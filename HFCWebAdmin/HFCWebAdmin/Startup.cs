@@ -1,7 +1,8 @@
-﻿using Microsoft.Owin;
+﻿using HFCWebAdmin;
+using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(HFCWebAdmin.Startup))]
+[assembly: OwinStartup(typeof(Startup))]
 namespace HFCWebAdmin
 {
     public partial class Startup
