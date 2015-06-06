@@ -1,13 +1,10 @@
 namespace HFCWebAdmin.Migrations
 {
     using HFCWebAdmin.Models;
-    using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Data.Entity.Migrations;
-    using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<HFCWebAdmin.Models.ApplicationDbContext>
+	internal sealed class Configuration : DbMigrationsConfiguration<HFCWebAdmin.Models.ApplicationDbContext>
     {
         public Configuration()
         {
