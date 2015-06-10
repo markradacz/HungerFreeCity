@@ -1,17 +1,11 @@
 ﻿@model IEnumerable<HFCWebAdmin.Models.PersonalShoppingItem>
 
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Personal Shopping Items";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
+<h2>Personal Shopping Items</h2>
     <p>
         @Html.ActionLink("Create New", "Create")
     </p>
@@ -109,5 +103,3 @@
     }
     
     </table>
-</body>
-</html>
