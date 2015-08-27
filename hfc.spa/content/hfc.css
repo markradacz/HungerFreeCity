@@ -1,0 +1,77 @@
+﻿.editPanel {
+	border: #71b1d1 1px solid;
+    width: 400px;
+}
+.k-window-titlebar {
+	background: #71b1d1;
+	color: #FFF !important;
+	font-size: 15pt;
+    font-weight: bold;
+    text-align: center;
+}
+.editPanel > div {
+    padding-bottom: 20px;
+    text-align: center;
+}
+.editPanel > div > input {
+	font-size: 15pt;
+}
+.editPanel > div > button {
+	font-size: 15pt;
+    text-transform: uppercase;
+}
+
+div.k-window-content {
+	padding: 10px;
+}
+.k-widget .k-autocomplete .k-header {
+	width: 30em;
+}
+.k-widget .k-autocomplete .k-input, .k-dropdown-wrap {
+	border: 1px solid #71b1d1;
+	border-radius: 4px;
+}
+input .k-input .k-readonly {
+	color: #999 !important;
+}
+
+/* favorite styling */
+.favorite-star {
+    margin: 2px;
+}
+.favorite-star > input[type=checkbox] {
+    display: none;  /* hide the actual checkbox */
+}
+label.favorite-star > span:before {
+    content: "\f006";
+    color: #CCC;
+}
+label.favorite-star > input[type=checkbox]:checked + span:before {
+    content: "\f005";
+    color: gold;
+}
+
+.centerlist {
+    border-style: none;
+}
+.center-tile {
+    border: #71b1d1 solid 1px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+.center-tile table {
+    width: 100%;
+}
+.center-tile td {
+    vertical-align: top;
+    padding: 5px;
+}
+.center-tile td:last-child {
+    text-align: right;
+}
+
+.tabtoolbar {
+    border-style: none;
+    background-color: transparent;
+}
