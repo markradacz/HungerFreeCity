@@ -5,8 +5,34 @@
 module hfc {
     export class locationvm extends BaseViewModel {
         public title: string = "Location";
-        public centers: kendo.data.DataSource;  // defined by the manage viewmodel
+        public item: any;  // defined by the manage viewmodel
         public init(): void {
+            this.bind("change", e => {
+                var data = this.get('item');
+                var lat = data.geometry.coordinates[0];
+                var lng = data.geometry.coordinates[1];
+                $("#map").kendoMap({
+                    center: [lat, lng],
+                    zoom: 15,
+                    controls: {
+                        attribution: false,
+                        navigator: false,
+                        zoom: false
+                    },
+                    layers: [{
+                        type: "tile",
+                        urlTemplate: "http://#= subdomain #.tile.openstreetmap.org/#= zoom #/#= x #/#= y #.png",
+                        subdomains: ["a", "b", "c"],
+                        attribution: "&copy; <a href='http://osm.org/copyright'>OpenStreetMap contributors</a>"
+                    }],
+                    markers: [{
+                        location: [lat, lng],
+                        shape: "pinTarget",
+                        tooltip: { content: data.name }
+                    }]
+                });
+                $("#map").data("kendoMap").resize(true);
+            });
         }
     }
 }

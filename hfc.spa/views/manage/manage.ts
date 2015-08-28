@@ -15,19 +15,22 @@ module hfc {
             transport: { firebase: { url: 'https://amber-torch-2255.firebaseio.com/' } }
         });
 
-        //public centers: any[] = [
-        //    { id: 1, Name: "Southside Food Bank", Address: "123 Southside Blvd.", Favorite: true },
-        //    { id: 2, Name: "Beaches Donation Center", Address: "929 San Pablo Rd.", Favorite: false },
-        //    { id: 3, Name: "Downtown Food Network", Address: "555 Main St.", Favorite: false }
-        //];
-
         public showCenter = e => {
-            hfc.common.log("showCenter");
-            // todo: figure out which row of the collection to bind to the subviews
-            (<needsvm>this.needsView.model).centers = this.centers;
-            (<centervm>this.centerView.model).centers = this.centers;
-            (<locationvm>this.locationView.model).centers = this.centers;
+            // hfc.common.log("showCenter");
+            // get the row of the collection to bind to the subviews
+            var listView = $(e.sender.element).data("kendoListView");
+            var index = listView.select().index();
+            var item = listView.dataSource.view()[index];
+            //hfc.common.log(JSON.stringify(item));
+
+            (<needsvm>this.needsView.model).set('item', item);
+            (<centervm>this.centerView.model).set('item', item);
+            (<locationvm>this.locationView.model).set('item', item);
             this.layout.showIn("#viewConent", this.needsView);
+
+            // select the Needs button in the toolbar
+            var tabtoolbar = $("#tabtoolbar").data("kendoToolBar");
+            tabtoolbar.toggle("#needs", true); //select button with id: "foo"
         }
 
         public tabToggle = e => {
@@ -35,7 +38,7 @@ module hfc {
             //e.checked Boolean Boolean flag that indicates the button state.
             //e.id String The id of the command element.
             //e.sender kendo.ui.ToolBar The widget instance which fired the event.
-            hfc.common.log("tab toggle: " + e.id + " --> " + e.checked);
+            //hfc.common.log("tab toggle: " + e.id + " --> " + e.checked);
             //var row = this.modules.filter(function (r) { return r.id === e.id; });
             //hfc.common.log("data: " + JSON.stringify(row));
             switch (e.id) {

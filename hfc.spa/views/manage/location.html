@@ -1,2 +1,7 @@
-﻿<h1 data-bind="html: title"></h1>
-Location
+﻿<h2>Location of <span data-bind="html: item.name"></span></h2>
+<div>
+    <span data-bind="text: item.geometry.coordinates[0]" />
+    <span data-bind="text: item.geometry.coordinates[1]" />
+</div>
+
+<div id="map" style="width: 200px; height: 200px;" />

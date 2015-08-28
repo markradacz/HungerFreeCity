@@ -15,7 +15,8 @@
 						<tr>
 							<td>
 								<dl>
-									<dt>#:name#</dt>
+                                    <dt data-bind="text: name"></dt>
+                                    <dd data-bind="text: phone"></dd>
 								</dl>
 							</td>
 							<td style="vertical-align: top;">
@@ -30,7 +31,8 @@
 			</script>
 		</td>
 		<td style="padding-left: 20px; vertical-align: top;">
-			<div class="tabtoolbar"
+			<div id="tabtoolbar"
+                 class="tabtoolbar"
                  data-role="toolbar"
 				 data-bind="events: { toggle: tabToggle }"
 				 data-items='[{

@@ -30,6 +30,9 @@
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="fonts\fontawesome-webfont.svg" />
+    <Content Include="Scripts\kendo\2015.2.805\kendo.dataviz.core.min.js" />
+    <Content Include="Scripts\kendo\2015.2.805\kendo.dataviz.map.min.js" />
+    <Content Include="Scripts\kendo\2015.2.805\kendo.drawing.min.js" />
     <Content Include="Views\manage\center.js.map" />
     <Content Include="Views\manage\location.js" />
     <Content Include="Views\manage\needs.js.map" />

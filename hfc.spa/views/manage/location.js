@@ -18,6 +18,33 @@ var hfc;
             this.title = "Location";
         }
         locationvm.prototype.init = function () {
+            var _this = this;
+            this.bind("change", function (e) {
+                var data = _this.get('item');
+                var lat = data.geometry.coordinates[0];
+                var lng = data.geometry.coordinates[1];
+                $("#map").kendoMap({
+                    center: [lat, lng],
+                    zoom: 15,
+                    controls: {
+                        attribution: false,
+                        navigator: false,
+                        zoom: false
+                    },
+                    layers: [{
+                            type: "tile",
+                            urlTemplate: "http://#= subdomain #.tile.openstreetmap.org/#= zoom #/#= x #/#= y #.png",
+                            subdomains: ["a", "b", "c"],
+                            attribution: "&copy; <a href='http://osm.org/copyright'>OpenStreetMap contributors</a>"
+                        }],
+                    markers: [{
+                            location: [lat, lng],
+                            shape: "pinTarget",
+                            tooltip: { content: data.name }
+                        }]
+                });
+                $("#map").data("kendoMap").resize(true);
+            });
         };
         return locationvm;
     })(hfc.BaseViewModel);

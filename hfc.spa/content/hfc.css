@@ -71,6 +71,11 @@ label.favorite-star > input[type=checkbox]:checked + span:before {
     text-align: right;
 }
 
+.center-tile dl {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 .tabtoolbar {
     border-style: none;
     background-color: transparent;

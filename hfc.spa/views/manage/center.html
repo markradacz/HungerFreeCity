@@ -1,2 +1,29 @@
-﻿<h1 data-bind="html: title"></h1>
-Center
+﻿<h2>Center information for <span data-bind="html: item.name"></span></h2>
+
+<h3>Address</h3>
+<div data-bind="text: item.address.address1"/>
+<div data-bind="text: item.address.address2" />
+<div>
+    <span data-bind="text: item.address.city" />
+    <span data-bind="text: item.address.state" />
+    <span data-bind="text: item.address.zipcode" />
+</div>
+
+<h3>Hours</h3>
+<div data-bind="text: item.hours" />
+
+<h3>Phone</h3>
+<div data-bind="text: item.phone" />
+
+<h3>Site</h3>
+<div data-bind="text: item.site" />
+
+<h3>Notes</h3>
+<div data-role="listview"
+     data-selectable="false"
+     data-template="centerItemTemplate"
+     data-bind="source: item.centerinfo">
+</div>
+<script type="text/x-kendo-tmpl" id="centerItemTemplate">
+    <div data-bind="text: name"/>
+</script>

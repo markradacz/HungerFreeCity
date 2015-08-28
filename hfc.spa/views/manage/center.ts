@@ -5,7 +5,7 @@
 module hfc {
     export class centervm extends BaseViewModel {
         public title: string = "Center";
-        public centers: kendo.data.DataSource;  // defined by the manage viewmodel
+        public item: any;  // defined by the manage viewmodel
         public init(): void {
         }
     }
