@@ -55,6 +55,7 @@ var hfc;
         User
         -----------------------------------------------------*/
         common.User = null;
+        common.FirebaseUrl = 'https://amber-torch-2255.firebaseio.com/';
         return common;
     })(kendo.data.ObservableObject);
     hfc.common = common;

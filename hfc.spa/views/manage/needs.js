@@ -17,6 +17,36 @@ var hfc;
             _super.apply(this, arguments);
             this.title = "Needs";
         }
+        needsvm.prototype.OnDataBound = function () {
+            // make the listview sortable and all the items within draggable
+            $("#needsList").kendoSortable({
+                filter: ">div.needItem",
+                cursor: "move",
+                placeholder: function (element) {
+                    return element.clone().css("opacity", 0.1);
+                },
+                hint: function (element) {
+                    return element.clone().removeClass("k-state-selected");
+                },
+                change: function (e) {
+                    //var skip = dataSource.skip(),
+                    //    oldIndex = e.oldIndex + skip,
+                    //    newIndex = e.newIndex + skip,
+                    //    data = dataSource.data(),
+                    //    dataItem = dataSource.getByUid(e.item.data("uid"));
+                    //dataSource.remove(dataItem);
+                    //dataSource.insert(newIndex, dataItem);
+                    //var srcUid = e.draggable.element.data("uid");
+                    //var dstUid = e.dropTarget.data("uid");
+                    //var srcItem = dataSource.getByUid(srcUid);
+                    //var dstItem = dataSource.getByUid(dstUid);
+                    //var dstIdx = dataSource.indexOf(dstItem);
+                    //dataSource.remove(srcItem);
+                    //dataSource.insert(dstIdx, srcItem);
+                    //e.draggable.destroy();
+                }
+            });
+        };
         needsvm.prototype.init = function () {
         };
         return needsvm;
@@ -24,7 +54,8 @@ var hfc;
     hfc.needsvm = needsvm;
 })(hfc || (hfc = {}));
 define([
-    'text!views/manage/needs.html'
+    'text!views/manage/needs.html',
+    'kendo'
 ], function (template) {
     var vm = new hfc.needsvm();
     var view = new kendo.View(template, {

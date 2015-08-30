@@ -12,7 +12,7 @@ module hfc {
         public centers: kendo.data.DataSource = new kendo.data.DataSource({
             type: "firebase",
             autoSync: false, // true recommended
-            transport: { firebase: { url: 'https://amber-torch-2255.firebaseio.com/' } }
+            transport: { firebase: { url: hfc.common.FirebaseUrl } }
         });
 
         public showCenter = e => {

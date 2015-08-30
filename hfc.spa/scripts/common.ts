@@ -8,6 +8,8 @@ module hfc {
 	    -----------------------------------------------------*/
         public static User: any = null;
 
+        public static FirebaseUrl: string = 'https://amber-torch-2255.firebaseio.com/';
+
         /*-----------------------------------------------------
 		Toast Notifications
 	    -----------------------------------------------------*/

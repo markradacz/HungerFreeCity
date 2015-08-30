@@ -34,7 +34,7 @@ define([
     router.route('/about', function (e) {
         layout.showIn('#content', about);
     });
-    var ref = new Firebase('https://amber-torch-2255.firebaseio.com/');
+    var ref = new Firebase(hfc.common.FirebaseUrl);
     ref.onAuth(function (authData) {
         if (authData) {
             // save the user's profile into the database so we can list users,
@@ -47,7 +47,7 @@ define([
     //var dataSource: kendo.data.DataSource = new kendo.data.DataSource({
     //    type: "firebase",
     //    autoSync: true, // recommended
-    //    transport: { firebase: { url: 'https://amber-torch-2255.firebaseio.com/' } }
+    //    transport: { firebase: { url: hfc.common.FirebaseUrl } }
     //});
     //dataSource.fetch( function() {  // no lambda here so we can use 'this.'
     //    var data = this.data();
@@ -75,19 +75,7 @@ define([
             password: password
         }, function (error, authData) {
             if (error) {
-                switch (error.code) {
-                    case "INVALID_EMAIL":
-                        hfc.common.errorToast('The specified user account email is invalid.');
-                        break;
-                    case "INVALID_PASSWORD":
-                        hfc.common.errorToast('The specified user account password is incorrect.');
-                        break;
-                    case "INVALID_USER":
-                        hfc.common.errorToast('The specified user account does not exist.');
-                        break;
-                    default:
-                        hfc.common.errorToast('Error logging user in: ' + error);
-                }
+                showError(error);
             }
             else {
                 hfc.common.successToast('Successfully created user account with uid: ' + authData.uid);
@@ -102,19 +90,7 @@ define([
             password: password
         }, function (error, authData) {
             if (error) {
-                switch (error.code) {
-                    case "INVALID_EMAIL":
-                        hfc.common.errorToast('The specified user account email is invalid.');
-                        break;
-                    case "INVALID_PASSWORD":
-                        hfc.common.errorToast('The specified user account password is incorrect.');
-                        break;
-                    case "INVALID_USER":
-                        hfc.common.errorToast('The specified user account does not exist.');
-                        break;
-                    default:
-                        hfc.common.errorToast('Error logging user in: ' + error);
-                }
+                showError(error);
             }
             else {
                 hfc.common.successToast('Authenticated successfully: ' + authData);
@@ -129,19 +105,7 @@ define([
             email: email
         }, function (error) {
             if (error) {
-                switch (error.code) {
-                    case "INVALID_EMAIL":
-                        hfc.common.errorToast('The specified user account email is invalid.');
-                        break;
-                    case "INVALID_PASSWORD":
-                        hfc.common.errorToast('The specified user account password is incorrect.');
-                        break;
-                    case "INVALID_USER":
-                        hfc.common.errorToast('The specified user account does not exist.');
-                        break;
-                    default:
-                        hfc.common.errorToast('Error sending password reset email: ' + error);
-                }
+                showError(error);
             }
             else {
                 hfc.common.successToast('Password reset email sent successfully');
@@ -150,6 +114,21 @@ define([
             }
         });
     });
+    function showError(error) {
+        switch (error.code) {
+            case "INVALID_EMAIL":
+                hfc.common.errorToast('The specified user account email is invalid.');
+                break;
+            case "INVALID_PASSWORD":
+                hfc.common.errorToast('The specified user account password is incorrect.');
+                break;
+            case "INVALID_USER":
+                hfc.common.errorToast('The specified user account does not exist.');
+                break;
+            default:
+                hfc.common.errorToast('Error logging user in: ' + error);
+        }
+    }
     return router;
 });
 //# sourceMappingURL=app.js.map

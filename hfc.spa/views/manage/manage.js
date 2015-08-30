@@ -20,7 +20,7 @@ var hfc;
             this.centers = new kendo.data.DataSource({
                 type: "firebase",
                 autoSync: false,
-                transport: { firebase: { url: 'https://amber-torch-2255.firebaseio.com/' } }
+                transport: { firebase: { url: hfc.common.FirebaseUrl } }
             });
             this.showCenter = function (e) {
                 // hfc.common.log("showCenter");
