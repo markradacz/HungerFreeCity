@@ -14,53 +14,86 @@ var hfc;
     var managevm = (function (_super) {
         __extends(managevm, _super);
         function managevm() {
-            var _this = this;
             _super.apply(this, arguments);
             this.title = "Manage";
+            this.toolbarVisible = false;
             this.centers = new kendo.data.DataSource({
                 type: "firebase",
                 autoSync: false,
-                transport: { firebase: { url: hfc.common.FirebaseUrl } }
-            });
-            this.showCenter = function (e) {
-                // hfc.common.log("showCenter");
-                // get the row of the collection to bind to the subviews
-                var listView = $(e.sender.element).data("kendoListView");
-                var index = listView.select().index();
-                var item = listView.dataSource.view()[index];
-                //hfc.common.log(JSON.stringify(item));
-                _this.needsView.model.set('item', item);
-                _this.centerView.model.set('item', item);
-                _this.locationView.model.set('item', item);
-                _this.layout.showIn("#viewConent", _this.needsView);
-                // select the Needs button in the toolbar
-                var tabtoolbar = $("#tabtoolbar").data("kendoToolBar");
-                tabtoolbar.toggle("#needs", true); //select button with id: "foo"
-            };
-            this.tabToggle = function (e) {
-                //e.target jQuery The jQuery object that represents the command element.
-                //e.checked Boolean Boolean flag that indicates the button state.
-                //e.id String The id of the command element.
-                //e.sender kendo.ui.ToolBar The widget instance which fired the event.
-                //hfc.common.log("tab toggle: " + e.id + " --> " + e.checked);
-                //var row = this.modules.filter(function (r) { return r.id === e.id; });
-                //hfc.common.log("data: " + JSON.stringify(row));
-                switch (e.id) {
-                    case "needs":
-                        _this.layout.showIn("#viewConent", _this.needsView);
-                        break;
-                    case "center":
-                        _this.layout.showIn("#viewConent", _this.centerView);
-                        break;
-                    case "location":
-                        _this.layout.showIn("#viewConent", _this.locationView);
-                        break;
+                transport: { firebase: { url: hfc.common.FirebaseUrl + "centers" } },
+                sort: [
+                    //{ field: "favorite", dir: "desc" },   // Note: causes re-order when favorite clicked, but listview doesn't show the change
+                    { field: "name", dir: "asc" }
+                ],
+                schema: {
+                    parse: function (items) {
+                        // join in the user's favorited centers
+                        if (hfc.common.User && hfc.common.User.favorites) {
+                            items.forEach(function (v) {
+                                v.favorite = $.inArray(v.centerid, hfc.common.User.favorites) >= 0;
+                            });
+                        }
+                        return items;
+                    }
+                },
+                change: function (e) {
+                    if (e.action === 'itemchange' && e.field === 'favorite') {
+                        hfc.common.log('favorite changed on the datasource!');
+                        // so change the user's favorites and persist
+                        var all = this.data();
+                        hfc.common.User.favorites = all.filter(function (v) { return v.favorite; }).map(function (v) { return v.centerid; });
+                        //common.log('favorites are ' + JSON.stringify(hfc.common.User.favorites ) );
+                        // persist the user's favorites
+                        $.publish('saveFavorites');
+                    }
                 }
-            };
+            });
             this.layout = new kendo.Layout("<div id='viewConent'/>");
         }
+        ;
+        managevm.prototype.showCenter = function (e) {
+            // get the row of the collection to bind to the subviews
+            var listView = $(e.sender.element).data("kendoListView");
+            var index = listView.select().index();
+            var item = listView.dataSource.view()[index];
+            var url = hfc.common.FirebaseUrl + "centers/" + index;
+            hfc.common.log('selected center url is ' + url);
+            this.needsView.model.setup(item, url);
+            this.centerView.model.setup(item, url);
+            this.locationView.model.setup(item, url);
+            this.layout.showIn("#viewConent", this.needsView);
+            // select the Needs button in the toolbar
+            var tabtoolbar = $("#tabtoolbar").data("kendoToolBar");
+            tabtoolbar.toggle("#needs", true); //select button with id: "foo"
+            this.set('toolbarVisible', true);
+        };
+        managevm.prototype.tabToggle = function (e) {
+            //e.target jQuery The jQuery object that represents the command element.
+            //e.checked Boolean Boolean flag that indicates the button state.
+            //e.id String The id of the command element.
+            //e.sender kendo.ui.ToolBar The widget instance which fired the event.
+            //hfc.common.log("tab toggle: " + e.id + " --> " + e.checked);
+            //var row = this.modules.filter(function (r) { return r.id === e.id; });
+            //hfc.common.log("data: " + JSON.stringify(row));
+            switch (e.id) {
+                case "needs":
+                    this.layout.showIn("#viewConent", this.needsView);
+                    break;
+                case "center":
+                    this.layout.showIn("#viewConent", this.centerView);
+                    break;
+                case "location":
+                    this.layout.showIn("#viewConent", this.locationView);
+                    break;
+            }
+        };
         managevm.prototype.init = function () {
+            var _this = this;
             this.layout.render('#tabContent');
+            $.subscribe('userChanged', function () {
+                // re-read our datasource upon login, so favorties are matched
+                _this.centers.read();
+            });
         };
         return managevm;
     })(hfc.BaseViewModel);

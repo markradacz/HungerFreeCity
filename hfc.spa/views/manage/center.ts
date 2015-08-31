@@ -6,6 +6,18 @@ module hfc {
     export class centervm extends BaseViewModel {
         public title: string = "Center";
         public item: any;  // defined by the manage viewmodel
+        public center: kendo.data.DataSource = new kendo.data.DataSource();
+
+        public setup(item, url) {
+            this.set("item", item);
+            this.set("url", url);
+            this.set("center", new kendo.data.DataSource({
+                type: "firebase",
+                autoSync: false, // true recommended
+                transport: { firebase: { url: url } }
+            }));
+        }
+
         public init(): void {
         }
     }

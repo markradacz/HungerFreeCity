@@ -9,63 +9,67 @@ define([
     'views/manage/manage',
     'views/about/about'
 ], function (kendo, layout, home, manage, about) {
-    // the application router
+    // Setup the application router
     var router = new kendo.Router({
-        init: function () {
-            // render the layout first
-            layout.render('#applicationHost');
-        },
-        routeMissing: function (e) {
-            // debug shim writes console errors to the browser dev tools
-            hfc.common.errorToast('No Route Found' + e.url);
-        },
-        change: function (e) {
-            // publish an event whenever the route changes
-            $.publish('/router/change', [e]);
-        }
+        init: function () { layout.render('#applicationHost'); },
+        routeMissing: function (e) { hfc.common.errorToast('No Route Found' + e.url); },
+        change: function (e) { $.publish('routeChange', [e]); } // publish an event whenever the route changes
     });
     // Add new routes here...
-    router.route('/', function (e) {
-        layout.showIn('#content', home);
-    });
-    router.route('/manage', function (e) {
-        layout.showIn('#content', manage);
-    });
-    router.route('/about', function (e) {
-        layout.showIn('#content', about);
-    });
+    router.route('/', function (e) { layout.showIn('#content', home); });
+    router.route('/manage', function (e) { layout.showIn('#content', manage); });
+    router.route('/about', function (e) { layout.showIn('#content', about); });
     var ref = new Firebase(hfc.common.FirebaseUrl);
-    ref.onAuth(function (authData) {
-        if (authData) {
-            // save the user's profile into the database so we can list users,
-            // use them in Security and Firebase Rules, and show profiles
-            ref.child("users").child(authData.uid).set({
-                email: authData.password.email
-            });
-        }
-    });
-    //var dataSource: kendo.data.DataSource = new kendo.data.DataSource({
-    //    type: "firebase",
-    //    autoSync: true, // recommended
-    //    transport: { firebase: { url: hfc.common.FirebaseUrl } }
+    //ref.onAuth(authData => {    // NOT CALLED when the user is already authenticated and remembered
+    //    // provider: authData.provider,
+    //    // provider The authentication method used, in this case: password.  String  
+    //    // uid A unique user ID, intended as the user's unique key across all providers.  String
+    //    // token The Firebase authentication token for this session.  String  
+    //    // auth The contents of the authentication token, which will be available as the auth variable within your Security and Firebase Rules.  Object  
+    //    // expires A timestamp, in seconds since the UNIX epoch, indicating when the authentication token expires.  Number  
+    //    // password An object containing provider-specific data.  Object  
+    //    // password.email The user's email address.  String  
+    //    // password.isTemporaryPassword Whether or not the user authenticated using a temporary password, as used in password reset flows.  Boolean  
+    //    // password.profileImageURL The URL to the user's Gravatar profile image, which is retrieved from hashing the user's email. If the user does not have a Gravatar profile, then a pixelated face is used.  String  
+    //    if (authData) {
+    //        // save the user's profile into the database so we can list users,
+    //        // use them in Security and Firebase Rules, and show profiles
+    //        // TODO: don't overwrite when already exists!
+    //        hfc.common.successToast('You have been authenticated!' + authData.uid);
+    //    }
     //});
-    //dataSource.fetch( function() {  // no lambda here so we can use 'this.'
-    //    var data = this.data();
-    //    hfc.common.log(data.length);
-    //    hfc.common.log(JSON.stringify(data));
-    //});
-    // fetch the latest list of center data
-    //ref.on("value", snapshot => {
-    //    hfc.common.log(JSON.stringify(snapshot.val()));
-    //}, error => {
-    //    hfc.common.errorToast("The read failed: " + error.code);
-    //});
+    var userRef;
     var authData = ref.getAuth();
     if (authData) {
-        //hfc.common.successToast( 'Already logged in: ' + authData.uid );
-        hfc.common.User = authData;
+        // get the user's profile data
+        userRef = ref.child('users').child(authData.uid).ref();
+        userRef.on('value', function (userData) {
+            var data = userData.val();
+            if (data) {
+                if (data.favorites === undefined) {
+                    data.favorites = [];
+                    userRef.set(data);
+                }
+                hfc.common.User = data;
+                $.publish('userChanged');
+                hfc.common.successToast('Welcome back ' + data.email);
+            }
+            else {
+                hfc.common.User = {
+                    email: authData.password.email,
+                    favorites: []
+                };
+                userRef.set(hfc.common.User);
+                $.publish('userChanged');
+                hfc.common.successToast('Welcome aboard ' + data.email);
+            }
+        });
     }
-    $.subscribe('/navigate', function (route) {
+    $.subscribe('saveFavorites', function () {
+        var favRef = userRef.child('favorites').ref();
+        favRef.set(hfc.common.User.favorites);
+    });
+    $.subscribe('navigate', function (route) {
         router.navigate(route);
     });
     $.subscribe('register', function (email, password) {

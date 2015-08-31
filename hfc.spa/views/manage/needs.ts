@@ -6,7 +6,14 @@ module hfc {
     export class needsvm extends BaseViewModel {
         public title: string = "Needs";
         public item: any;  // defined by the manage viewmodel
-        public OnDataBound() {
+        public url: string;  // defined by the manage viewmodel
+
+        public setup(item, url) {
+            this.set("item", item);
+            this.set("url", url);
+        }
+
+        public onDataBound() {
             // make the listview sortable and all the items within draggable
             $("#needsList").kendoSortable({
                 filter: ">div.needItem",

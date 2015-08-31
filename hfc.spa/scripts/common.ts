@@ -44,20 +44,7 @@ module hfc {
                 // if (console.timeStamp) console.timeStamp(message);
             }
         }
-
-        /*-----------------------------------------------------
-		Initialization
-	    -----------------------------------------------------*/
-        public static init(): void  {
-        }
     }
-
-    // $(document).ready(function() {
-    //	common.init();
-    // });
-    $(window).load(() => {
-        common.init();	// called less frequently--not every time a content page is loaded
-    });
 
     export class BaseViewModel extends kendo.data.ObservableObject {
     }

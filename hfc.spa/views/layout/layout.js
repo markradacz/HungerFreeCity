@@ -69,37 +69,41 @@ var hfc;
             $.publish('resetPassword', [this.get('email')]);
         };
         layoutvm.prototype.init = function (e) {
-            var vm = this;
+            var _this = this;
             // cache a reference to the nav links element
-            vm.nav = e.sender.element.find('#nav-links');
-            $.subscribe('/router/change', function (e) {
+            this.nav = e.sender.element.find('#nav-links');
+            $.subscribe('routeChange', function (e) {
                 // select the nav link based on the current route
-                var active = vm.nav.find('a[href="#' + e.url + '"]').parent();
+                var active = _this.nav.find('a[href="#' + e.url + '"]').parent();
                 // if the nav link exists...
                 if (active.length > 0) {
                     // remove the active class from all links
-                    vm.nav.find('li').removeClass('active');
+                    _this.nav.find('li').removeClass('active');
                     // add the active class to the current link
                     active.addClass('active');
                 }
             });
-            if (hfc.common.User) {
-                vm.set('loggedIn', true);
-                vm.set('email', hfc.common.User.password.email);
-            }
+            $.subscribe('userChanged', function () {
+                if (hfc.common.User) {
+                    _this.set('loggedIn', true);
+                    _this.set('email', hfc.common.User.email);
+                }
+                else {
+                    _this.set('loggedIn', false);
+                    _this.set('email', "");
+                }
+            });
             $.subscribe('loginSuccess', function (authData) {
-                vm.set('loggedIn', true);
-                vm.set('email', hfc.common.User.password.email);
                 // close the login panel
-                vm.closePanel('#loginPanel');
+                _this.closePanel('#loginPanel');
             });
             $.subscribe('registerSuccess', function (authData) {
                 // close the registration panel
-                vm.closePanel('#registerPanel');
+                _this.closePanel('#registerPanel');
             });
             $.subscribe('resetPasswordSuccess', function (authData) {
                 // close the reset password panel and show the login panel
-                vm.closePanel('#forgotPanel');
+                _this.closePanel('#forgotPanel');
             });
         };
         return layoutvm;

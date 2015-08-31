@@ -6,6 +6,12 @@ module hfc {
     export class locationvm extends BaseViewModel {
         public title: string = "Location";
         public item: any;  // defined by the manage viewmodel
+
+        public setup(item, url) {
+            this.set("item", item);
+            this.set("url", url);
+        }
+
         public init(): void {
             this.bind("change", e => {
                 var data = this.get('item');
@@ -31,7 +37,7 @@ module hfc {
                         tooltip: { content: data.name }
                     }]
                 });
-                $("#map").data("kendoMap").resize(true);
+                //$("#map").data("kendoMap").resize(true);
             });
         }
     }

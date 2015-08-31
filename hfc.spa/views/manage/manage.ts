@@ -5,6 +5,7 @@
 module hfc {
     export class managevm extends BaseViewModel {
         public title: string = "Manage";
+        public toolbarVisible: boolean = false;;
         public needsView: kendo.View;
         public centerView: kendo.View;
         public locationView: kendo.View;
@@ -12,28 +13,56 @@ module hfc {
         public centers: kendo.data.DataSource = new kendo.data.DataSource({
             type: "firebase",
             autoSync: false, // true recommended
-            transport: { firebase: { url: hfc.common.FirebaseUrl } }
-        });
+            transport: { firebase: { url: hfc.common.FirebaseUrl + "centers" } },
+            sort: [
+                //{ field: "favorite", dir: "desc" },   // Note: causes re-order when favorite clicked, but listview doesn't show the change
+                { field: "name", dir: "asc" }
+            ],
+            schema: {
+                parse(items) {
+                    // join in the user's favorited centers
+                    if (hfc.common.User && hfc.common.User.favorites) {
+                        items.forEach(v => {
+                            v.favorite = $.inArray(v.centerid, hfc.common.User.favorites) >= 0;
+                        });
+                    }
+                    return items;
+                }
+            },
+            change: function (e) {
+                if (e.action === 'itemchange' && e.field === 'favorite') {
+                    common.log('favorite changed on the datasource!');
+                    // so change the user's favorites and persist
+                    var all = this.data();
+                    hfc.common.User.favorites = all.filter(v => v.favorite).map(v => v.centerid);
+                    //common.log('favorites are ' + JSON.stringify(hfc.common.User.favorites ) );
+                    // persist the user's favorites
+                    $.publish('saveFavorites');
+                }
+            }
+        })
 
-        public showCenter = e => {
-            // hfc.common.log("showCenter");
+        public showCenter(e: any) {
             // get the row of the collection to bind to the subviews
             var listView = $(e.sender.element).data("kendoListView");
             var index = listView.select().index();
             var item = listView.dataSource.view()[index];
-            //hfc.common.log(JSON.stringify(item));
 
-            (<needsvm>this.needsView.model).set('item', item);
-            (<centervm>this.centerView.model).set('item', item);
-            (<locationvm>this.locationView.model).set('item', item);
+            var url: string = common.FirebaseUrl + "centers/" + index;
+            common.log('selected center url is ' + url);
+
+            (<needsvm>this.needsView.model).setup(item, url);
+            (<centervm>this.centerView.model).setup(item, url);
+            (<locationvm>this.locationView.model).setup(item, url);
             this.layout.showIn("#viewConent", this.needsView);
 
             // select the Needs button in the toolbar
             var tabtoolbar = $("#tabtoolbar").data("kendoToolBar");
             tabtoolbar.toggle("#needs", true); //select button with id: "foo"
+            this.set('toolbarVisible', true);
         }
 
-        public tabToggle = e => {
+        public tabToggle(e: any) {
             //e.target jQuery The jQuery object that represents the command element.
             //e.checked Boolean Boolean flag that indicates the button state.
             //e.id String The id of the command element.
@@ -51,6 +80,10 @@ module hfc {
         private layout: kendo.Layout = new kendo.Layout("<div id='viewConent'/>");
         public init(): void {
             this.layout.render('#tabContent');
+            $.subscribe('userChanged', () => {
+                // re-read our datasource upon login, so favorties are matched
+                this.centers.read();
+            });
         }
     }
 }

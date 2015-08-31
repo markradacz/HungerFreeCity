@@ -47,11 +47,6 @@ var hfc;
             }
         };
         /*-----------------------------------------------------
-        Initialization
-        -----------------------------------------------------*/
-        common.init = function () {
-        };
-        /*-----------------------------------------------------
         User
         -----------------------------------------------------*/
         common.User = null;
@@ -59,12 +54,6 @@ var hfc;
         return common;
     })(kendo.data.ObservableObject);
     hfc.common = common;
-    // $(document).ready(function() {
-    //	common.init();
-    // });
-    $(window).load(function () {
-        common.init(); // called less frequently--not every time a content page is loaded
-    });
     var BaseViewModel = (function (_super) {
         __extends(BaseViewModel, _super);
         function BaseViewModel() {

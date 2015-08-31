@@ -80,3 +80,15 @@ label.favorite-star > input[type=checkbox]:checked + span:before {
     border-style: none;
     background-color: transparent;
 }
+
+.needslist {
+    border-style: none;
+    width: 50%;
+}
+.needItem {
+    border: #71b1d1 solid 1px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    cursor: move;
+    padding: 5px;
+}

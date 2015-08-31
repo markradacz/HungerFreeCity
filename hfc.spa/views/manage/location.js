@@ -17,6 +17,10 @@ var hfc;
             _super.apply(this, arguments);
             this.title = "Location";
         }
+        locationvm.prototype.setup = function (item, url) {
+            this.set("item", item);
+            this.set("url", url);
+        };
         locationvm.prototype.init = function () {
             var _this = this;
             this.bind("change", function (e) {
@@ -43,7 +47,7 @@ var hfc;
                             tooltip: { content: data.name }
                         }]
                 });
-                $("#map").data("kendoMap").resize(true);
+                //$("#map").data("kendoMap").resize(true);
             });
         };
         return locationvm;

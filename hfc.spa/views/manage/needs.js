@@ -17,7 +17,11 @@ var hfc;
             _super.apply(this, arguments);
             this.title = "Needs";
         }
-        needsvm.prototype.OnDataBound = function () {
+        needsvm.prototype.setup = function (item, url) {
+            this.set("item", item);
+            this.set("url", url);
+        };
+        needsvm.prototype.onDataBound = function () {
             // make the listview sortable and all the items within draggable
             $("#needsList").kendoSortable({
                 filter: ">div.needItem",

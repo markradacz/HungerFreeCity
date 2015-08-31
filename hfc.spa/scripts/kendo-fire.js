@@ -26,7 +26,7 @@
 
 				if( fbRef !== undefined ) {
 					var result = data;
-					result.id = fbRef.name();
+					result.id = fbRef.key();	// was .name()
 					options.success( result );
 					delete this.requestId;
 				}
@@ -63,8 +63,11 @@
 						return;
 					}
 					var model = childSnapshot.val();
-					model.id = childSnapshot.key();
-					callbacks.pushUpdate( model );
+					try {
+						model.id = childSnapshot.key();
+						callbacks.pushUpdate( model );
+					}
+					catch( ex ) { }
 				}, function () { }, this );
 
 				this.ref.on( 'child_changed', function ( childSnapshot, prevChildName ) {

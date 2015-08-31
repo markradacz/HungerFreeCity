@@ -1,11 +1,15 @@
 ﻿<h2>Needs for <span data-bind="html: item.name"></span></h2>
 <div id="needsList"
+     class="needslist"
      data-role="listview"
      data-selectable="true"
      data-template="needItemTemplate"
-     data-bind="source: item.needs, events: { dataBound: OnDataBound }"
+     data-bind="source: item.needs, events: { dataBound: onDataBound }"
      style="height: 500px; overflow: auto">
 </div>
 <script type="text/x-kendo-tmpl" id="needItemTemplate">
-    <div class="needItem" data-bind="text: name"/>
+    <div class="needItem">
+        <span data-bind="text: index" />
+        <span data-bind="text: name" />
+    </div>
 </script>

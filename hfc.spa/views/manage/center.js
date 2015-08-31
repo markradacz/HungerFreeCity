@@ -16,7 +16,17 @@ var hfc;
         function centervm() {
             _super.apply(this, arguments);
             this.title = "Center";
+            this.center = new kendo.data.DataSource();
         }
+        centervm.prototype.setup = function (item, url) {
+            this.set("item", item);
+            this.set("url", url);
+            this.set("center", new kendo.data.DataSource({
+                type: "firebase",
+                autoSync: false,
+                transport: { firebase: { url: url } }
+            }));
+        };
         centervm.prototype.init = function () {
         };
         return centervm;

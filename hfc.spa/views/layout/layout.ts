@@ -73,42 +73,43 @@ module hfc {
         }
 
         public init(e: any): void {
-            var vm = this;
-
             // cache a reference to the nav links element
-            vm.nav = e.sender.element.find('#nav-links');
-            $.subscribe('/router/change', function (e) {
+            this.nav = e.sender.element.find('#nav-links');
+            $.subscribe('routeChange', e => {
                 // select the nav link based on the current route
-                var active = vm.nav.find('a[href="#' + e.url + '"]').parent();
+                var active = this.nav.find('a[href="#' + e.url + '"]').parent();
                 // if the nav link exists...
                 if (active.length > 0) {
                     // remove the active class from all links
-                    vm.nav.find('li').removeClass('active');
+                    this.nav.find('li').removeClass('active');
                     // add the active class to the current link
                     active.addClass('active');
                 }
             });
 
-            if (hfc.common.User) {
-                vm.set('loggedIn', true);
-                vm.set('email', hfc.common.User.password.email);
-            }
+            $.subscribe('userChanged', () => {
+                if (hfc.common.User) {
+                    this.set('loggedIn', true);
+                    this.set('email', hfc.common.User.email);
+                } else {
+                    this.set('loggedIn', false);
+                    this.set('email', "");
+                }
+            });
 
-            $.subscribe('loginSuccess', function (authData) {
-                vm.set('loggedIn', true);
-                vm.set('email', hfc.common.User.password.email);
+            $.subscribe('loginSuccess', authData => {
                 // close the login panel
-                vm.closePanel('#loginPanel');
+                this.closePanel('#loginPanel');
             });
 
-            $.subscribe('registerSuccess', function (authData) {
+            $.subscribe('registerSuccess', authData => {
                 // close the registration panel
-                vm.closePanel('#registerPanel');
+                this.closePanel('#registerPanel');
             });
 
-            $.subscribe('resetPasswordSuccess', function (authData) {
+            $.subscribe('resetPasswordSuccess', authData => {
                 // close the reset password panel and show the login panel
-                vm.closePanel('#forgotPanel');
+                this.closePanel('#forgotPanel');
             });
         }
     }
