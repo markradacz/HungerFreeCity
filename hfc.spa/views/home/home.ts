@@ -2,15 +2,22 @@
 /// <reference path='../../scripts/typings/kendo.all.d.ts' />
 /// <reference path='../../scripts/common.ts' />
 module hfc {
-    export class homevm extends BaseViewModel {
+    export class homevm extends kendo.data.ObservableObject {
         public title: string = 'Home';
+        public loggedIn: boolean = false;
+
+        public doLogin(e: any): void {
+            $.publish("showLogin");
+        }
+
+        public doRegister(e: any): void {
+            $.publish("showRegister");
+        }
 
         public init(): void {
-            var vm = this;
-            if (hfc.common.User) {
-                //vm.set('loggedIn', true);
-                //vm.set('email', hfc.common.User.password.email);
-            }
+            $.subscribe("loggedIn", () => { this.set('loggedIn', true); });
+            $.subscribe("loggedOff", () => { this.set('loggedIn', false); });
+            this.set('loggedIn', hfc.common.User ? true : false);
         }
     }
 }
@@ -21,12 +28,8 @@ define([
     var vm: hfc.homevm = new hfc.homevm();
     var view: kendo.View = new kendo.View(homeTemplate, {
         model: vm,
-        show: () => {
-            kendo.fx(this.element).fade('in').duration(500).play();
-        },
-        init: () => {
-            vm.init();
-        }
+        show: () => { kendo.fx(this.element).fade('in').duration(500).play(); },
+        init: () => { vm.init(); }
     });
     return view;
 });

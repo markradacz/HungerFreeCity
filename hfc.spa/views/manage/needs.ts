@@ -3,7 +3,7 @@
 /// <reference path="../../scripts/typings/kendo.all.d.ts" />
 /// <reference path="../../scripts/common.ts" />
 module hfc {
-    export class needsvm extends BaseViewModel {
+    export class needsvm extends kendo.data.ObservableObject {
         public title: string = "Needs";
         public item: any;  // defined by the manage viewmodel
         public url: string;  // defined by the manage viewmodel

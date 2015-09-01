@@ -2,17 +2,18 @@
 /// <reference path="scripts/typings/kendo.all.d.ts" />
 /// <reference path="scripts/typings/require.d.ts" />
 /// <reference path="scripts/common.ts" />
-require.config( {
+
+require.config({
 	paths: {
 		'jQuery': 'scripts/jquery-2.1.4.min',
 		'pubsub': 'scripts/pubsub',
 		'bootstrap': 'scripts/bootstrap',
-		'firebase': 'scripts/firebase-debug',
+		'firebase': 'scripts/firebase',
 		'text': 'scripts/text',
 		'kendo': 'kendo',
 		'common': 'scripts/common',
 		'liveSetup': 'liveSetup',
-		'live': 'scripts/live',
+        'live': 'scripts/live',
 		'app': 'app'
 	},
 	shim: {
@@ -28,20 +29,20 @@ require.config( {
 		'live': {
 			deps: ['liveSetup']
 		},
-		'common': {
-			deps: ['kendo', 'jQuery']
-		},
+        'common': {
+            deps: ['jQuery', 'kendo']
+        },
 		'app': {
-			deps: ['jQuery', 'kendo', 'common', 'pubsub', 'bootstrap', 'firebase', 'text', 'live']
-		}
+            deps: ['jQuery', 'kendo', 'common', 'pubsub', 'bootstrap', 'firebase', 'text', 'live']
+        }
     }
 } );
 
 define( [
     'app'
-], app => {
+], (app) => {
 	app.start();
-} );
+});
 
 // Stop Form Submission of Enter Key Press
 function stopRKey( evt ) {

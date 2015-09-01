@@ -30,7 +30,7 @@ var hfc;
         centervm.prototype.init = function () {
         };
         return centervm;
-    })(hfc.BaseViewModel);
+    })(kendo.data.ObservableObject);
     hfc.centervm = centervm;
 })(hfc || (hfc = {}));
 define([

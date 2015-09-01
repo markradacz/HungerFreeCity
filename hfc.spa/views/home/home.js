@@ -15,14 +15,22 @@ var hfc;
         function homevm() {
             _super.apply(this, arguments);
             this.title = 'Home';
+            this.loggedIn = false;
         }
+        homevm.prototype.doLogin = function (e) {
+            $.publish("showLogin");
+        };
+        homevm.prototype.doRegister = function (e) {
+            $.publish("showRegister");
+        };
         homevm.prototype.init = function () {
-            var vm = this;
-            if (hfc.common.User) {
-            }
+            var _this = this;
+            $.subscribe("loggedIn", function () { _this.set('loggedIn', true); });
+            $.subscribe("loggedOff", function () { _this.set('loggedIn', false); });
+            this.set('loggedIn', hfc.common.User ? true : false);
         };
         return homevm;
-    })(hfc.BaseViewModel);
+    })(kendo.data.ObservableObject);
     hfc.homevm = homevm;
 })(hfc || (hfc = {}));
 define([
@@ -31,12 +39,8 @@ define([
     var vm = new hfc.homevm();
     var view = new kendo.View(homeTemplate, {
         model: vm,
-        show: function () {
-            kendo.fx(_this.element).fade('in').duration(500).play();
-        },
-        init: function () {
-            vm.init();
-        }
+        show: function () { kendo.fx(_this.element).fade('in').duration(500).play(); },
+        init: function () { vm.init(); }
     });
     return view;
 });

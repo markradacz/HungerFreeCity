@@ -21,6 +21,13 @@
     text-transform: uppercase;
 }
 
+.nav > li > span {
+    vertical-align: middle;
+    text-wrap: none;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
 div.k-window-content {
 	padding: 10px;
 }
@@ -70,7 +77,6 @@ label.favorite-star > input[type=checkbox]:checked + span:before {
 .center-tile td:last-child {
     text-align: right;
 }
-
 .center-tile dl {
     margin-top: 0;
     margin-bottom: 0;
@@ -91,4 +97,51 @@ label.favorite-star > input[type=checkbox]:checked + span:before {
     margin-bottom: 10px;
     cursor: move;
     padding: 5px;
+}
+
+/***************************
+* Notifications
+***************************/
+.notification {
+	background: gold;
+	padding: 20px;
+	color: #000000;
+	width: 200px;
+	z-index: 10004;
+}
+.successNotification {
+    border: #71b1d1 solid 1px;
+    border-radius: 10px;
+	background: greenyellow;
+	padding: 20px;
+	color: #000000;
+	width: 200px;
+	z-index: 10004;
+}
+.infoNotification {
+    border: #71b1d1 solid 1px;
+    border-radius: 10px;
+	background: greenyellow;
+	padding: 20px;
+	color: #000000;
+	width: 200px;
+	z-index: 10004;
+}
+.warningNotification {
+    border: #71b1d1 solid 1px;
+    border-radius: 10px;
+	background: gold;
+	padding: 20px;
+	color: #000000;
+	width: 200px;
+	z-index: 10004;
+}
+.errorNotification {
+    border: #71b1d1 solid 1px;
+    border-radius: 10px;
+	background: lightsalmon;
+	padding: 20px;
+	color: #000000;
+	width: 200px;
+	z-index: 10004;
 }

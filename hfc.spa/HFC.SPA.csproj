@@ -27,6 +27,8 @@
     <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="app.js" />
+    <Content Include="app.js.map" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="fonts\fontawesome-webfont.svg" />
@@ -37,8 +39,6 @@
     <Content Include="Views\manage\location.js" />
     <Content Include="Views\manage\needs.js.map" />
     <Content Include="Views\manage\location.js.map" />
-    <TypeScriptCompile Include="app.ts" />
-    <Content Include="app.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -412,6 +412,7 @@
     <Content Include="index.html" />
     <Content Include="liveSetup.js" />
     <Content Include="kendo.js" />
+    <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="main.ts" />
     <Content Include="main.js" />
     <Content Include="packages.config" />
@@ -442,7 +443,6 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
-    <Content Include="app.js.map" />
     <Content Include="main.js.map" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -1046,7 +1046,6 @@
     <Content Include="Views\home\home.js.map" />
     <Content Include="Views\manage\center.js" />
     <Content Include="Views\manage\manage.js.map" />
-    <Content Include="Views\layout\layout.js.map" />
     <TypeScriptCompile Include="Scripts\common.ts" />
     <TypeScriptCompile Include="Scripts\typings\firebase.d.ts" />
     <Content Include="Views\about\about.html" />
@@ -1055,7 +1054,6 @@
     <TypeScriptCompile Include="Views\manage\center.ts" />
     <TypeScriptCompile Include="Views\manage\needs.ts" />
     <TypeScriptCompile Include="Views\manage\manage.ts" />
-    <TypeScriptCompile Include="Views\layout\layout.ts" />
     <Content Include="Views\manage\center.html" />
     <Content Include="Views\manage\location.html" />
     <Content Include="Views\manage\manage.html" />
@@ -1063,8 +1061,6 @@
     <TypeScriptCompile Include="Views\home\home.ts" />
     <Content Include="Views\home\home.html" />
     <Content Include="Views\home\home.js" />
-    <Content Include="Views\layout\layout.html" />
-    <Content Include="Views\layout\layout.js" />
     <Content Include="Views\manage\needs.html" />
     <Content Include="Views\manage\needs.js" />
     <Content Include="web.config" />

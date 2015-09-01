@@ -54,7 +54,7 @@ var hfc;
         needsvm.prototype.init = function () {
         };
         return needsvm;
-    })(hfc.BaseViewModel);
+    })(kendo.data.ObservableObject);
     hfc.needsvm = needsvm;
 })(hfc || (hfc = {}));
 define([

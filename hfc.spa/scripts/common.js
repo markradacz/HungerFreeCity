@@ -54,14 +54,6 @@ var hfc;
         return common;
     })(kendo.data.ObservableObject);
     hfc.common = common;
-    var BaseViewModel = (function (_super) {
-        __extends(BaseViewModel, _super);
-        function BaseViewModel() {
-            _super.apply(this, arguments);
-        }
-        return BaseViewModel;
-    })(kendo.data.ObservableObject);
-    hfc.BaseViewModel = BaseViewModel;
 })(hfc || (hfc = {}));
 // extend jQuery with a new distinctByProperty() function that does an in-place edit of the array removing duplicates; favoring early values rather than latter
 jQuery.extend({
@@ -519,6 +511,7 @@ var kendo;
             //	}
             //});
             // toggle a CSS class
+            // <div class="tile" data-bind="cssToggle: canRemove" data-class-true="already" data-class-false="new">
             var cssToggle = (function (_super) {
                 __extends(cssToggle, _super);
                 function cssToggle(element, bindings, options) {
@@ -529,7 +522,10 @@ var kendo;
                 }
                 cssToggle.prototype.refresh = function () {
                     var e = $(this.element);
-                    if (this.bindings["cssToggle"].get()) {
+                    var binding = this.bindings["cssToggle"];
+                    var val = binding.source[binding.path];
+                    // var val = binding.get();
+                    if (val) {
                         e.addClass(this.c);
                     }
                     else {

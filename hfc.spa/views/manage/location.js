@@ -51,7 +51,7 @@ var hfc;
             });
         };
         return locationvm;
-    })(hfc.BaseViewModel);
+    })(kendo.data.ObservableObject);
     hfc.locationvm = locationvm;
 })(hfc || (hfc = {}));
 define([

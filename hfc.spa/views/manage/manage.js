@@ -50,14 +50,13 @@ var hfc;
             });
             this.layout = new kendo.Layout("<div id='viewConent'/>");
         }
-        ;
         managevm.prototype.showCenter = function (e) {
             // get the row of the collection to bind to the subviews
             var listView = $(e.sender.element).data("kendoListView");
             var index = listView.select().index();
             var item = listView.dataSource.view()[index];
             var url = hfc.common.FirebaseUrl + "centers/" + index;
-            hfc.common.log('selected center url is ' + url);
+            //common.log('selected center url is ' + url);
             this.needsView.model.setup(item, url);
             this.centerView.model.setup(item, url);
             this.locationView.model.setup(item, url);
@@ -90,13 +89,17 @@ var hfc;
         managevm.prototype.init = function () {
             var _this = this;
             this.layout.render('#tabContent');
-            $.subscribe('userChanged', function () {
+            $.subscribe('loggedIn', function () {
                 // re-read our datasource upon login, so favorties are matched
                 _this.centers.read();
             });
+            if (hfc.common.User && hfc.common.User.favorites) {
+                // re-read our datasource upon login, so favorties are matched
+                this.centers.read();
+            }
         };
         return managevm;
-    })(hfc.BaseViewModel);
+    })(kendo.data.ObservableObject);
     hfc.managevm = managevm;
 })(hfc || (hfc = {}));
 define([

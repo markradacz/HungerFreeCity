@@ -45,9 +45,6 @@ module hfc {
             }
         }
     }
-
-    export class BaseViewModel extends kendo.data.ObservableObject {
-    }
 }
 
 // extend jQuery with a new distinctByProperty() function that does an in-place edit of the array removing duplicates; favoring early values rather than latter
@@ -460,6 +457,7 @@ module kendo.data.binders {
 //});
 
     // toggle a CSS class
+    // <div class="tile" data-bind="cssToggle: canRemove" data-class-true="already" data-class-false="new">
     export class cssToggle extends Binder {
         c: string;
         nc: string;
@@ -471,7 +469,10 @@ module kendo.data.binders {
         }
         refresh() {
             var e = $(this.element);
-            if (this.bindings["cssToggle"].get()) {
+            var binding = this.bindings["cssToggle"];
+            var val = binding.source[binding.path];
+            // var val = binding.get();
+            if (val) {
                 e.addClass(this.c);
             } else {
                 e.removeClass(this.c);

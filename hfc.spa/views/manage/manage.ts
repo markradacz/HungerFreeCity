@@ -3,9 +3,9 @@
 /// <reference path="../../scripts/typings/kendo.all.d.ts" />
 /// <reference path="../../scripts/common.ts" />
 module hfc {
-    export class managevm extends BaseViewModel {
+    export class managevm extends kendo.data.ObservableObject {
         public title: string = "Manage";
-        public toolbarVisible: boolean = false;;
+        public toolbarVisible: boolean = false;
         public needsView: kendo.View;
         public centerView: kendo.View;
         public locationView: kendo.View;
@@ -49,7 +49,7 @@ module hfc {
             var item = listView.dataSource.view()[index];
 
             var url: string = common.FirebaseUrl + "centers/" + index;
-            common.log('selected center url is ' + url);
+            //common.log('selected center url is ' + url);
 
             (<needsvm>this.needsView.model).setup(item, url);
             (<centervm>this.centerView.model).setup(item, url);
@@ -80,10 +80,14 @@ module hfc {
         private layout: kendo.Layout = new kendo.Layout("<div id='viewConent'/>");
         public init(): void {
             this.layout.render('#tabContent');
-            $.subscribe('userChanged', () => {
+            $.subscribe('loggedIn', () => {
                 // re-read our datasource upon login, so favorties are matched
                 this.centers.read();
             });
+            if (hfc.common.User && hfc.common.User.favorites) {
+                // re-read our datasource upon login, so favorties are matched
+                this.centers.read();
+            }
         }
     }
 }

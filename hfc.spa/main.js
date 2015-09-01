@@ -7,7 +7,7 @@ require.config({
         'jQuery': 'scripts/jquery-2.1.4.min',
         'pubsub': 'scripts/pubsub',
         'bootstrap': 'scripts/bootstrap',
-        'firebase': 'scripts/firebase-debug',
+        'firebase': 'scripts/firebase',
         'text': 'scripts/text',
         'kendo': 'kendo',
         'common': 'scripts/common',
@@ -29,7 +29,7 @@ require.config({
             deps: ['liveSetup']
         },
         'common': {
-            deps: ['kendo', 'jQuery']
+            deps: ['jQuery', 'kendo']
         },
         'app': {
             deps: ['jQuery', 'kendo', 'common', 'pubsub', 'bootstrap', 'firebase', 'text', 'live']

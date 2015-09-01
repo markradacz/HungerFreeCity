@@ -3,7 +3,7 @@
 /// <reference path="../../scripts/typings/kendo.all.d.ts" />
 /// <reference path="../../scripts/common.ts" />
 module hfc {
-    export class centervm extends BaseViewModel {
+    export class centervm extends kendo.data.ObservableObject {
         public title: string = "Center";
         public item: any;  // defined by the manage viewmodel
         public center: kendo.data.DataSource = new kendo.data.DataSource();

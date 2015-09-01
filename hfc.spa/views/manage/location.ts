@@ -3,7 +3,7 @@
 /// <reference path="../../scripts/typings/kendo.all.d.ts" />
 /// <reference path="../../scripts/common.ts" />
 module hfc {
-    export class locationvm extends BaseViewModel {
+    export class locationvm extends kendo.data.ObservableObject {
         public title: string = "Location";
         public item: any;  // defined by the manage viewmodel
 
