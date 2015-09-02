@@ -7,19 +7,51 @@ module hfc {
         public title: string = "Needs";
         public item: any;  // defined by the manage viewmodel
         public url: string;  // defined by the manage viewmodel
+        public need: any = null;
 
-        public setup(item, url) {
+        public setup(item, url): void {
             this.set("item", item);
             this.set("url", url);
         }
 
-        public onDataBound() {
+        public doAction(e: any): void {
+            if (e.id === "add") {
+                this.item.needs.push({ name: 'New Item' });
+                this.showButtons(false);
+            } else if (e.id == "edit") {
+                // popup a dialog box to edit the value
+                var listView = $('#needsList').data("kendoListView");
+                var index = listView.select().index();
+                this.set('need', listView.dataSource.view()[index]);
+
+                var p = $('#editNeedPanel').data('kendoWindow');
+                p.open();
+                p.center();
+
+            } else if(e.id == "remove") {
+                // find which item is selected
+                var listView = $('#needsList').data("kendoListView");
+                var index = listView.select().index();
+                var item = listView.dataSource.view()[index];
+                this.item.needs.remove(item);
+                this.showButtons(false);
+            }
+        }
+
+        public onItemSelected(e: any): void {
+            var listView = $('#needsList').data("kendoListView");
+            var index = listView.select().index();
+            // var item = listView.dataSource.view()[index];
+            this.showButtons((index >= 0));
+        }
+
+        public onDataBound(): void {
             // make the listview sortable and all the items within draggable
             $("#needsList").kendoSortable({
                 filter: ">div.needItem",
                 cursor: "move",
                 placeholder: function (element) {
-                    return element.clone().css("opacity", 0.1);
+                    return element.clone().css("opacity", 0.5);
                 },
                 hint: function (element) {
                     return element.clone().removeClass("k-state-selected");
@@ -45,7 +77,22 @@ module hfc {
             });
         }
 
+        private showButtons(b: boolean): void {
+            if (b) {
+                $("a#remove").fadeIn(300);
+                $("a#edit").fadeIn(300);
+            } else {
+                $("a#remove").fadeOut(300);
+                $("a#edit").fadeOut(300);
+            }
+        }
+
         public init(): void {
+            this.bind("change", function (e) {
+                if (e.field === 'item') {
+                    this.showButtons(false);
+                }
+            });
         }
     }
 }

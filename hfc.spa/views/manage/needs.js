@@ -16,10 +16,40 @@ var hfc;
         function needsvm() {
             _super.apply(this, arguments);
             this.title = "Needs";
+            this.need = null;
         }
         needsvm.prototype.setup = function (item, url) {
             this.set("item", item);
             this.set("url", url);
+        };
+        needsvm.prototype.doAction = function (e) {
+            if (e.id === "add") {
+                this.item.needs.push({ name: 'New Item' });
+                this.showButtons(false);
+            }
+            else if (e.id == "edit") {
+                // popup a dialog box to edit the value
+                var listView = $('#needsList').data("kendoListView");
+                var index = listView.select().index();
+                this.set('need', listView.dataSource.view()[index]);
+                var p = $('#editNeedPanel').data('kendoWindow');
+                p.open();
+                p.center();
+            }
+            else if (e.id == "remove") {
+                // find which item is selected
+                var listView = $('#needsList').data("kendoListView");
+                var index = listView.select().index();
+                var item = listView.dataSource.view()[index];
+                this.item.needs.remove(item);
+                this.showButtons(false);
+            }
+        };
+        needsvm.prototype.onItemSelected = function (e) {
+            var listView = $('#needsList').data("kendoListView");
+            var index = listView.select().index();
+            // var item = listView.dataSource.view()[index];
+            this.showButtons((index >= 0));
         };
         needsvm.prototype.onDataBound = function () {
             // make the listview sortable and all the items within draggable
@@ -27,7 +57,7 @@ var hfc;
                 filter: ">div.needItem",
                 cursor: "move",
                 placeholder: function (element) {
-                    return element.clone().css("opacity", 0.1);
+                    return element.clone().css("opacity", 0.5);
                 },
                 hint: function (element) {
                     return element.clone().removeClass("k-state-selected");
@@ -51,7 +81,22 @@ var hfc;
                 }
             });
         };
+        needsvm.prototype.showButtons = function (b) {
+            if (b) {
+                $("a#remove").fadeIn(300);
+                $("a#edit").fadeIn(300);
+            }
+            else {
+                $("a#remove").fadeOut(300);
+                $("a#edit").fadeOut(300);
+            }
+        };
         needsvm.prototype.init = function () {
+            this.bind("change", function (e) {
+                if (e.field === 'item') {
+                    this.showButtons(false);
+                }
+            });
         };
         return needsvm;
     })(kendo.data.ObservableObject);

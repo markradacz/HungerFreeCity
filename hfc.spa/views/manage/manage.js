@@ -50,10 +50,33 @@ var hfc;
             });
             this.layout = new kendo.Layout("<div id='viewConent'/>");
         }
+        managevm.prototype.doAction = function (e) {
+            if (e.id === "addcenter") {
+                this.centers.add({ name: '  New Center', address: {}, needs: [], centerinfo: [], geometry: { coordinates: [] } });
+                this.showButtons(false);
+            }
+            else if (e.id == "removecenter") {
+                // find which item is selected
+                var listView = $('#centerlist').data("kendoListView");
+                var index = listView.select().index();
+                var item = listView.dataSource.view()[index];
+                this.centers.remove(item);
+                this.showButtons(false);
+            }
+        };
+        managevm.prototype.showButtons = function (b) {
+            if (b) {
+                $("a#removecenter").fadeIn(300);
+            }
+            else {
+                $("a#removecenter").fadeOut(300);
+            }
+        };
         managevm.prototype.showCenter = function (e) {
             // get the row of the collection to bind to the subviews
             var listView = $(e.sender.element).data("kendoListView");
             var index = listView.select().index();
+            this.showButtons(index >= 0);
             var item = listView.dataSource.view()[index];
             var url = hfc.common.FirebaseUrl + "centers/" + index;
             //common.log('selected center url is ' + url);

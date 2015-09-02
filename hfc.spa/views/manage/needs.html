@@ -1,15 +1,47 @@
 ﻿<h2>Needs for <span data-bind="html: item.name"></span></h2>
+<div class="tabtoolbar"
+    data-role="toolbar"
+    data-bind="events: { click: doAction }"
+    data-items='[{
+        type: "buttonGroup",
+        buttons: [
+            { spriteCssClass: "fa fa-plus", text: " ADD ITEM", "id": "add" },
+            { spriteCssClass: "fa fa-pencil", text: " EDIT ITEM", "id": "edit", hidden: true },
+            { spriteCssClass: "fa fa-trash", text: " REMOVE ITEM", "id": "remove", hidden: true }
+        ]
+    }]'>
+</div>
+
 <div id="needsList"
      class="needslist"
      data-role="listview"
      data-selectable="true"
      data-template="needItemTemplate"
-     data-bind="source: item.needs, events: { dataBound: onDataBound }"
-     style="height: 500px; overflow: auto">
+     data-bind="source: item.needs, events: { dataBound: onDataBound, change: onItemSelected }">
 </div>
 <script type="text/x-kendo-tmpl" id="needItemTemplate">
     <div class="needItem">
-        <span data-bind="text: index" />
         <span data-bind="text: name" />
+        <span class="fa fa-lg" />
     </div>
 </script>
+
+<div id="editNeedPanel" style="display: none"
+     data-role="window"
+     data-title="EDIT ITEM"
+     data-draggable="true"
+     data-modal="true"
+     data-scrollable="false"
+     data-pinned="false"
+     data-resizable="false"
+     data-actions="['Close']"
+     data-position='{ top: "50%", left: "50%" }'
+     data-visible="false"
+     class="editPanel">
+    <div>
+        Correct the value
+    </div>
+    <div>
+        <input type="text" class="k-textbox" data-min-width="300" data-bind="value: need.name" placeholder="Name of need" style="width: 100%;" />
+    </div>
+</div>

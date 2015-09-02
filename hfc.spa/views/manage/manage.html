@@ -2,7 +2,19 @@
 <table style="width: 100%; height: 100%">
 	<tr>
 		<td style="width: 300px; vertical-align: top;">
-			<div class="centerlist"
+            <div class="tabtoolbar"
+                 data-role="toolbar"
+                 data-bind="events: { click: doAction }"
+                 data-items='[{
+                    type: "buttonGroup",
+                    buttons: [
+                        { spriteCssClass: "fa fa-plus", text: " ADD CENTER", "id": "addcenter" },
+                        { spriteCssClass: "fa fa-trash", text: " REMOVE CENTER", "id": "removecenter", hidden: true }
+                    ]
+                }]'>
+            </div>
+			<div id="centerlist"
+                 class="centerlist"
                  data-role="listview"
 				 data-selectable="true"
 				 data-template="template"

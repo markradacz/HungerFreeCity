@@ -89,14 +89,33 @@ label.favorite-star > input[type=checkbox]:checked + span:before {
 
 .needslist {
     border-style: none;
-    width: 50%;
 }
+
 .needItem {
+    width: 200px;
     border: #71b1d1 solid 1px;
     border-radius: 10px;
     margin-bottom: 10px;
-    cursor: move;
     padding: 5px;
+}
+
+div.needItem {
+    cursor: move;
+}
+
+div.needItem > span.fa {
+    float: right !important;
+    line-height: 1em;
+    vertical-align: 0;
+}
+
+div.needItem > span.fa:before {
+    content: "\f0c9";
+    color: #71b1d1;
+}
+
+button.needItem > span.fa {
+    color: #71b1d1;
 }
 
 /***************************

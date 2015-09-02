@@ -40,12 +40,35 @@ module hfc {
                     $.publish('saveFavorites');
                 }
             }
-        })
+        });
+
+        public doAction(e: any): void {
+            if (e.id === "addcenter") {
+                this.centers.add({ name: '  New Center', address: {}, needs: [], centerinfo: [], geometry: { coordinates: [] } });
+                this.showButtons(false);
+            } else if (e.id == "removecenter") {
+                // find which item is selected
+                var listView = $('#centerlist').data("kendoListView");
+                var index = listView.select().index();
+                var item = listView.dataSource.view()[index];
+                this.centers.remove(item);
+                this.showButtons(false);
+            }
+        }
+
+        private showButtons(b: boolean): void {
+            if (b) {
+                $("a#removecenter").fadeIn(300);
+            } else {
+                $("a#removecenter").fadeOut(300);
+            }
+        }
 
         public showCenter(e: any) {
             // get the row of the collection to bind to the subviews
             var listView = $(e.sender.element).data("kendoListView");
             var index = listView.select().index();
+            this.showButtons(index >= 0);
             var item = listView.dataSource.view()[index];
 
             var url: string = common.FirebaseUrl + "centers/" + index;
