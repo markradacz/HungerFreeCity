@@ -14,7 +14,7 @@
 		kendo.data.transports.firebase = kendo.data.RemoteTransport.extend( {
 			create: function ( options ) {
 				var data = this.parameterMap( options.data, 'create' );
-				delete data.id;
+				delete data.refkey;
 
 				this.requestId = kendo.guid();
 
@@ -26,7 +26,7 @@
 
 				if( fbRef !== undefined ) {
 					var result = data;
-					result.id = fbRef.key();	// was .name()
+					result.refkey = fbRef.key();	// was .name()
 					options.success( result );
 					delete this.requestId;
 				}
@@ -34,10 +34,10 @@
 
 			destroy: function ( options ) {
 				var data = this.parameterMap( options.data, 'update' );
-				this.ref.child( data.id ).set( null, function ( error ) {
+				this.ref.child( data.refkey ).set( null, function ( error ) {
 					if( !error ) {
 						var result = data;
-						result.id = data.id;
+						result.refkey = data.refkey;
 						options.success( result );
 					} else {
 						options.fail();
@@ -50,7 +50,7 @@
 
 				var url = firebase.url;
 				if( !url ) {
-					throw new Error( 'The option, URL must be set.' );
+					throw new Error( 'The URL must be set.' );
 				}
 
 				this.ref = new Firebase( url );
@@ -64,7 +64,7 @@
 					}
 					var model = childSnapshot.val();
 					try {
-						model.id = childSnapshot.key();
+						model.refkey = childSnapshot.key();
 						callbacks.pushUpdate( model );
 					}
 					catch( ex ) { }
@@ -72,19 +72,19 @@
 
 				this.ref.on( 'child_changed', function ( childSnapshot, prevChildName ) {
 					var model = childSnapshot.val();
-					model.id = childSnapshot.key();
+					model.refkey = childSnapshot.key();
 					callbacks.pushUpdate( model );
 				} );
 
 				this.ref.on( 'child_moved', function ( childSnapshot, prevChildName ) {
 					var model = childSnapshot.val();
-					model.id = childSnapshot.key();
+					model.refkey = childSnapshot.key();
 					callbacks.pushUpdate( model );
 				} );
 
 				this.ref.on( 'child_removed', function ( oldChildSnapshot ) {
 					var model = oldChildSnapshot.val();
-					model.id = oldChildSnapshot.key();
+					model.refkey = oldChildSnapshot.key();
 					callbacks.pushDestroy( model );
 				} );
 			},
@@ -93,23 +93,23 @@
 				this.ref.once( 'value', function ( dataSnapshot ) {
 					var data = [];
 					dataSnapshot.forEach( function ( childSnapshot ) {
-						var item = childSnapshot.val();
-						item.id = childSnapshot.key();
-						data.push( item );
+						var model = childSnapshot.val();
+						model.refkey = childSnapshot.key();
+						data.push( model );
 					} );
 					options.success( data );
 				} );
 			},
 
 			update: function ( options ) {
-				var id = options.data.id,
+				var refkey = options.data.refkey,
 					data = this.parameterMap( options.data, 'update' );
 
-				delete data.id;
-				this.ref.child( id ).set( data, function ( error ) {
+				delete data.refkey;
+				this.ref.child( refkey ).set( data, function ( error ) {
 					if( !error ) {
 						var result = data;
-						result.id = id;
+						result.refkey = refkey;
 						options.success( result );
 					} else {
 						options.fail();

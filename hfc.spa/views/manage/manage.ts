@@ -9,6 +9,7 @@ module hfc {
         public needsView: kendo.View;
         public centerView: kendo.View;
         public locationView: kendo.View;
+        public blankView: kendo.View = new kendo.View('<div/>');
 
         public centers: kendo.data.DataSource = new kendo.data.DataSource({
             type: "firebase",
@@ -31,7 +32,7 @@ module hfc {
             },
             change: function (e) {
                 if (e.action === 'itemchange' && e.field === 'favorite') {
-                    common.log('favorite changed on the datasource!');
+                    // common.log('favorite changed on the datasource!');
                     // so change the user's favorites and persist
                     var all = this.data();
                     hfc.common.User.favorites = all.filter(v => v.favorite).map(v => v.centerid);
@@ -51,6 +52,10 @@ module hfc {
                 var listView = $('#centerlist').data("kendoListView");
                 var index = listView.select().index();
                 var item = listView.dataSource.view()[index];
+
+                this.layout.showIn("#viewConent", this.blankView);
+                this.set('toolbarVisible', false);
+
                 this.centers.remove(item);
                 this.showButtons(false);
             }
@@ -61,7 +66,7 @@ module hfc {
                 $("a#removecenter").fadeIn(300);
             } else {
                 $("a#removecenter").fadeOut(300);
-            }
+          }
         }
 
         public showCenter(e: any) {

@@ -17,6 +17,7 @@ var hfc;
             _super.apply(this, arguments);
             this.title = "Manage";
             this.toolbarVisible = false;
+            this.blankView = new kendo.View('<div/>');
             this.centers = new kendo.data.DataSource({
                 type: "firebase",
                 autoSync: false,
@@ -38,7 +39,7 @@ var hfc;
                 },
                 change: function (e) {
                     if (e.action === 'itemchange' && e.field === 'favorite') {
-                        hfc.common.log('favorite changed on the datasource!');
+                        // common.log('favorite changed on the datasource!');
                         // so change the user's favorites and persist
                         var all = this.data();
                         hfc.common.User.favorites = all.filter(function (v) { return v.favorite; }).map(function (v) { return v.centerid; });
@@ -60,6 +61,8 @@ var hfc;
                 var listView = $('#centerlist').data("kendoListView");
                 var index = listView.select().index();
                 var item = listView.dataSource.view()[index];
+                this.layout.showIn("#viewConent", this.blankView);
+                this.set('toolbarVisible', false);
                 this.centers.remove(item);
                 this.showButtons(false);
             }
