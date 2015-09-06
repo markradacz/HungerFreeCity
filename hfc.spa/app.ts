@@ -39,11 +39,10 @@ module hfc {
         }
 
         public logoff(): void {
-            common.User = null;
-            this.setlogin();
             // Unauthenticate the client
             this.ref.unauth();
-            // TODO: make sure we are moved to the Home tab
+            common.User = null;
+            this.setlogin();
         }
 
         private validateEmail(email : string): boolean {
@@ -62,7 +61,7 @@ module hfc {
                 return;
             }
 
-            if (password == null || password == "") {
+            if (password == null || password === "") {
                 common.errorToast("Please provide a password");
                 return;
             }
@@ -70,7 +69,7 @@ module hfc {
             this.ref.createUser({
                 email: email,
                 password: password
-            }, (error, authData) => {
+            }, (error) => {
                 if (error) {
                     this.showError(error);
                 } else {
@@ -151,7 +150,7 @@ module hfc {
                         email: authData.password.email,
                         favorites: []
                     };
-                    var mod: boolean = false;
+                    var mod = false;
                     if (data.userId === undefined) {
                         data.userId = authData.uid;
                         mod = true;
@@ -255,6 +254,9 @@ define([
     router.route("/", () => { layout.showIn("#viewRoot", home); });
     router.route("/manage", () => { layout.showIn("#viewRoot", manage); });
     router.route("/about", () => { layout.showIn("#viewRoot", about); });
+
+	$.subscribe("loggedIn", () => { router.navigate("/manage"); });       
+	$.subscribe("loggedOff", () => { router.navigate("/"); });       
 
     return router;
 });

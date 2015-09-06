@@ -47,11 +47,10 @@ var hfc;
             this.showPanel("#forgotPanel");
         };
         appvm.prototype.logoff = function () {
-            hfc.common.User = null;
-            this.setlogin();
             // Unauthenticate the client
             this.ref.unauth();
-            // TODO: make sure we are moved to the Home tab
+            hfc.common.User = null;
+            this.setlogin();
         };
         appvm.prototype.validateEmail = function (email) {
             var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
@@ -66,14 +65,14 @@ var hfc;
                 hfc.common.errorToast("Invalid email address: " + email);
                 return;
             }
-            if (password == null || password == "") {
+            if (password == null || password === "") {
                 hfc.common.errorToast("Please provide a password");
                 return;
             }
             this.ref.createUser({
                 email: email,
                 password: password
-            }, function (error, authData) {
+            }, function (error) {
                 if (error) {
                     _this.showError(error);
                 }
@@ -247,6 +246,8 @@ define([
     router.route("/", function () { layout.showIn("#viewRoot", home); });
     router.route("/manage", function () { layout.showIn("#viewRoot", manage); });
     router.route("/about", function () { layout.showIn("#viewRoot", about); });
+    $.subscribe("loggedIn", function () { router.navigate("/manage"); });
+    $.subscribe("loggedOff", function () { router.navigate("/"); });
     return router;
 });
 //# sourceMappingURL=app.js.map
