@@ -1,0 +1,15 @@
+{
+  "firebase": "amber-torch-2255",
+  "public": ".",
+  "ignore": [
+    "firebase.json",
+    "**/packages",
+    "**/bin",
+    "**/obj",
+    "**/.*",
+    "**/.vs*",
+    "**/web.config",
+    "**/*.json",
+    "**/node_modules/**"
+  ]
+}

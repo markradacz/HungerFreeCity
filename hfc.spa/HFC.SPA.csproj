@@ -444,6 +444,7 @@
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="main.js.map" />
+    <Content Include="firebase.json" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -453,7 +454,6 @@
     <Content Include="Scripts\firebase.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
-    <Content Include="Scripts\kendo-fire.js" />
     <Content Include="Scripts\kendo\2015.2.805\angular.min.js" />
     <Content Include="Scripts\kendo\2015.2.805\cultures\kendo.culture.af-ZA.min.js" />
     <Content Include="Scripts\kendo\2015.2.805\cultures\kendo.culture.af.min.js" />

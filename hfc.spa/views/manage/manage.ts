@@ -4,65 +4,46 @@
 /// <reference path="../../scripts/common.ts" />
 module hfc {
     export class managevm extends kendo.data.ObservableObject {
-        public title: string = "Manage";
-        public toolbarVisible: boolean = false;
+        public title = "Manage";
+        public toolbarVisible = false;
         public needsView: kendo.View;
         public centerView: kendo.View;
         public locationView: kendo.View;
-        public blankView: kendo.View = new kendo.View('<div/>');
+        public blankView = new kendo.View("<div/>");
+        public centers = new kendo.data.ObservableArray([]);
 
-        public centers: kendo.data.DataSource = new kendo.data.DataSource({
-            type: "firebase",
-            autoSync: false, // true recommended
-            transport: { firebase: { url: hfc.common.FirebaseUrl + "centers" } },
-            sort: [
-                //{ field: "favorite", dir: "desc" },   // Note: causes re-order when favorite clicked, but listview doesn't show the change
-                { field: "name", dir: "asc" }
-            ],
-            schema: {
-                parse(items) {
-                    // join in the user's favorited centers
-                    if (hfc.common.User && hfc.common.User.favorites) {
-                        items.forEach(v => {
-                            v.favorite = $.inArray(v.centerid, hfc.common.User.favorites) >= 0;
-                        });
-                    }
-                    return items;
-                }
-            },
-            change: function (e) {
-                if (e.action === 'itemchange' && e.field === 'favorite') {
-                    // common.log('favorite changed on the datasource!');
-                    // so change the user's favorites and persist
-                    var all = this.data();
-                    hfc.common.User.favorites = all.filter(v => v.favorite).map(v => v.centerid);
-                    //common.log('favorites are ' + JSON.stringify(hfc.common.User.favorites ) );
-                    // persist the user's favorites
-                    $.publish('saveFavorites');
-                }
-            }
-        });
+        private layout = new kendo.Layout("<div id='viewConent'/>");
 
         public doAction(e: any): void {
             if (e.id === "addcenter") {
-                this.centers.add({ name: '  New Center', address: {}, needs: [], centerinfo: [], geometry: { coordinates: [] } });
+	            var center = {
+		            name: "  New Center",
+					centerid: kendo.guid(),
+					address: {},
+					needs: [],
+					centerinfo: [],
+					geometry: {
+						coordinates: []
+					}
+	            };
+                this.centers.unshift(center);
                 this.showButtons(false);
-            } else if (e.id == "removecenter") {
+            } else if (e.id === "removecenter") {
                 // find which item is selected
-                var listView = $('#centerlist').data("kendoListView");
+                var listView = $("#centerlist").data("kendoListView");
                 var index = listView.select().index();
-                var item = listView.dataSource.view()[index];
+                var item = this.centers[index];
 
                 this.layout.showIn("#viewConent", this.blankView);
-                this.set('toolbarVisible', false);
+                this.set("toolbarVisible", false);
 
                 this.centers.remove(item);
                 this.showButtons(false);
             }
         }
 
-        private showButtons(b: boolean): void {
-            if (b) {
+        private showButtons(fadein: boolean): void {
+            if (fadein) {
                 $("a#removecenter").fadeIn(300);
             } else {
                 $("a#removecenter").fadeOut(300);
@@ -74,20 +55,17 @@ module hfc {
             var listView = $(e.sender.element).data("kendoListView");
             var index = listView.select().index();
             this.showButtons(index >= 0);
-            var item = listView.dataSource.view()[index];
+            var item = this.centers[index];
 
-            var url: string = common.FirebaseUrl + "centers/" + index;
-            //common.log('selected center url is ' + url);
-
-            (<needsvm>this.needsView.model).setup(item, url);
-            (<centervm>this.centerView.model).setup(item, url);
-            (<locationvm>this.locationView.model).setup(item, url);
+            (<needsvm>this.needsView.model).setup(item);
+            (<centervm>this.centerView.model).setup(item);
+            (<locationvm>this.locationView.model).setup(item);
             this.layout.showIn("#viewConent", this.needsView);
 
             // select the Needs button in the toolbar
             var tabtoolbar = $("#tabtoolbar").data("kendoToolBar");
             tabtoolbar.toggle("#needs", true); //select button with id: "foo"
-            this.set('toolbarVisible', true);
+            this.set("toolbarVisible", true);
         }
 
         public tabToggle(e: any) {
@@ -105,26 +83,56 @@ module hfc {
             }
         }
 
-        private layout: kendo.Layout = new kendo.Layout("<div id='viewConent'/>");
         public init(): void {
-            this.layout.render('#tabContent');
-            $.subscribe('loggedIn', () => {
-                // re-read our datasource upon login, so favorties are matched
-                this.centers.read();
+            this.layout.render("#tabContent");
+        }
+
+        public constructor() {
+            super();
+	        var that = this;
+            $.subscribe("loggedIn", (ref: Firebase) => {
+                // register the Firebase ref
+                ref.child("centers").on("value", data => {
+					that.centers.length = 0;	// clear the current array
+                    // join in the user's favorited centers, and add each to the collection
+                    if (common.User && common.User.favorites) {
+						var all = data.val();
+						all.sort((a: any, b: any) => { return a.name.localeCompare( b.name ); });
+                        all.forEach(v => {
+                            v.favorite = $.inArray(v.centerid, common.User.favorites) >= 0;
+							that.centers.push(v);
+                        });
+                    }
+                });
+
+				$.subscribe("saveCenter", index => {
+					var center = that.centers[index];
+					common.log("saving center data " + JSON.stringify(center));
+					// ref.child("centers").child(index).set(center);
+				});
             });
-            if (hfc.common.User && hfc.common.User.favorites) {
-                // re-read our datasource upon login, so favorties are matched
-                this.centers.read();
-            }
+
+			that.centers.bind("change", e => {
+				if (e.action === "itemchange" && e.field === "favorite") {
+					// common.log('favorite changed on the datasource!');
+					// so change the user's favorites and persist
+					common.User.favorites = that.centers
+						.filter((v: any) => v.favorite)
+						.map((v: any) => v.centerid);
+					common.log("favorites are " + JSON.stringify(common.User.favorites ) );
+					// persist the user's favorites
+					$.publish("saveFavorites");
+				}        
+	        });
         }
     }
 }
 
 define([
-    'text!views/manage/manage.html',
-    'views/manage/needs',
-    'views/manage/center',
-    'views/manage/location'
+    "text!views/manage/manage.html",
+    "views/manage/needs",
+    "views/manage/center",
+    "views/manage/location"
 ], (template, needs, center, location) => {
     var vm = new hfc.managevm();
     vm.needsView = needs;
@@ -133,7 +141,7 @@ define([
 
     return new kendo.View(template, {
         model: vm,
-        show: e => { kendo.fx(this.element).fade('in').duration(500).play(); },
+        show: e => { kendo.fx(this.element).fade("in").duration(500).play(); },
         init: () => { vm.init(); }
     });
 });

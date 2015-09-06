@@ -17,9 +17,8 @@ var hfc;
             _super.apply(this, arguments);
             this.title = "Location";
         }
-        locationvm.prototype.setup = function (item, url) {
+        locationvm.prototype.setup = function (item) {
             this.set("item", item);
-            this.set("url", url);
         };
         locationvm.prototype.init = function () {
             var _this = this;

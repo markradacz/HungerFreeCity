@@ -10,8 +10,7 @@
 	'scripts/kendo/2015.2.805/kendo.notification.min',
 	'scripts/kendo/2015.2.805/kendo.dataviz.core.min',
 	'scripts/kendo/2015.2.805/kendo.dataviz.map.min',
-	'scripts/kendo/2015.2.805/kendo.drawing.min',
-	'scripts/kendo-fire'
+	'scripts/kendo/2015.2.805/kendo.drawing.min'
 ], function () {
 	return kendo;
 } );

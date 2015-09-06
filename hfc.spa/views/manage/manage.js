@@ -14,61 +14,74 @@ var hfc;
     var managevm = (function (_super) {
         __extends(managevm, _super);
         function managevm() {
-            _super.apply(this, arguments);
+            _super.call(this);
             this.title = "Manage";
             this.toolbarVisible = false;
-            this.blankView = new kendo.View('<div/>');
-            this.centers = new kendo.data.DataSource({
-                type: "firebase",
-                autoSync: false,
-                transport: { firebase: { url: hfc.common.FirebaseUrl + "centers" } },
-                sort: [
-                    //{ field: "favorite", dir: "desc" },   // Note: causes re-order when favorite clicked, but listview doesn't show the change
-                    { field: "name", dir: "asc" }
-                ],
-                schema: {
-                    parse: function (items) {
-                        // join in the user's favorited centers
-                        if (hfc.common.User && hfc.common.User.favorites) {
-                            items.forEach(function (v) {
-                                v.favorite = $.inArray(v.centerid, hfc.common.User.favorites) >= 0;
-                            });
-                        }
-                        return items;
+            this.blankView = new kendo.View("<div/>");
+            this.centers = new kendo.data.ObservableArray([]);
+            this.layout = new kendo.Layout("<div id='viewConent'/>");
+            var that = this;
+            $.subscribe("loggedIn", function (ref) {
+                // register the Firebase ref
+                ref.child("centers").on("value", function (data) {
+                    that.centers.length = 0; // clear the current array
+                    // join in the user's favorited centers, and add each to the collection
+                    if (hfc.common.User && hfc.common.User.favorites) {
+                        var all = data.val();
+                        all.sort(function (a, b) { return a.name.localeCompare(b.name); });
+                        all.forEach(function (v) {
+                            v.favorite = $.inArray(v.centerid, hfc.common.User.favorites) >= 0;
+                            that.centers.push(v);
+                        });
                     }
-                },
-                change: function (e) {
-                    if (e.action === 'itemchange' && e.field === 'favorite') {
-                        // common.log('favorite changed on the datasource!');
-                        // so change the user's favorites and persist
-                        var all = this.data();
-                        hfc.common.User.favorites = all.filter(function (v) { return v.favorite; }).map(function (v) { return v.centerid; });
-                        //common.log('favorites are ' + JSON.stringify(hfc.common.User.favorites ) );
-                        // persist the user's favorites
-                        $.publish('saveFavorites');
-                    }
+                });
+                $.subscribe("saveCenter", function (index) {
+                    var center = that.centers[index];
+                    hfc.common.log("saving center data " + JSON.stringify(center));
+                    // ref.child("centers").child(index).set(center);
+                });
+            });
+            that.centers.bind("change", function (e) {
+                if (e.action === "itemchange" && e.field === "favorite") {
+                    // common.log('favorite changed on the datasource!');
+                    // so change the user's favorites and persist
+                    hfc.common.User.favorites = that.centers
+                        .filter(function (v) { return v.favorite; })
+                        .map(function (v) { return v.centerid; });
+                    hfc.common.log("favorites are " + JSON.stringify(hfc.common.User.favorites));
+                    // persist the user's favorites
+                    $.publish("saveFavorites");
                 }
             });
-            this.layout = new kendo.Layout("<div id='viewConent'/>");
         }
         managevm.prototype.doAction = function (e) {
             if (e.id === "addcenter") {
-                this.centers.add({ name: '  New Center', address: {}, needs: [], centerinfo: [], geometry: { coordinates: [] } });
+                var center = {
+                    name: "  New Center",
+                    centerid: kendo.guid(),
+                    address: {},
+                    needs: [],
+                    centerinfo: [],
+                    geometry: {
+                        coordinates: []
+                    }
+                };
+                this.centers.unshift(center);
                 this.showButtons(false);
             }
-            else if (e.id == "removecenter") {
+            else if (e.id === "removecenter") {
                 // find which item is selected
-                var listView = $('#centerlist').data("kendoListView");
+                var listView = $("#centerlist").data("kendoListView");
                 var index = listView.select().index();
-                var item = listView.dataSource.view()[index];
+                var item = this.centers[index];
                 this.layout.showIn("#viewConent", this.blankView);
-                this.set('toolbarVisible', false);
+                this.set("toolbarVisible", false);
                 this.centers.remove(item);
                 this.showButtons(false);
             }
         };
-        managevm.prototype.showButtons = function (b) {
-            if (b) {
+        managevm.prototype.showButtons = function (fadein) {
+            if (fadein) {
                 $("a#removecenter").fadeIn(300);
             }
             else {
@@ -80,17 +93,15 @@ var hfc;
             var listView = $(e.sender.element).data("kendoListView");
             var index = listView.select().index();
             this.showButtons(index >= 0);
-            var item = listView.dataSource.view()[index];
-            var url = hfc.common.FirebaseUrl + "centers/" + index;
-            //common.log('selected center url is ' + url);
-            this.needsView.model.setup(item, url);
-            this.centerView.model.setup(item, url);
-            this.locationView.model.setup(item, url);
+            var item = this.centers[index];
+            this.needsView.model.setup(item);
+            this.centerView.model.setup(item);
+            this.locationView.model.setup(item);
             this.layout.showIn("#viewConent", this.needsView);
             // select the Needs button in the toolbar
             var tabtoolbar = $("#tabtoolbar").data("kendoToolBar");
             tabtoolbar.toggle("#needs", true); //select button with id: "foo"
-            this.set('toolbarVisible', true);
+            this.set("toolbarVisible", true);
         };
         managevm.prototype.tabToggle = function (e) {
             //e.target jQuery The jQuery object that represents the command element.
@@ -113,26 +124,17 @@ var hfc;
             }
         };
         managevm.prototype.init = function () {
-            var _this = this;
-            this.layout.render('#tabContent');
-            $.subscribe('loggedIn', function () {
-                // re-read our datasource upon login, so favorties are matched
-                _this.centers.read();
-            });
-            if (hfc.common.User && hfc.common.User.favorites) {
-                // re-read our datasource upon login, so favorties are matched
-                this.centers.read();
-            }
+            this.layout.render("#tabContent");
         };
         return managevm;
     })(kendo.data.ObservableObject);
     hfc.managevm = managevm;
 })(hfc || (hfc = {}));
 define([
-    'text!views/manage/manage.html',
-    'views/manage/needs',
-    'views/manage/center',
-    'views/manage/location'
+    "text!views/manage/manage.html",
+    "views/manage/needs",
+    "views/manage/center",
+    "views/manage/location"
 ], function (template, needs, center, location) {
     var vm = new hfc.managevm();
     vm.needsView = needs;
@@ -140,7 +142,7 @@ define([
     vm.locationView = location;
     return new kendo.View(template, {
         model: vm,
-        show: function (e) { kendo.fx(_this.element).fade('in').duration(500).play(); },
+        show: function (e) { kendo.fx(_this.element).fade("in").duration(500).play(); },
         init: function () { vm.init(); }
     });
 });

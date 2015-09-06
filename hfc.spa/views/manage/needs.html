@@ -15,11 +15,12 @@
      data-role="listview"
      data-selectable="true"
      data-template="needItemTemplate"
-     data-bind="source: needs, events: { dataBound: onDataBound, change: onItemSelected }">
+     data-bind="source: item.needs, events: { dataBound: onDataBound, change: onItemSelected }">
 </div>
 <script type="text/x-kendo-tmpl" id="needItemTemplate">
     <div class="needItem">
         <a class="confirmRemove" data-bind="click: onRemove">REMOVE</a>
+        <span data-bind="text: index" />.
         <span data-bind="text: name" />
         <span class="fa fa-lg fa-bars" />
         <a data-bind="click: onShowRemove"><span class="fa fa-lg fa-trash" /></a>

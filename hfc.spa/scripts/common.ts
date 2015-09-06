@@ -148,7 +148,7 @@ module kendo.data.binders.widget {
         }
 
         init(element: any, bindings: { [key: string]: Binding; }, options?: any) {
- 		    kendo.data.Binder.fn.init.call(this, element, bindings, options);
+ 		    data.Binder.fn.init.call(this, element, bindings, options);
 		    var binding = this.bindings["onEnter"];
 		    $(element.input).bind("keydown", function(e) {
 			    if (e.which === 13) {
@@ -168,7 +168,7 @@ module kendo.data.binders.widget {
         }
 
         init(element: any, bindings: { [key: string]: Binding; }, options?: any) {
-            kendo.data.Binder.fn.init.call(this, element, bindings, options);
+            data.Binder.fn.init.call(this, element, bindings, options);
             var binding = this.bindings["onKeyUp"];
             $(element.element[0]).bind("keyup", function (e) {
                 var fn = binding.source.get(binding.path);
@@ -186,7 +186,7 @@ module kendo.data.binders.widget {
         }
 
         init(element: any, bindings: { [key: string]: Binding; }, options?: any) {
-            kendo.data.Binder.fn.init.call(this, element, bindings, options);
+            data.Binder.fn.init.call(this, element, bindings, options);
             var binding = this.bindings["onComboKeyUp"];
             $(element.input[0]).bind("keyup", function (e) {
                 var fn = binding.source.get(binding.path);
@@ -386,7 +386,7 @@ module kendo.data.binders {
     }
 
 // Example: <span data-bind="date: selectedBlock.LastUpdated" data-dateformat="dddd MMM dd, yyyy hh:mmtt"></span>
-    export class date extends kendo.data.Binder {
+    export class date extends data.Binder {
         private dateformat: string;
         constructor(element: Element, bindings: { [key: string]: Binding; }, options?: any) {
             super(element, bindings, options);

@@ -159,7 +159,7 @@ var kendo;
                         _super.call(this, element, bindings, options);
                     }
                     onEnter.prototype.init = function (element, bindings, options) {
-                        kendo.data.Binder.fn.init.call(this, element, bindings, options);
+                        data.Binder.fn.init.call(this, element, bindings, options);
                         var binding = this.bindings["onEnter"];
                         $(element.input).bind("keydown", function (e) {
                             if (e.which === 13) {
@@ -180,7 +180,7 @@ var kendo;
                         _super.call(this, element, bindings, options);
                     }
                     onKeyUp.prototype.init = function (element, bindings, options) {
-                        kendo.data.Binder.fn.init.call(this, element, bindings, options);
+                        data.Binder.fn.init.call(this, element, bindings, options);
                         var binding = this.bindings["onKeyUp"];
                         $(element.element[0]).bind("keyup", function (e) {
                             var fn = binding.source.get(binding.path);
@@ -199,7 +199,7 @@ var kendo;
                         _super.call(this, element, bindings, options);
                     }
                     onComboKeyUp.prototype.init = function (element, bindings, options) {
-                        kendo.data.Binder.fn.init.call(this, element, bindings, options);
+                        data.Binder.fn.init.call(this, element, bindings, options);
                         var binding = this.bindings["onComboKeyUp"];
                         $(element.input[0]).bind("keyup", function (e) {
                             var fn = binding.source.get(binding.path);
@@ -458,7 +458,7 @@ var kendo;
                     }
                 };
                 return date;
-            })(kendo.data.Binder);
+            })(data.Binder);
             binders.date = date;
             // format text from binding
             //export class textFormat extends Binder {

@@ -17,7 +17,7 @@ module hfc {
         public init(): void {
             $.subscribe("loggedIn", () => { this.set('loggedIn', true); });
             $.subscribe("loggedOff", () => { this.set('loggedIn', false); });
-            this.set('loggedIn', hfc.common.User ? true : false);
+            this.set('loggedIn', common.User ? true : false);
         }
     }
 }
