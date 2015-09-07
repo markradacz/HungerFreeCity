@@ -141,7 +141,7 @@ define([
 
     return new kendo.View(template, {
         model: vm,
-        show: e => { kendo.fx(this.element).fade("in").duration(500).play(); },
-        init: () => { vm.init(); }
+        show() { hfc.common.animate(this.element, "slideUp"); },
+        init() { vm.init(); }
     });
 });

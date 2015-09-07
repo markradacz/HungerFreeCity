@@ -111,8 +111,8 @@ define([
     var vm = new hfc.needsvm();
     var view = new kendo.View(template, {
         model: vm,
-        show: e => { kendo.fx(this.element).fade("in").duration(500).play(); },
-        init: () => { vm.init(); }
+        show() { hfc.common.animate(this.element); },
+        init() { vm.init(); }
     });
     return view;
 });

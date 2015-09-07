@@ -14,6 +14,43 @@ var hfc;
         function common() {
             _super.apply(this, arguments);
         }
+        common.animate = function (jelement, type) {
+            var wrapper = kendo.fx(jelement);
+            var effect = wrapper.fade("in");
+            switch (type) {
+                //case "fadeIn":
+                //effect = wrapper.fade( "in" );
+                //	break;
+                case "fadeOut":
+                    effect = wrapper.fade("out");
+                    break;
+                case "expandHorizontal":
+                    effect.add(wrapper.expand("horizontal"));
+                    break;
+                case "expandVertical":
+                    effect.add(wrapper.expand("vertical"));
+                    break;
+                case "slideLeft":
+                    effect.add(wrapper.slideIn("left"));
+                    break;
+                case "slideRight":
+                    effect.add(wrapper.slideIn("right"));
+                    break;
+                case "slideUp":
+                    effect.add(wrapper.slideIn("up"));
+                    break;
+                case "slideDown":
+                    effect.add(wrapper.slideIn("down"));
+                    break;
+                case "zoomIn":
+                    effect.add(wrapper.zoom("in"));
+                    break;
+                case "zoomOut":
+                    effect.add(wrapper.zoom("out"));
+                    break;
+            }
+            effect.duration(1000).play();
+        };
         /*-----------------------------------------------------
         Toast Notifications
         -----------------------------------------------------*/

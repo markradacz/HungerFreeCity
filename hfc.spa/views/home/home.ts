@@ -28,8 +28,8 @@ define([
     var vm: hfc.homevm = new hfc.homevm();
     var view: kendo.View = new kendo.View(homeTemplate, {
         model: vm,
-        show: () => { kendo.fx(this.element).fade('in').duration(500).play(); },
-        init: () => { vm.init(); }
+        show() { hfc.common.animate(this.element, "slideUp"); },
+        init() { vm.init(); }
     });
     return view;
 });

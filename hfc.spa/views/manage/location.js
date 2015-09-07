@@ -4,7 +4,6 @@ var __extends = (this && this.__extends) || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-var _this = this;
 /// <reference path="../../scripts/typings/require.d.ts" />
 /// <reference path="../../scripts/typings/jquery.d.ts" />
 /// <reference path="../../scripts/typings/kendo.all.d.ts" />
@@ -59,7 +58,7 @@ define([
     var vm = new hfc.locationvm();
     var view = new kendo.View(template, {
         model: vm,
-        show: function (e) { kendo.fx(_this.element).fade('in').duration(500).play(); },
+        show: function () { hfc.common.animate(this.element); },
         init: function () { vm.init(); }
     });
     return view;
