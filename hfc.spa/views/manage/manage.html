@@ -8,8 +8,7 @@
                  data-items='[{
                     type: "buttonGroup",
                     buttons: [
-                        { spriteCssClass: "fa fa-plus", text: " ADD", "id": "addcenter" },
-                        { spriteCssClass: "fa fa-trash", text: " REMOVE", "id": "removecenter", hidden: true }
+                        { spriteCssClass: "fa fa-plus", text: " ADD CENTER", "id": "addcenter" }
                     ]
                 }]'>
             </div>
@@ -23,10 +22,13 @@
 			</div>
 			<script type="text/x-kendo-tmpl" id="template">
 				<div class="center-tile" data-bind="appearAnimation: slideUp">
-					<table>
+					<table style="width: 100%">
 						<tr>
-							<td>
-								<dl>
+                            <td>
+                                <button class="confirmRemove" data-bind="click: onRemove">REMOVE</button>
+                            </td>
+                            <td>
+                                <dl>
                                     <dt data-bind="text: name" />
                                     <dd data-bind="text: address.address1" />
                                     <dd data-bind="text: address.address2" />
@@ -36,13 +38,14 @@
                                         <span data-bind="text: address.zipcode" />
                                     </dd>
                                     <dd data-bind="text: phone" />
-								</dl>
-							</td>
-							<td style="vertical-align: top;">
+                                </dl>
+                            </td>
+							<td style="vertical-align: top; text-align: center; width: 20px;">
 								<label class="favorite-star">
 									<input type="checkbox" data-bind="checked: favorite" />
 									<span class="fa fa-2x"></span>
-								</label>
+								</label><br/>
+                                <a class="removeIcon" data-bind="click: onShowRemove"><span class="fa fa-2x fa-trash" /></a>
 							</td>
 						</tr>
 					</table>

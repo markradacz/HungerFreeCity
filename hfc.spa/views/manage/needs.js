@@ -23,11 +23,16 @@ var hfc;
             this.reorderItems();
         };
         needsvm.prototype.doAction = function (e) {
+            var _this = this;
             if (e.id === "add") {
                 // popup a dialog box to edit the value
                 var listView = $("#needsList").data("kendoListView");
                 //needs.insert(0, { name: 'New Item' });
-                this.item.needs.unshift({ name: "New Item" });
+                this.item.needs.unshift({
+                    name: "New Item",
+                    onShowRemove: function (e) { _this.onShowRemove(e); },
+                    onRemove: function (e) { _this.onRemove(e); }
+                });
                 listView.select(listView.element.children().first());
                 this.set("need", this.item.needs[0]);
                 $("#editNeedPanel").data("kendoWindow").open().center();
@@ -45,7 +50,7 @@ var hfc;
             var listView = $("#needsList").data("kendoListView");
             var elem = listView.select()[0];
             $(elem)
-                .find("a.confirmRemove")
+                .find("button.confirmRemove")
                 .animate({ display: "inline", width: "70px", opacity: 1.0 }, 400);
         };
         needsvm.prototype.onRemove = function (e) {
@@ -59,19 +64,24 @@ var hfc;
         needsvm.prototype.onItemSelected = function (e) {
             //var listView = $('#needsList').data("kendoListView");
             //var index = listView.select().index();
-            // var item = listView.dataSource.view()[index];
-            $("#needsList a.confirmRemove").each(function () {
+            //var item = listView.dataSource.view()[index];
+            $(".needItem button.confirmRemove").each(function () {
                 var op = $(this).css("opacity");
                 if (op > "0") {
-                    $(this).animate({ display: "none", width: "1px", opacity: 0 }, 200);
+                    $(this).animate({ display: "none", width: "0px", opacity: 0 }, 200);
                 }
             });
         };
         needsvm.prototype.reorderItems = function () {
+            var _this = this;
             // reset the index values
             var needs = needsvm.instance.get("item").get("needs");
             var index = 0;
-            needs.forEach(function (v) { v.set("index", ++index); });
+            needs.forEach(function (v) {
+                v.set("index", ++index);
+                v.onShowRemove = function (e) { _this.onShowRemove(e); };
+                v.onRemove = function (e) { _this.onRemove(e); };
+            });
         };
         needsvm.prototype.onDataBound = function () {
             // make the listview sortable and all the items within draggable

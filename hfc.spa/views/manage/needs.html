@@ -19,11 +19,11 @@
 </div>
 <script type="text/x-kendo-tmpl" id="needItemTemplate">
     <div class="needItem">
-        <a class="confirmRemove" data-bind="click: onRemove">REMOVE</a>
+        <button class="confirmRemove" data-bind="click: onRemove">REMOVE</button>
         <span data-bind="text: index" />.
         <span data-bind="text: name" />
         <span class="fa fa-lg fa-bars" />
-        <a data-bind="click: onShowRemove"><span class="fa fa-lg fa-trash" /></a>
+        <a class="removeIcon" data-bind="click: onShowRemove"><span class="fa fa-lg fa-trash" /></a>
         <a data-bind="click: onEdit"><span class="fa fa-lg fa-pencil" /></a>
     </div>
 </script>

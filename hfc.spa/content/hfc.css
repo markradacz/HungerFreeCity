@@ -89,7 +89,7 @@ label.favorite-star > input[type=checkbox]:checked + span:before {
 
 .needslist {
     border-style: none;
-    height: 500px;
+    height: 700px;
     overflow-y: scroll;
 }
 
@@ -106,18 +106,6 @@ label.favorite-star > input[type=checkbox]:checked + span:before {
     text-wrap: normal;
 }
 
-div.needItem a.confirmRemove {
-    width: 70px;
-    background: red;
-    border-radius: 5px;
-    padding: 1px;
-    color: white;
-    vertical-align: middle;
-    text-align: center;
-    display: none;
-    opacity: 0;
-}
-
 div.needItem span.fa {
     float: right !important;
     line-height: 1em;
@@ -125,25 +113,46 @@ div.needItem span.fa {
     padding-left: 15px;
 }
 
-div.needItem span.fa.fa-bars {
+.k-listview span.fa.fa-bars {
     cursor: move;
     color: #71b1d1;
 }
 
-div.needItem span.fa.fa-pencil, div.needItem span.fa.fa-trash {
+.k-listview span.fa.fa-pencil, .k-listview span.fa.fa-trash {
     visibility: hidden !important;
 }
 
-div.needItem.k-state-selected span.fa.fa-pencil {
+.k-listview .k-state-selected span.fa.fa-pencil {
     visibility: visible !important;
     cursor: pointer;
     color: gold;
 }
 
-div.needItem.k-state-selected span.fa.fa-trash {
+.k-listview .k-state-selected span.fa.fa-trash {
     visibility: visible !important;
     cursor: pointer;
     color: red;
+}
+
+a.removeIcon {
+    visibility: visible !important;
+    cursor: pointer;
+    color: red;
+}
+
+button.confirmRemove {
+    width: 0;
+    height: 100%;
+    line-height: 100%;
+    cursor: pointer;
+    background: red;
+    border-radius: 5px;
+    padding: 1px;
+    color: white;
+    vertical-align: middle !important;
+    text-align: center;
+    /*display: none;*/
+    opacity: 0;
 }
 
 /***************************

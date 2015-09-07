@@ -15,66 +15,87 @@ module hfc {
         private layout = new kendo.Layout("<div id='viewConent'/>");
 
         public doAction(e: any): void {
-			var listView = $("#centerlist").data("kendoListView");
             if (e.id === "addcenter") {
 				var center = {
 					name: "  New Center",
+					hours: "",
+					lastModified: new Date().toISOString(),
+					phone: "",
+					site: "",
 					centerid: kendo.guid(),
 					address: {},
 					needs: [],
 					centerinfo: [],
 					geometry: {
-						coordinates: []
-					}
+						coordinates: [-81.7276643, 30.2890513],
+						type: "Point"
+					},
+					onShowRemove: e => { this.onShowRemove(e); },
+					onRemove: e => { this.onRemove(e); }
 				};
                 this.centers.unshift(center);
-                this.showButtons(false);
-            } else if (e.id === "removecenter") {
-                // find which item is selected
-                var index = listView.select().index();
-                var item = this.centers[index];
-
-                this.layout.showIn("#viewConent", this.blankView);
-                this.set("toolbarVisible", false);
-
-                this.centers.remove(item);
-                this.showButtons(false);
-    //        } else if (e.id === "savecenter") {
-    //            var i2 = listView.select().index();
-				//var c2 = this.centers[i2];
-				//common.log("saving center data " + JSON.stringify(c2));
-				////var ref = this.get("ref");
-				////ref.child("centers").child(index).set(center);
+				// now select the newly added center
+				var listView = $("#centerlist").data("kendoListView");
+				listView.select(listView.element.children().first());
             }
-        }
-
-        private showButtons(fadein: boolean): void {
-            if (fadein) {
-                $("a#removecenter").fadeIn(300);
-            } else {
-                $("a#removecenter").fadeOut(300);
-			}
+			// savecenter
+			// var i2 = listView.select().index();
+			// var c2 = this.centers[i2];
+			// common.log("saving center data " + JSON.stringify(c2));
+			// var ref = this.get("ref");
+			// ref.child("centers").child(index).set(center);
         }
 
         public showCenter(e: any) {
             // get the row of the collection to bind to the subviews
             var listView = $(e.sender.element).data("kendoListView");
             var index = listView.select().index();
-            this.showButtons(index >= 0);
             var item = this.centers[index];
+
+			$("#centerlist button.confirmRemove").each(function () {
+                var op = $(this).css("opacity");
+                if (op > "0") {
+                    $(this).animate({ width: 0, height: "100%", opacity: 0 }, 200);
+					// display: "none", 
+                }
+            });
 
             (<needsvm>this.needsView.model).setup(item);
             (<centervm>this.centerView.model).setup(item);
             (<locationvm>this.locationView.model).setup(item);
-            this.layout.showIn("#viewConent", this.needsView);
 
-            // select the Needs button in the toolbar
+            // select the Needs button in the toolbar if there isn't anything selected
             var tabtoolbar = $("#tabtoolbar").data("kendoToolBar");
-            tabtoolbar.toggle("#needs", true); //select button with id: "foo"
+			var selected = tabtoolbar.getSelectedFromGroup("tab");
+			if (selected.length === 0) {
+				tabtoolbar.toggle("#needs", true);
+				this.layout.showIn("#viewConent", this.needsView);				
+			}
             this.set("toolbarVisible", true);
         }
 
-        public tabToggle(e: any) {
+		public onShowRemove(e: any): void {
+            var listView = $("#centerlist").data("kendoListView");
+            var elem = listView.select()[0];
+			$(elem)
+				.find(".confirmRemove")
+				.animate({ width: "70px", height: "100%", opacity: 1.0 }, 400);
+			// display: "inline", 
+        }
+
+		public onRemove(e: any): void {
+            // find which item is selected
+            var listView = $("#centerlist").data("kendoListView");
+            var index = listView.select().index();
+            var item = this.centers[index];
+
+			this.layout.showIn("#viewConent", this.blankView);
+			this.set("toolbarVisible", false);
+
+            this.centers.remove(item);
+		}
+
+       public tabToggle(e: any) {
             //e.target jQuery The jQuery object that represents the command element.
             //e.checked Boolean Boolean flag that indicates the button state.
             //e.id String The id of the command element.
@@ -106,7 +127,9 @@ module hfc {
 						all.sort((a: any, b: any) => { return a.name.localeCompare(b.name); });
                         all.forEach(v => {
                             v.favorite = $.inArray(v.centerid, common.User.favorites) >= 0;
-							that.centers.push(v);
+							v.onShowRemove = e => { this.onShowRemove(e); }
+							v.onRemove = e => { this.onRemove(e); }
+	                        that.centers.push(v);
                         });
                     }
                 });
