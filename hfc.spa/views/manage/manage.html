@@ -1,5 +1,5 @@
-﻿<h1 data-bind="html: title" />
-<table style="width: 100%; height: 100%">
+﻿<h1 data-bind="html: title, appearAnimation: slideDown"></h1>
+<table style="width: 100%; height: 100%" data-bind="appearAnimation: slideLeft">
 	<tr>
 		<td style="width: 300px; vertical-align: top;">
             <div class="tabtoolbar"
@@ -8,8 +8,8 @@
                  data-items='[{
                     type: "buttonGroup",
                     buttons: [
-                        { spriteCssClass: "fa fa-plus", text: " ADD CENTER", "id": "addcenter" },
-                        { spriteCssClass: "fa fa-trash", text: " REMOVE CENTER", "id": "removecenter", hidden: true }
+                        { spriteCssClass: "fa fa-plus", text: " ADD", "id": "addcenter" },
+                        { spriteCssClass: "fa fa-trash", text: " REMOVE", "id": "removecenter", hidden: true }
                     ]
                 }]'>
             </div>
@@ -22,7 +22,7 @@
 				 style="height: 500px; overflow: auto">
 			</div>
 			<script type="text/x-kendo-tmpl" id="template">
-				<div class="center-tile">
+				<div class="center-tile" data-bind="appearAnimation: slideUp">
 					<table>
 						<tr>
 							<td>
@@ -49,7 +49,7 @@
 				</div>
 			</script>
 		</td>
-		<td style="padding-left: 20px; vertical-align: top;">
+		<td style="padding-left: 20px; vertical-align: top;" data-bind="appearAnimation: slideLeft">
 			<div id="tabtoolbar"
                  class="tabtoolbar"
                  data-role="toolbar"

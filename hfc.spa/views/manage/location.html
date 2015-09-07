@@ -1,7 +1,7 @@
-﻿<h2>Location of <span data-bind="html: item.name"></span></h2>
+﻿<h2 data-bind="appearAnimation: slideDown">Location of <span data-bind="html: item.name"></span></h2>
 <div>
-    <span data-bind="text: item.geometry.coordinates[0]" />
-    <span data-bind="text: item.geometry.coordinates[1]" />
+    <span data-bind="text: item.geometry.coordinates[0]"></span>
+    <span data-bind="text: item.geometry.coordinates[1]"></span>
 </div>
 
-<div id="map" style="width: 200px; height: 200px;" />
+<div id="map" style="width: 200px; height: 200px;"></div>

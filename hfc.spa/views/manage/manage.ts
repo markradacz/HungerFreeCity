@@ -15,9 +15,10 @@ module hfc {
         private layout = new kendo.Layout("<div id='viewConent'/>");
 
         public doAction(e: any): void {
+			var listView = $("#centerlist").data("kendoListView");
             if (e.id === "addcenter") {
-	            var center = {
-		            name: "  New Center",
+				var center = {
+					name: "  New Center",
 					centerid: kendo.guid(),
 					address: {},
 					needs: [],
@@ -25,12 +26,11 @@ module hfc {
 					geometry: {
 						coordinates: []
 					}
-	            };
+				};
                 this.centers.unshift(center);
                 this.showButtons(false);
             } else if (e.id === "removecenter") {
                 // find which item is selected
-                var listView = $("#centerlist").data("kendoListView");
                 var index = listView.select().index();
                 var item = this.centers[index];
 
@@ -39,6 +39,12 @@ module hfc {
 
                 this.centers.remove(item);
                 this.showButtons(false);
+    //        } else if (e.id === "savecenter") {
+    //            var i2 = listView.select().index();
+				//var c2 = this.centers[i2];
+				//common.log("saving center data " + JSON.stringify(c2));
+				////var ref = this.get("ref");
+				////ref.child("centers").child(index).set(center);
             }
         }
 
@@ -47,7 +53,7 @@ module hfc {
                 $("a#removecenter").fadeIn(300);
             } else {
                 $("a#removecenter").fadeOut(300);
-          }
+			}
         }
 
         public showCenter(e: any) {
@@ -89,7 +95,7 @@ module hfc {
 
         public constructor() {
             super();
-	        var that = this;
+			var that = this;
             $.subscribe("loggedIn", (ref: Firebase) => {
                 // register the Firebase ref
                 ref.child("centers").on("value", data => {
@@ -97,19 +103,13 @@ module hfc {
                     // join in the user's favorited centers, and add each to the collection
                     if (common.User && common.User.favorites) {
 						var all = data.val();
-						all.sort((a: any, b: any) => { return a.name.localeCompare( b.name ); });
+						all.sort((a: any, b: any) => { return a.name.localeCompare(b.name); });
                         all.forEach(v => {
                             v.favorite = $.inArray(v.centerid, common.User.favorites) >= 0;
 							that.centers.push(v);
                         });
                     }
                 });
-
-				$.subscribe("saveCenter", index => {
-					var center = that.centers[index];
-					common.log("saving center data " + JSON.stringify(center));
-					// ref.child("centers").child(index).set(center);
-				});
             });
 
 			that.centers.bind("change", e => {
@@ -119,11 +119,11 @@ module hfc {
 					common.User.favorites = that.centers
 						.filter((v: any) => v.favorite)
 						.map((v: any) => v.centerid);
-					common.log("favorites are " + JSON.stringify(common.User.favorites ) );
+					common.log("favorites are " + JSON.stringify(common.User.favorites));
 					// persist the user's favorites
 					$.publish("saveFavorites");
-				}        
-	        });
+				}
+			});
         }
     }
 }

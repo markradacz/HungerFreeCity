@@ -10,6 +10,7 @@
     "**/.vs*",
     "**/web.config",
     "**/*.json",
+    "**/*.map",
     "**/node_modules/**"
   ]
 }

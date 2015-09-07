@@ -35,11 +35,6 @@ var hfc;
                         });
                     }
                 });
-                $.subscribe("saveCenter", function (index) {
-                    var center = that.centers[index];
-                    hfc.common.log("saving center data " + JSON.stringify(center));
-                    // ref.child("centers").child(index).set(center);
-                });
             });
             that.centers.bind("change", function (e) {
                 if (e.action === "itemchange" && e.field === "favorite") {
@@ -55,6 +50,7 @@ var hfc;
             });
         }
         managevm.prototype.doAction = function (e) {
+            var listView = $("#centerlist").data("kendoListView");
             if (e.id === "addcenter") {
                 var center = {
                     name: "  New Center",
@@ -71,7 +67,6 @@ var hfc;
             }
             else if (e.id === "removecenter") {
                 // find which item is selected
-                var listView = $("#centerlist").data("kendoListView");
                 var index = listView.select().index();
                 var item = this.centers[index];
                 this.layout.showIn("#viewConent", this.blankView);

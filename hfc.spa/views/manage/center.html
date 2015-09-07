@@ -1,22 +1,22 @@
-﻿<h2>Center information for <span data-bind="html: item.name"></span></h2>
+﻿<h2 data-bind="appearAnimation: slideDown">Center information for <span data-bind="html: item.name"></span></h2>
 
 <h3>Address</h3>
-<div data-bind="text: item.address.address1"/>
-<div data-bind="text: item.address.address2" />
+<div data-bind="text: item.address.address1"></div>
+<div data-bind="text: item.address.address2"></div>
 <div>
-    <span data-bind="text: item.address.city" />
-    <span data-bind="text: item.address.state" />
-    <span data-bind="text: item.address.zipcode" />
+    <span data-bind="text: item.address.city"></span>
+    <span data-bind="text: item.address.state"></span>
+    <span data-bind="text: item.address.zipcode"></span>
 </div>
 
 <h3>Hours</h3>
-<div data-bind="text: item.hours" />
+<div data-bind="text: item.hours"></div>
 
 <h3>Phone</h3>
-<div data-bind="text: item.phone" />
+<div data-bind="text: item.phone"></div>
 
 <h3>Site</h3>
-<div data-bind="text: item.site" />
+<div data-bind="text: item.site"></div>
 
 <h3>Notes</h3>
 <div data-role="listview"
