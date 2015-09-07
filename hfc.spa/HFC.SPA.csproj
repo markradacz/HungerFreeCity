@@ -27,6 +27,7 @@
     <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="animated_favicon1.gif" />
     <Content Include="app.js" />
     <Content Include="app.js.map" />
     <Content Include="Content\font-awesome.css" />
