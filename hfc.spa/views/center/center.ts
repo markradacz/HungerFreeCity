@@ -18,10 +18,11 @@ module hfc {
 			// Save the record
 			var clone = JSON.parse(JSON.stringify(this.get("item")));	// cheap way to get a deep clone
 			delete clone.favorite;	// remove this property
+			clone.lastModified = new Date().toISOString();
 
 			// common.log("saving center data " + JSON.stringify(clone));
 			var ref = new Firebase(common.FirebaseUrl);
-			ref.child(this.get("refpath")).set(clone, error => {
+			ref.child(this.get("refpath")).update(clone, error => {
 				if (error) {
 					common.errorToast("Data could not be saved." + error);
 				} else {
