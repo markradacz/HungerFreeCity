@@ -113,7 +113,7 @@ module hfc {
 }
 
 define([
-    "text!views/manage/needs.html",
+    "text!views/needs/needs.html",
     "kendo"
 ], template => {
     var vm = new hfc.needsvm();

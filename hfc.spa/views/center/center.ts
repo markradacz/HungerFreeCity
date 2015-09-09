@@ -17,7 +17,7 @@ module hfc {
 }
 
 define([
-    'text!views/manage/center.html'
+    'text!views/center/center.html'
 ], template => {
     var vm = new hfc.centervm();
     var view = new kendo.View(template, {

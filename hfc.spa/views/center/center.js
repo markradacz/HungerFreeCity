@@ -26,7 +26,7 @@ var hfc;
     hfc.centervm = centervm;
 })(hfc || (hfc = {}));
 define([
-    'text!views/manage/center.html'
+    'text!views/center/center.html'
 ], function (template) {
     var vm = new hfc.centervm();
     var view = new kendo.View(template, {

@@ -152,9 +152,9 @@ var hfc;
 })(hfc || (hfc = {}));
 define([
     "text!views/manage/manage.html",
-    "views/manage/needs",
-    "views/manage/center",
-    "views/manage/location"
+    "views/needs/needs",
+    "views/center/center",
+    "views/location/location"
 ], function (template, needs, center, location) {
     var vm = new hfc.managevm();
     vm.needsView = needs;

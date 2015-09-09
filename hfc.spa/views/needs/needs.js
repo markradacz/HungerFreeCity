@@ -113,7 +113,7 @@ var hfc;
     hfc.needsvm = needsvm;
 })(hfc || (hfc = {}));
 define([
-    "text!views/manage/needs.html",
+    "text!views/needs/needs.html",
     "kendo"
 ], function (template) {
     var vm = new hfc.needsvm();
