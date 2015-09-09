@@ -6,12 +6,12 @@
 			"Views/home/home.js",
 			"Views/manage/manage.html",
 			"Views/manage/manage.js",
-			"Views/manage/needs.html",
-			"Views/manage/needs.js",
-			"Views/manage/location.html",
-			"Views/manage/location.js",
-			"Views/manage/center.html",
-			"Views/manage/center.js"
+			"Views/needs/needs.html",
+			"Views/needs/needs.js",
+			"Views/location/location.html",
+			"Views/location/location.js",
+			"Views/center/center.html",
+			"Views/center/center.js"
 		];
 	}
 	return null;

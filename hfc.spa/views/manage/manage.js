@@ -15,14 +15,13 @@ var hfc;
         function managevm() {
             var _this = this;
             _super.call(this);
-            this.title = "Manage";
             this.toolbarVisible = false;
             this.blankView = new kendo.View("<div/>");
             this.centers = new kendo.data.ObservableArray([]);
+            this.item = { name: "" };
             this.layout = new kendo.Layout("<div id='viewConent'/>");
             var that = this;
             $.subscribe("loggedIn", function (ref) {
-                // register the Firebase ref
                 ref.child("centers").on("value", function (data) {
                     that.centers.length = 0; // clear the current array
                     // join in the user's favorited centers, and add each to the collection
@@ -76,27 +75,23 @@ var hfc;
                 var listView = $("#centerlist").data("kendoListView");
                 listView.select(listView.element.children().first());
             }
-            // savecenter
-            // var i2 = listView.select().index();
-            // var c2 = this.centers[i2];
-            // common.log("saving center data " + JSON.stringify(c2));
-            // var ref = this.get("ref");
-            // ref.child("centers").child(index).set(center);
         };
         managevm.prototype.showCenter = function (e) {
             // get the row of the collection to bind to the subviews
             var listView = $(e.sender.element).data("kendoListView");
             var index = listView.select().index();
             var item = this.centers[index];
+            this.set("item", item);
+            var refpath = "/centers/" + index;
             $("#centerlist button.confirmRemove").each(function () {
                 var op = $(this).css("opacity");
                 if (op > "0") {
                     $(this).animate({ width: 0, height: "100%", opacity: 0 }, 200);
                 }
             });
-            this.needsView.model.setup(item);
-            this.centerView.model.setup(item);
-            this.locationView.model.setup(item);
+            this.needsView.model.setup(item, refpath);
+            this.centerView.model.setup(item, refpath);
+            this.locationView.model.setup(item, refpath);
             // select the Needs button in the toolbar if there isn't anything selected
             var tabtoolbar = $("#tabtoolbar").data("kendoToolBar");
             var selected = tabtoolbar.getSelectedFromGroup("tab");

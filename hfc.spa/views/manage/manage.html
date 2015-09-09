@@ -1,7 +1,7 @@
-﻿<h1 data-bind="html: title, appearAnimation: slideDown"></h1>
-<table style="width: 100%; height: 100%" data-bind="appearAnimation: slideLeft">
+﻿<table style="width: 100%; height: 100%" data-bind="appearAnimation: slideLeft">
 	<tr>
 		<td style="width: 300px; vertical-align: top;">
+            <h1 data-bind="appearAnimation: slideDown">Manage</h1>
             <div class="tabtoolbar"
                  data-role="toolbar"
                  data-bind="events: { click: doAction }"
@@ -53,6 +53,7 @@
 			</script>
 		</td>
 		<td style="padding-left: 20px; vertical-align: top;" data-bind="appearAnimation: slideLeft">
+            <h1 data-bind="visible: toolbarVisible, appearAnimation: slideDown, html: item.name"></h1>
 			<div id="tabtoolbar"
                  class="tabtoolbar"
                  data-role="toolbar"

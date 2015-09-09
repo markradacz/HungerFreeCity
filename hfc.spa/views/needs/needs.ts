@@ -5,13 +5,14 @@
 module hfc {
     export class needsvm extends kendo.data.ObservableObject {
         public static instance: needsvm = null; // set in the setup() method below
-        public title = "Needs";
         public need: any = null;
-        public item: any;  // defined by the manage viewmodel
+        public item: any;
+        public refpath: string;
  
-        public setup(item): void {
+        public setup(item, refpath): void {
             needsvm.instance = this;
 			this.set("item", item);
+			this.set("refpath", refpath);
 			this.reorderItems();
         }
 

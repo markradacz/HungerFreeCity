@@ -14,10 +14,32 @@ var hfc;
         __extends(centervm, _super);
         function centervm() {
             _super.apply(this, arguments);
-            this.title = "Center";
         }
-        centervm.prototype.setup = function (item) {
+        centervm.prototype.doAction = function (e) {
+            if (e.id === "edit") {
+                // popup a dialog box to edit the value
+                $("#editCenterPanel").data("kendoWindow").open().center();
+            }
+        };
+        centervm.prototype.closeButtonClick = function (e) {
+            // Save the record
+            var clone = JSON.parse(JSON.stringify(this.get("item"))); // cheap way to get a deep clone
+            delete clone.favorite; // remove this property
+            // common.log("saving center data " + JSON.stringify(clone));
+            var ref = new Firebase(hfc.common.FirebaseUrl);
+            ref.child(this.get("refpath")).set(clone, function (error) {
+                if (error) {
+                    hfc.common.errorToast("Data could not be saved." + error);
+                }
+                else {
+                    hfc.common.successToast("Center saved successfully.");
+                    $("#editCenterPanel").data("kendoWindow").close();
+                }
+            });
+        };
+        centervm.prototype.setup = function (item, refpath) {
             this.set("item", item);
+            this.set("refpath", refpath);
         };
         centervm.prototype.init = function () {
         };

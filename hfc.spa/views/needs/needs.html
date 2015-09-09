@@ -1,11 +1,10 @@
-﻿<h2 data-bind="appearAnimation: slideDown">Needs for <span data-bind="html: item.name"></span></h2>
-<div class="tabtoolbar"
+﻿<div class="tabtoolbar"
     data-role="toolbar"
     data-bind="events: { click: doAction }"
     data-items='[{
         type: "buttonGroup",
         buttons: [
-            { spriteCssClass: "fa fa-plus", text: " ADD ITEM", "id": "add" }
+            { spriteCssClass: "fa fa-plus", text: " ADD NEED", "id": "add" }
         ]
     }]'>
 </div>
@@ -40,7 +39,8 @@
      data-visible="false"
      class="editPanel">
     <div>
-        <input type="text" class="k-textbox" data-min-width="300" data-bind="value: need.name" placeholder="Name of need" style="width: 100%;" />
+        <label class="k-edit-label">Name</label>
+        <input type="text" class="k-textbox" data-min-width="300" data-bind="value: need.name" placeholder="Name of need" />
     </div>
     <button id="button" data-role="button" class="k-primary" data-bind="click: closeButtonClick" style="width: 100%;">
         <span class="fa fa-floppy-o"></span> <span> Save</span>

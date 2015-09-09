@@ -1,4 +1,18 @@
-﻿.editPanel {
+﻿h1 {
+    color: #71b1d1;
+    margin-bottom: .1em;
+    margin-top: .1em;
+}
+h3 {
+    color: #71b1d1;
+}
+.navbar-brand > span.title {
+    color: #71b1d1;
+}
+a.k-button {
+    color: #71b1d1;
+}
+.editPanel {
 	border: #71b1d1 1px solid;
     width: 400px;
 }
@@ -21,11 +35,10 @@
     text-transform: uppercase;
 }
 
-.nav > li > span {
+.nav > li > a, .nav > li > a > span {
     vertical-align: middle;
     text-wrap: none;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    color: #71b1d1 !important;    
 }
 
 div.k-window-content {
@@ -89,7 +102,6 @@ label.favorite-star > input[type=checkbox]:checked + span:before {
 
 .needslist {
     border-style: none;
-    height: 700px;
     overflow-y: scroll;
 }
 

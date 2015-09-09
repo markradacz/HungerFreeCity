@@ -4,13 +4,13 @@
 /// <reference path="../../scripts/common.ts" />
 module hfc {
     export class managevm extends kendo.data.ObservableObject {
-        public title = "Manage";
         public toolbarVisible = false;
         public needsView: kendo.View;
         public centerView: kendo.View;
         public locationView: kendo.View;
         public blankView = new kendo.View("<div/>");
         public centers = new kendo.data.ObservableArray([]);
+        public item: any = { name: "" };
 
         private layout = new kendo.Layout("<div id='viewConent'/>");
 
@@ -38,12 +38,6 @@ module hfc {
 				var listView = $("#centerlist").data("kendoListView");
 				listView.select(listView.element.children().first());
             }
-			// savecenter
-			// var i2 = listView.select().index();
-			// var c2 = this.centers[i2];
-			// common.log("saving center data " + JSON.stringify(c2));
-			// var ref = this.get("ref");
-			// ref.child("centers").child(index).set(center);
         }
 
         public showCenter(e: any) {
@@ -51,6 +45,8 @@ module hfc {
             var listView = $(e.sender.element).data("kendoListView");
             var index = listView.select().index();
             var item = this.centers[index];
+			this.set("item", item);
+	        var refpath = "/centers/" + index;
 
 			$("#centerlist button.confirmRemove").each(function () {
                 var op = $(this).css("opacity");
@@ -60,9 +56,9 @@ module hfc {
                 }
             });
 
-            (<needsvm>this.needsView.model).setup(item);
-            (<centervm>this.centerView.model).setup(item);
-            (<locationvm>this.locationView.model).setup(item);
+            (<needsvm>this.needsView.model).setup(item, refpath);
+            (<centervm>this.centerView.model).setup(item, refpath);
+            (<locationvm>this.locationView.model).setup(item, refpath);
 
             // select the Needs button in the toolbar if there isn't anything selected
             var tabtoolbar = $("#tabtoolbar").data("kendoToolBar");
@@ -118,7 +114,6 @@ module hfc {
             super();
 			var that = this;
             $.subscribe("loggedIn", (ref: Firebase) => {
-                // register the Firebase ref
                 ref.child("centers").on("value", data => {
 					that.centers.length = 0;	// clear the current array
                     // join in the user's favorited centers, and add each to the collection

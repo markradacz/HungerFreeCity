@@ -1,4 +1,13 @@
-﻿<h2 data-bind="appearAnimation: slideDown">Location of <span data-bind="html: item.name"></span></h2>
+﻿<div class="tabtoolbar"
+     data-role="toolbar"
+     data-bind="events: { click: doAction }"
+     data-items='[{
+        type: "buttonGroup",
+        buttons: [
+            { spriteCssClass: "fa fa-pencil", text: " EDIT", "id": "add" }
+        ]
+    }]'>
+</div>
 <div>
     <span data-bind="text: item.geometry.coordinates[0]"></span>
     <span data-bind="text: item.geometry.coordinates[1]"></span>

@@ -4,11 +4,36 @@
 /// <reference path="../../scripts/common.ts" />
 module hfc {
     export class centervm extends kendo.data.ObservableObject {
-        public title = "Center";
-        public item: any;  // defined by the manage viewmodel
+        public item: any;
+        public refpath: string;
 
-        public setup(item) {
+		public doAction(e: any): void {
+            if (e.id === "edit") {
+                // popup a dialog box to edit the value
+                $("#editCenterPanel").data("kendoWindow").open().center();
+			}
+        }
+
+		private closeButtonClick(e: any): void {
+			// Save the record
+			var clone = JSON.parse(JSON.stringify(this.get("item")));	// cheap way to get a deep clone
+			delete clone.favorite;	// remove this property
+
+			// common.log("saving center data " + JSON.stringify(clone));
+			var ref = new Firebase(common.FirebaseUrl);
+			ref.child(this.get("refpath")).set(clone, error => {
+				if (error) {
+					common.errorToast("Data could not be saved." + error);
+				} else {
+					common.successToast("Center saved successfully.");
+					$("#editCenterPanel").data("kendoWindow").close();
+				}
+			});
+        }
+
+        public setup(item, refpath): void {
             this.set("item", item);
+			this.set("refpath", refpath);
         }
 
         public init(): void {

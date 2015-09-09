@@ -14,12 +14,12 @@ var hfc;
         __extends(needsvm, _super);
         function needsvm() {
             _super.apply(this, arguments);
-            this.title = "Needs";
             this.need = null;
         }
-        needsvm.prototype.setup = function (item) {
+        needsvm.prototype.setup = function (item, refpath) {
             needsvm.instance = this;
             this.set("item", item);
+            this.set("refpath", refpath);
             this.reorderItems();
         };
         needsvm.prototype.doAction = function (e) {

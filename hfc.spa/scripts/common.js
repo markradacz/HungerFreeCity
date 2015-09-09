@@ -395,6 +395,30 @@ var kendo;
                 return subcount;
             })(data_1.Binder);
             binders.subcount = subcount;
+            // get the count of a collection named in the binding
+            var combine = (function (_super) {
+                __extends(combine, _super);
+                function combine() {
+                    _super.apply(this, arguments);
+                }
+                combine.prototype.refresh = function () {
+                    var binding = this.bindings["combine"];
+                    var collection = binding.source[binding.path];
+                    if (collection === undefined || collection === null) {
+                        // try to walk the . notation of the path
+                        var matches = /([^\.]+)\.(.*)/.exec(binding.path);
+                        collection = binding.source[matches[1]][matches[2]];
+                    }
+                    if (collection === undefined || collection === null) {
+                        $(this.element).text("");
+                    }
+                    else {
+                        $(this.element).text(collection.join("\n"));
+                    }
+                };
+                return combine;
+            })(data_1.Binder);
+            binders.combine = combine;
             // apply animation to the element on appearance
             var appearAnimation = (function (_super) {
                 __extends(appearAnimation, _super);

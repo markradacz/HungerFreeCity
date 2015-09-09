@@ -14,10 +14,10 @@ var hfc;
         __extends(locationvm, _super);
         function locationvm() {
             _super.apply(this, arguments);
-            this.title = "Location";
         }
-        locationvm.prototype.setup = function (item) {
+        locationvm.prototype.setup = function (item, refpath) {
             this.set("item", item);
+            this.set("refpath", refpath);
         };
         locationvm.prototype.init = function () {
             var _this = this;

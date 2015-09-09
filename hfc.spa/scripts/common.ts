@@ -338,6 +338,25 @@ module kendo.data.binders {
         }
     }
 
+    // get the count of a collection named in the binding
+    export class combine extends Binder {
+        refresh() {
+            var binding = this.bindings["combine"];
+            var collection : any[] = binding.source[binding.path];
+	        if (collection === undefined || collection === null) {
+		        // try to walk the . notation of the path
+		        var matches = /([^\.]+)\.(.*)/.exec(binding.path);
+		        collection = binding.source[matches[1]][matches[2]];
+	        }
+
+			if (collection === undefined || collection === null) {
+		        $(this.element).text("");
+	        }  else {
+				$(this.element).text(collection.join("\n"));
+	        }
+        }
+    }
+
     // apply animation to the element on appearance
     export class appearAnimation extends Binder {
         public refresh() : void {

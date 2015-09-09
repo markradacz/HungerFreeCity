@@ -4,12 +4,13 @@
 /// <reference path="../../scripts/common.ts" />
 module hfc {
     export class locationvm extends kendo.data.ObservableObject {
-        public title = "Location";
-        public item: any;  // defined by the manage viewmodel
+        public item: any;
+        public refpath: string;
 
-        public setup(item) {
+        public setup(item, refpath): void {
             this.set("item", item);
-        }
+			this.set("refpath", refpath);
+       }
 
         public init(): void {
             this.bind("change", e => {
