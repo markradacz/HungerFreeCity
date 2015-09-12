@@ -262,7 +262,7 @@ define([
     kendo.bind("#applicationHost", vm);
     vm.init();
     var layout = new kendo.Layout("<div id=\"viewRoot\"/>", {
-        show: function () { kendo.fx(_this.element).fade("in").duration(500).play(); },
+        show: function () { hfc.common.animate(_this.element); }
     });
     // Setup the application router
     var router = new kendo.Router({
@@ -271,9 +271,9 @@ define([
         change: function (e) { vm.routeChange(e); } // whenever the route changes
     });
     // Add new routes here...
-    router.route("/", function () { layout.showIn("#viewRoot", home); });
-    router.route("/manage", function () { layout.showIn("#viewRoot", manage); });
-    router.route("/about", function () { layout.showIn("#viewRoot", about); });
+    router.route("/", function () { layout.showIn("#viewRoot", home, "swap"); });
+    router.route("/manage", function () { layout.showIn("#viewRoot", manage, "swap"); });
+    router.route("/about", function () { layout.showIn("#viewRoot", about, "swap"); });
     $.subscribe("loggedIn", function () { router.navigate("/manage"); });
     $.subscribe("loggedOff", function () { router.navigate("/"); });
     return router;

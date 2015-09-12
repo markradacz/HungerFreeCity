@@ -46,7 +46,7 @@ module hfc {
             var index = listView.select().index();
             var item = this.centers[index];
 			this.set("item", item);
-	        var refpath = "/centers/" + index;
+			var refpath = "/centers/" + index;
 
 			$("#centerlist button.confirmRemove").each(function () {
                 var op = $(this).css("opacity");
@@ -65,7 +65,9 @@ module hfc {
 			var selected = tabtoolbar.getSelectedFromGroup("tab");
 			if (selected.length === 0) {
 				tabtoolbar.toggle("#needs", true);
-				this.layout.showIn("#viewConent", this.needsView);				
+				this.tabView("needs");
+			} else {
+				this.tabView(selected.attr("id"));
 			}
             this.set("toolbarVisible", true);
         }
@@ -85,13 +87,13 @@ module hfc {
             var index = listView.select().index();
             var item = this.centers[index];
 
-			this.layout.showIn("#viewConent", this.blankView);
+			this.layout.showIn("#viewConent", this.blankView, "swap");
 			this.set("toolbarVisible", false);
 
             this.centers.remove(item);
 		}
 
-       public tabToggle(e: any) {
+		public tabToggle(e: any) {
             //e.target jQuery The jQuery object that represents the command element.
             //e.checked Boolean Boolean flag that indicates the button state.
             //e.id String The id of the command element.
@@ -99,12 +101,23 @@ module hfc {
             //hfc.common.log("tab toggle: " + e.id + " --> " + e.checked);
             //var row = this.modules.filter(function (r) { return r.id === e.id; });
             //hfc.common.log("data: " + JSON.stringify(row));
-            switch (e.id) {
-                case "needs": this.layout.showIn("#viewConent", this.needsView); break;
-                case "center": this.layout.showIn("#viewConent", this.centerView); break;
-                case "location": this.layout.showIn("#viewConent", this.locationView); break;
-            }
+			this.tabView(e.id);
         }
+
+		public tabView(id: string) {
+			//e.target jQuery The jQuery object that represents the command element.
+			//e.checked Boolean Boolean flag that indicates the button state.
+			//e.id String The id of the command element.
+			//e.sender kendo.ui.ToolBar The widget instance which fired the event.
+			//hfc.common.log("tab toggle: " + e.id + " --> " + e.checked);
+			//var row = this.modules.filter(function (r) { return r.id === e.id; });
+			//hfc.common.log("data: " + JSON.stringify(row));
+			switch (id) {
+				case "needs": this.layout.showIn("#viewConent", this.needsView, "swap"); break;
+				case "center": this.layout.showIn("#viewConent", this.centerView, "swap"); break;
+				case "location": this.layout.showIn("#viewConent", this.locationView, "swap"); break;
+			}
+		}
 
         public init(): void {
             this.layout.render("#tabContent");
@@ -124,7 +137,7 @@ module hfc {
                             v.favorite = $.inArray(v.centerid, common.User.favorites) >= 0;
 							v.onShowRemove = e => { this.onShowRemove(e); }
 							v.onRemove = e => { this.onRemove(e); }
-	                        that.centers.push(v);
+							that.centers.push(v);
                         });
                     }
                 });

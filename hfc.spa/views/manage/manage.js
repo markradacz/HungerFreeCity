@@ -97,7 +97,10 @@ var hfc;
             var selected = tabtoolbar.getSelectedFromGroup("tab");
             if (selected.length === 0) {
                 tabtoolbar.toggle("#needs", true);
-                this.layout.showIn("#viewConent", this.needsView);
+                this.tabView("needs");
+            }
+            else {
+                this.tabView(selected.attr("id"));
             }
             this.set("toolbarVisible", true);
         };
@@ -114,7 +117,7 @@ var hfc;
             var listView = $("#centerlist").data("kendoListView");
             var index = listView.select().index();
             var item = this.centers[index];
-            this.layout.showIn("#viewConent", this.blankView);
+            this.layout.showIn("#viewConent", this.blankView, "swap");
             this.set("toolbarVisible", false);
             this.centers.remove(item);
         };
@@ -126,15 +129,25 @@ var hfc;
             //hfc.common.log("tab toggle: " + e.id + " --> " + e.checked);
             //var row = this.modules.filter(function (r) { return r.id === e.id; });
             //hfc.common.log("data: " + JSON.stringify(row));
-            switch (e.id) {
+            this.tabView(e.id);
+        };
+        managevm.prototype.tabView = function (id) {
+            //e.target jQuery The jQuery object that represents the command element.
+            //e.checked Boolean Boolean flag that indicates the button state.
+            //e.id String The id of the command element.
+            //e.sender kendo.ui.ToolBar The widget instance which fired the event.
+            //hfc.common.log("tab toggle: " + e.id + " --> " + e.checked);
+            //var row = this.modules.filter(function (r) { return r.id === e.id; });
+            //hfc.common.log("data: " + JSON.stringify(row));
+            switch (id) {
                 case "needs":
-                    this.layout.showIn("#viewConent", this.needsView);
+                    this.layout.showIn("#viewConent", this.needsView, "swap");
                     break;
                 case "center":
-                    this.layout.showIn("#viewConent", this.centerView);
+                    this.layout.showIn("#viewConent", this.centerView, "swap");
                     break;
                 case "location":
-                    this.layout.showIn("#viewConent", this.locationView);
+                    this.layout.showIn("#viewConent", this.locationView, "swap");
                     break;
             }
         };

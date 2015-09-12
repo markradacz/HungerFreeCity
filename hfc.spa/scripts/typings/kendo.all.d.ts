@@ -309,7 +309,7 @@ declare module kendo {
     }
 
     class Layout extends View {
-        showIn(selector: string, view: View): void;
+        showIn(selector: string, view: View, swapclass?: string): void;
         regions: { [selector: string]: View; };
     }
 
