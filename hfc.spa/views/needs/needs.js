@@ -26,17 +26,12 @@ var hfc;
             var _this = this;
             if (e.id === "add") {
                 // popup a dialog box to edit the value
-                var listView = $("#needsList").data("kendoListView");
-                //needs.insert(0, { name: 'New Item' });
-                this.item.needs.unshift({
+                this.set("need", {
                     name: "New Item",
                     onShowRemove: function (e) { _this.onShowRemove(e); },
                     onRemove: function (e) { _this.onRemove(e); }
                 });
-                listView.select(listView.element.children().first());
-                this.set("need", this.item.needs[0]);
                 $("#editNeedPanel").data("kendoWindow").open().center();
-                this.reorderItems();
             }
         };
         needsvm.prototype.onEdit = function (e) {
@@ -102,7 +97,10 @@ var hfc;
                 }
             });
         };
-        needsvm.prototype.closeButtonClick = function (e) {
+        needsvm.prototype.saveButtonClick = function (e) {
+            var needs = this.get("item").get("needs");
+            needs.unshift(this.get("need"));
+            this.reorderItems();
             $("#editNeedPanel").data("kendoWindow").close();
         };
         needsvm.prototype.init = function () {

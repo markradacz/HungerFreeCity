@@ -19,17 +19,12 @@ module hfc {
         public doAction(e: any): void {
             if (e.id === "add") {
                 // popup a dialog box to edit the value
-                var listView = $("#needsList").data("kendoListView");
-                //needs.insert(0, { name: 'New Item' });
-                this.item.needs.unshift({
+				this.set("need", {
 					name: "New Item",
 					onShowRemove: e => { this.onShowRemove(e); },
 					onRemove: e => { this.onRemove(e); }
-                });
-                listView.select(listView.element.children().first());
-				this.set("need", this.item.needs[0]);
+				});
                 $("#editNeedPanel").data("kendoWindow").open().center();
-				this.reorderItems();
 			}
         }
 
@@ -104,7 +99,10 @@ module hfc {
             });
         }
 
-        private closeButtonClick(e: any): void {
+        private saveButtonClick(e: any): void {
+			var needs = this.get("item").get("needs");
+			needs.unshift(this.get("need"));
+			this.reorderItems();
             $("#editNeedPanel").data("kendoWindow").close();
         }
 
