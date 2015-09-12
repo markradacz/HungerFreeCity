@@ -102,7 +102,7 @@ label.favorite-star > input[type=checkbox]:checked + span:before {
 
 .needslist {
     border-style: none;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .needItem {

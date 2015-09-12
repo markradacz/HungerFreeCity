@@ -18,15 +18,24 @@ var hfc;
             var _this = this;
             _super.apply(this, arguments);
             this.loggedIn = false;
+            this.isLoggingIn = false;
+            this.isRegistering = false;
+            this.isResetting = false;
+            this.isPanelShowing = false;
             this.ref = new Firebase(hfc.common.FirebaseUrl);
             this.showRegister = function (e) {
-                _this.closePanel("#loginPanel");
-                _this.showPanel("#registerPanel");
+                _this.set("isLoggingIn", false);
+                _this.set("isRegistering", true);
+                _this.set("isResetting", false);
+                _this.showPanel("#loginPanel", "Sign Up");
+                _this.appear("#registerView");
             };
             this.showLogin = function (e) {
-                _this.closePanel("#forgotPanel");
-                _this.closePanel("#registerPanel");
-                _this.showPanel("#loginPanel");
+                _this.set("isLoggingIn", true);
+                _this.set("isRegistering", false);
+                _this.set("isResetting", false);
+                _this.showPanel("#loginPanel", "Log In");
+                _this.appear("#loginView");
             };
             this.saveFavorites = function () {
                 var userId = _this.get("userId");
@@ -34,17 +43,39 @@ var hfc;
                 favRef.set(hfc.common.User.favorites);
             };
         }
-        appvm.prototype.showPanel = function (id) {
+        appvm.prototype.showPanel = function (id, title) {
             var p = $(id).data("kendoWindow");
+            p.title(title);
+            if (this.get("isPanelShowing"))
+                return;
+            this.set("isPanelShowing", true);
             p.open();
             p.center();
         };
         appvm.prototype.closePanel = function (id) {
+            this.set("isPanelShowing", false);
             $(id).data("kendoWindow").close();
         };
+        appvm.prototype.panelClosed = function (e) {
+            this.set("isPanelShowing", false);
+            this.set("isLoggingIn", false);
+            this.set("isRegistering", false);
+            this.set("isResetting", false);
+        };
         appvm.prototype.showForgot = function (e) {
-            this.closePanel("#loginPanel");
-            this.showPanel("#forgotPanel");
+            this.set("isLoggingIn", false);
+            this.set("isRegistering", false);
+            this.set("isResetting", true);
+            this.showPanel("#loginPanel", "Reset Password");
+            this.appear("#forgotView");
+        };
+        appvm.prototype.appear = function (id) {
+            var w = kendo.fx($(id));
+            var fx = w.fade("in");
+            // fx.add(w.slideIn("up"));
+            // fx.add(w.zoom("in"));
+            // fx.add(w.expand("horizontal"));
+            fx.duration(500).play();
         };
         appvm.prototype.logoff = function () {
             // Unauthenticate the client
@@ -78,8 +109,7 @@ var hfc;
                 }
                 else {
                     hfc.common.successToast("Successfully registered");
-                    // close the registration panel
-                    _this.closePanel("#registerPanel");
+                    _this.closePanel("#loginPanel");
                     _this.loginButtonClick(e);
                 }
             });
@@ -96,7 +126,6 @@ var hfc;
                 }
                 else {
                     _this.getUserProfile(authData);
-                    // close the login panel
                     _this.closePanel("#loginPanel");
                 }
             });
@@ -111,8 +140,7 @@ var hfc;
                 }
                 else {
                     hfc.common.successToast("Password reset email sent successfully");
-                    // close the reset password panel and show the login panel
-                    _this.closePanel("#forgotPanel");
+                    _this.closePanel("#loginPanel");
                 }
             });
         };

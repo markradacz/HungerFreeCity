@@ -5,38 +5,74 @@
 /// <reference path="scripts/common.ts" />
 module hfc {
     export class appvm extends kendo.data.ObservableObject {
-        public loggedIn = false;
         public email: string;
         public password: string;
+        public loggedIn = false;
+		public isLoggingIn = false;
+		public isRegistering = false;
+		public isResetting = false;
+
+		private isPanelShowing = false;
         private nav: any;
         private ref = new Firebase(common.FirebaseUrl);
         private userId: string;
 
-        private showPanel(id: string): void {
+        private showPanel(id: string, title: string): void {
             var p = $(id).data("kendoWindow");
+			p.title(title);
+
+			if (this.get("isPanelShowing"))
+				return;
+			this.set("isPanelShowing", true);
+
             p.open();
             p.center();
         }
 
         private closePanel(id: string): void {
+			this.set("isPanelShowing", false);
             $(id).data("kendoWindow").close();
         }
 
-        public showRegister = (e: any) => { // use lambda to ensure _this reference
-            this.closePanel("#loginPanel");
-            this.showPanel("#registerPanel");
-        }
+		public panelClosed(e: any): void {
+			this.set("isPanelShowing", false);
+            this.set("isLoggingIn", false);
+            this.set("isRegistering", false);
+			this.set("isResetting", false);
+		}
 
-        public showLogin = (e: any) => {
-            this.closePanel("#forgotPanel");
-            this.closePanel("#registerPanel");
-            this.showPanel("#loginPanel");
-        }
+        public showRegister = (e: any) => { // use lambda to ensure _this reference
+            this.set("isLoggingIn", false);
+            this.set("isRegistering", true);
+			this.set("isResetting", false);
+			this.showPanel("#loginPanel", "Sign Up");
+			this.appear("#registerView");
+		}
+
+		public showLogin = (e: any) => {
+            this.set("isLoggingIn", true);
+            this.set("isRegistering", false);
+			this.set("isResetting", false);
+			this.showPanel("#loginPanel", "Log In");
+			this.appear("#loginView");
+		}
 
         public showForgot(e: any): void {
-            this.closePanel("#loginPanel");
-            this.showPanel("#forgotPanel");
-        }
+            this.set("isLoggingIn", false);
+            this.set("isRegistering", false);
+			this.set("isResetting", true);
+			this.showPanel("#loginPanel", "Reset Password");
+			this.appear("#forgotView");
+		}
+
+		private appear(id: string): void {
+			var w = kendo.fx($(id));
+			var fx = w.fade("in");
+			// fx.add(w.slideIn("up"));
+			// fx.add(w.zoom("in"));
+			// fx.add(w.expand("horizontal"));
+			fx.duration(500).play();
+		}
 
         public logoff(): void {
             // Unauthenticate the client
@@ -45,13 +81,12 @@ module hfc {
             this.setlogin();
         }
 
-        private validateEmail(email : string): boolean {
+        private validateEmail(email: string): boolean {
             var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
             return re.test(email);
         }
 
         public registerButtonClick(e: any): void {
-
             var email = this.get("email");
             var password = this.get("password");
 
@@ -74,8 +109,7 @@ module hfc {
                     this.showError(error);
                 } else {
                     common.successToast("Successfully registered");
-                    // close the registration panel
-                    this.closePanel("#registerPanel");
+                    this.closePanel("#loginPanel");
                     this.loginButtonClick(e);
                 }
             });
@@ -91,7 +125,6 @@ module hfc {
                     this.showError(error);
                 } else {
                     this.getUserProfile(authData);
-                    // close the login panel
                     this.closePanel("#loginPanel");
                 }
             });
@@ -105,8 +138,7 @@ module hfc {
                     this.showError(error);
                 } else {
                     common.successToast("Password reset email sent successfully");
-                    // close the reset password panel and show the login panel
-                    this.closePanel("#forgotPanel");
+                    this.closePanel("#loginPanel");
                 }
             });
         }
@@ -163,7 +195,7 @@ module hfc {
                         data.favorites = [];
                         mod = true;
                     }
-                    if(mod) uref.set(data);
+                    if (mod) uref.set(data);
                     common.User = data;
                     this.setlogin();
                 });
@@ -221,8 +253,8 @@ module hfc {
             // get the user's profile data
             this.getUserProfile(this.ref.getAuth());
 
-            $.subscribe("saveFavorites", this.saveFavorites);       
-            $.subscribe("showLogin", this.showLogin);       
+            $.subscribe("saveFavorites", this.saveFavorites);
+            $.subscribe("showLogin", this.showLogin);
             $.subscribe("showRegister", this.showRegister);
         }
     }
@@ -239,7 +271,7 @@ define([
     kendo.bind("#applicationHost", vm);
     vm.init();
 
-    var layout: kendo.Layout = new kendo.Layout( "<div id=\"viewRoot\"/>", {
+    var layout: kendo.Layout = new kendo.Layout("<div id=\"viewRoot\"/>", {
         show: () => { kendo.fx(this.element).fade("in").duration(500).play(); },
     });
 
@@ -255,8 +287,8 @@ define([
     router.route("/manage", () => { layout.showIn("#viewRoot", manage); });
     router.route("/about", () => { layout.showIn("#viewRoot", about); });
 
-	$.subscribe("loggedIn", () => { router.navigate("/manage"); });       
-	$.subscribe("loggedOff", () => { router.navigate("/"); });       
+	$.subscribe("loggedIn", () => { router.navigate("/manage"); });
+	$.subscribe("loggedOff", () => { router.navigate("/"); });
 
     return router;
 });

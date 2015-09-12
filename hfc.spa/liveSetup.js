@@ -2,6 +2,7 @@
 	if( document.location.hostname === "localhost" ) {
 		window.AdditionalLinks = [
 			"index.html",
+			"app.js",
 			"Views/home/home.html",
 			"Views/home/home.js",
 			"Views/manage/manage.html",
