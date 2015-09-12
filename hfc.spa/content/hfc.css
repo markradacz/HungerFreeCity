@@ -12,6 +12,7 @@ h3 {
 a.k-button {
     color: #71b1d1;
 }
+
 .editPanel {
 	border: #71b1d1 1px solid;
     width: 400px;
@@ -23,14 +24,14 @@ a.k-button {
     font-weight: bold;
     text-align: center;
 }
-.editPanel > div {
+.editPanel > div > div {
     padding-bottom: 20px;
     text-align: center;
 }
-.editPanel > div > input {
+.editPanel > div > div > input {
 	font-size: 15pt;
 }
-.editPanel > div > button {
+.editPanel > div > div > button {
 	font-size: 15pt;
     text-transform: uppercase;
 }
