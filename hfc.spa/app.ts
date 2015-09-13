@@ -283,9 +283,9 @@ define([
     });
 
     // Add new routes here...
-    router.route("/", () => { layout.showIn("#viewRoot", home, "swap"); });
-    router.route("/manage", () => { layout.showIn("#viewRoot", manage, "swap"); });
-    router.route("/about", () => { layout.showIn("#viewRoot", about, "swap"); });
+    router.route("/", () => { layout.showIn("#viewRoot", home); });
+    router.route("/manage", () => { layout.showIn("#viewRoot", manage); });
+    router.route("/about", () => { layout.showIn("#viewRoot", about); });
 
 	$.subscribe("loggedIn", () => { router.navigate("/manage"); });
 	$.subscribe("loggedOff", () => { router.navigate("/"); });

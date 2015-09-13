@@ -271,9 +271,9 @@ define([
         change: function (e) { vm.routeChange(e); } // whenever the route changes
     });
     // Add new routes here...
-    router.route("/", function () { layout.showIn("#viewRoot", home, "swap"); });
-    router.route("/manage", function () { layout.showIn("#viewRoot", manage, "swap"); });
-    router.route("/about", function () { layout.showIn("#viewRoot", about, "swap"); });
+    router.route("/", function () { layout.showIn("#viewRoot", home); });
+    router.route("/manage", function () { layout.showIn("#viewRoot", manage); });
+    router.route("/about", function () { layout.showIn("#viewRoot", about); });
     $.subscribe("loggedIn", function () { router.navigate("/manage"); });
     $.subscribe("loggedOff", function () { router.navigate("/"); });
     return router;

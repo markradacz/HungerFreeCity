@@ -21,14 +21,15 @@ var hfc;
                 $("#editCenterPanel").data("kendoWindow").open().center();
             }
         };
-        centervm.prototype.closeButtonClick = function (e) {
+        centervm.prototype.saveButtonClick = function (e) {
             // Save the record
             var clone = JSON.parse(JSON.stringify(this.get("item"))); // cheap way to get a deep clone
             delete clone.favorite; // remove this property
             clone.lastModified = new Date().toISOString();
             // common.log("saving center data " + JSON.stringify(clone));
-            var ref = new Firebase(hfc.common.FirebaseUrl);
-            ref.child(this.get("refpath")).update(clone, function (error) {
+            new Firebase(hfc.common.FirebaseUrl)
+                .child(this.get("item").refkey)
+                .update(clone, function (error) {
                 if (error) {
                     hfc.common.errorToast("Data could not be saved." + error);
                 }
@@ -38,9 +39,8 @@ var hfc;
                 }
             });
         };
-        centervm.prototype.setup = function (item, refpath) {
+        centervm.prototype.setup = function (item) {
             this.set("item", item);
-            this.set("refpath", refpath);
         };
         centervm.prototype.init = function () {
         };

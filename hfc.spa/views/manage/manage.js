@@ -26,14 +26,25 @@ var hfc;
                     that.centers.length = 0; // clear the current array
                     // join in the user's favorited centers, and add each to the collection
                     if (hfc.common.User && hfc.common.User.favorites) {
-                        var all = data.val();
-                        all.sort(function (a, b) { return a.name.localeCompare(b.name); });
-                        all.forEach(function (v) {
-                            v.favorite = $.inArray(v.centerid, hfc.common.User.favorites) >= 0;
-                            v.onShowRemove = function (e) { _this.onShowRemove(e); };
-                            v.onRemove = function (e) { _this.onRemove(e); };
-                            that.centers.push(v);
+                        var key = data.key();
+                        var all = [];
+                        // convert object to an array
+                        data.forEach(function (v) {
+                            var c = v.val();
+                            c.refkey = key + "/" + v.key();
+                            c.favorite = $.inArray(c.centerid, hfc.common.User.favorites) >= 0;
+                            if (!c.needs)
+                                c.needs = [];
+                            c.onShowRemove = function (e) { _this.onShowRemove(e); };
+                            c.onRemove = function (e) { _this.onRemove(e); };
+                            all.push(c);
                         });
+                        all.sort(function (a, b) {
+                            if (a.favorite === b.favorite)
+                                return a.name.localeCompare(b.name);
+                            return a.favorite ? -1 : 1;
+                        });
+                        all.forEach(function (v) { that.centers.push(v); });
                     }
                 });
             });
@@ -51,15 +62,12 @@ var hfc;
             });
         }
         managevm.prototype.doAction = function (e) {
-            var _this = this;
             if (e.id === "addcenter") {
                 var center = {
-                    name: "  New Center",
+                    name: "New Center",
                     hours: "",
-                    lastModified: new Date().toISOString(),
                     phone: "",
                     site: "",
-                    centerid: kendo.guid(),
                     address: {},
                     needs: [],
                     centerinfo: [],
@@ -67,13 +75,16 @@ var hfc;
                         coordinates: [-81.7276643, 30.2890513],
                         type: "Point"
                     },
-                    onShowRemove: function (e) { _this.onShowRemove(e); },
-                    onRemove: function (e) { _this.onRemove(e); }
+                    lastModified: new Date().toISOString(),
+                    centerid: kendo.guid()
                 };
-                this.centers.unshift(center);
-                // now select the newly added center
-                var listView = $("#centerlist").data("kendoListView");
-                listView.select(listView.element.children().first());
+                // save the new center to Firebase
+                this.set("item", center);
+                new Firebase(hfc.common.FirebaseUrl).child("centers").push(center, function (error) {
+                    if (error) {
+                        hfc.common.errorToast("Error saving: " + error);
+                    }
+                });
             }
         };
         managevm.prototype.showCenter = function (e) {
@@ -82,16 +93,15 @@ var hfc;
             var index = listView.select().index();
             var item = this.centers[index];
             this.set("item", item);
-            var refpath = "/centers/" + index;
             $("#centerlist button.confirmRemove").each(function () {
                 var op = $(this).css("opacity");
                 if (op > "0") {
                     $(this).animate({ width: 0, height: "100%", opacity: 0 }, 200);
                 }
             });
-            this.needsView.model.setup(item, refpath);
-            this.centerView.model.setup(item, refpath);
-            this.locationView.model.setup(item, refpath);
+            this.needsView.model.setup(item);
+            this.centerView.model.setup(item);
+            this.locationView.model.setup(item);
             // select the Needs button in the toolbar if there isn't anything selected
             var tabtoolbar = $("#tabtoolbar").data("kendoToolBar");
             var selected = tabtoolbar.getSelectedFromGroup("tab");
@@ -119,7 +129,9 @@ var hfc;
             var item = this.centers[index];
             this.layout.showIn("#viewConent", this.blankView, "swap");
             this.set("toolbarVisible", false);
-            this.centers.remove(item);
+            // remove on Firebase (and it may remove from centers list by callback)
+            new Firebase(hfc.common.FirebaseUrl).child(item.refkey).set(null); // remove the item
+            // this.centers.remove(item);
         };
         managevm.prototype.tabToggle = function (e) {
             //e.target jQuery The jQuery object that represents the command element.
@@ -149,6 +161,18 @@ var hfc;
                 case "location":
                     this.layout.showIn("#viewConent", this.locationView, "swap");
                     break;
+            }
+        };
+        managevm.prototype.listBound = function (e) {
+            // called for each row bound!
+            // if we have an item selected, then re-select it after a data refresh
+            var curr = this.get("item");
+            var listView = $("#centerlist").data("kendoListView");
+            var all = listView.dataItems();
+            var idx = $.indexByPropertyValue(all, "centerid", curr.centerid);
+            if (idx >= 0) {
+                var sel = listView.element.children()[idx];
+                listView.select(sel);
             }
         };
         managevm.prototype.init = function () {

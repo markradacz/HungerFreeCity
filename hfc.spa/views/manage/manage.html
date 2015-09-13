@@ -17,7 +17,7 @@
                  data-role="listview"
                  data-selectable="true"
                  data-template="template"
-                 data-bind="source: centers, events: { change: showCenter }"
+                 data-bind="source: centers, events: { change: showCenter, dataBound: listBound }"
                  style="height: 500px; overflow: auto">
             </div>
             <script type="text/x-kendo-tmpl" id="template">

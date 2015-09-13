@@ -17,12 +17,10 @@ module hfc {
         public doAction(e: any): void {
             if (e.id === "addcenter") {
 				var center = {
-					name: "  New Center",
+					name: "New Center",
 					hours: "",
-					lastModified: new Date().toISOString(),
 					phone: "",
 					site: "",
-					centerid: kendo.guid(),
 					address: {},
 					needs: [],
 					centerinfo: [],
@@ -30,13 +28,19 @@ module hfc {
 						coordinates: [-81.7276643, 30.2890513],
 						type: "Point"
 					},
-					onShowRemove: e => { this.onShowRemove(e); },
-					onRemove: e => { this.onRemove(e); }
+					lastModified: new Date().toISOString(),
+					centerid: kendo.guid()
+					//onShowRemove: e => { this.onShowRemove(e); },
+					//onRemove: e => { this.onRemove(e); }
 				};
-                this.centers.unshift(center);
-				// now select the newly added center
-				var listView = $("#centerlist").data("kendoListView");
-				listView.select(listView.element.children().first());
+
+				// save the new center to Firebase
+				this.set("item", center);
+				new Firebase(common.FirebaseUrl).child("centers").push(center, error => {
+					if (error) {
+						common.errorToast( "Error saving: " + error);
+					}					
+				});
             }
         }
 
@@ -46,19 +50,17 @@ module hfc {
             var index = listView.select().index();
             var item = this.centers[index];
 			this.set("item", item);
-			var refpath = "/centers/" + index;
 
 			$("#centerlist button.confirmRemove").each(function () {
                 var op = $(this).css("opacity");
                 if (op > "0") {
                     $(this).animate({ width: 0, height: "100%", opacity: 0 }, 200);
-					// display: "none", 
                 }
             });
 
-            (<needsvm>this.needsView.model).setup(item, refpath);
-            (<centervm>this.centerView.model).setup(item, refpath);
-            (<locationvm>this.locationView.model).setup(item, refpath);
+            (<needsvm>this.needsView.model).setup(item);
+            (<centervm>this.centerView.model).setup(item);
+            (<locationvm>this.locationView.model).setup(item);
 
             // select the Needs button in the toolbar if there isn't anything selected
             var tabtoolbar = $("#tabtoolbar").data("kendoToolBar");
@@ -90,10 +92,12 @@ module hfc {
 			this.layout.showIn("#viewConent", this.blankView, "swap");
 			this.set("toolbarVisible", false);
 
-            this.centers.remove(item);
+			// remove on Firebase (and it may remove from centers list by callback)
+			new Firebase(common.FirebaseUrl).child(item.refkey).set(null); // remove the item
+            // this.centers.remove(item);
 		}
 
-		public tabToggle(e: any) {
+		public tabToggle(e: any): void {
             //e.target jQuery The jQuery object that represents the command element.
             //e.checked Boolean Boolean flag that indicates the button state.
             //e.id String The id of the command element.
@@ -104,7 +108,7 @@ module hfc {
 			this.tabView(e.id);
         }
 
-		public tabView(id: string) {
+		public tabView(id: string): void {
 			//e.target jQuery The jQuery object that represents the command element.
 			//e.checked Boolean Boolean flag that indicates the button state.
 			//e.id String The id of the command element.
@@ -116,6 +120,19 @@ module hfc {
 				case "needs": this.layout.showIn("#viewConent", this.needsView, "swap"); break;
 				case "center": this.layout.showIn("#viewConent", this.centerView, "swap"); break;
 				case "location": this.layout.showIn("#viewConent", this.locationView, "swap"); break;
+			}
+		}
+
+		public listBound(e: any): void {
+			// called for each row bound!
+			// if we have an item selected, then re-select it after a data refresh
+			var curr = this.get("item");
+			var listView = $("#centerlist").data("kendoListView");
+			var all = listView.dataItems();
+			var idx = $.indexByPropertyValue(all, "centerid", curr.centerid);
+			if (idx >= 0) {
+				var sel = listView.element.children()[idx];
+				listView.select(sel);
 			}
 		}
 
@@ -131,14 +148,23 @@ module hfc {
 					that.centers.length = 0;	// clear the current array
                     // join in the user's favorited centers, and add each to the collection
                     if (common.User && common.User.favorites) {
-						var all = data.val();
-						all.sort((a: any, b: any) => { return a.name.localeCompare(b.name); });
-                        all.forEach(v => {
-                            v.favorite = $.inArray(v.centerid, common.User.favorites) >= 0;
-							v.onShowRemove = e => { this.onShowRemove(e); }
-							v.onRemove = e => { this.onRemove(e); }
-							that.centers.push(v);
-                        });
+						var key = data.key();
+	                    var all = [];
+						// convert object to an array
+						data.forEach(v => {
+							var c = v.val();
+							c.refkey = key + "/" + v.key();
+                            c.favorite = $.inArray(c.centerid, common.User.favorites) >= 0;
+							if (!c.needs) c.needs = [];
+							c.onShowRemove = e => { this.onShowRemove(e); }
+							c.onRemove = e => { this.onRemove(e); }
+							all.push(c);
+						});
+						all.sort((a: any, b: any) => {
+							if (a.favorite === b.favorite) return a.name.localeCompare(b.name);
+							return a.favorite ? -1 : 1;
+						});
+                        all.forEach( v => { that.centers.push(v); });
                     }
                 });
             });

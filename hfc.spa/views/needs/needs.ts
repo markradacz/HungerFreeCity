@@ -7,12 +7,10 @@ module hfc {
         public static instance: needsvm = null; // set in the setup() method below
         public need: any = null;
         public item: any;
-        public refpath: string;
  
-        public setup(item, refpath): void {
+        public setup(item): void {
             needsvm.instance = this;
 			this.set("item", item);
-			this.set("refpath", refpath);
 			this.reorderItems();
         }
 
@@ -25,6 +23,20 @@ module hfc {
 					onRemove: e => { this.onRemove(e); }
 				});
                 $("#editNeedPanel").data("kendoWindow").open().center();
+			} else if (e.id === "save") {
+				// common.log("saving center data " + JSON.stringify(clone));
+				var item = this.get("item");
+				var clone = JSON.parse(JSON.stringify(item.needs));	// cheap way to get a deep clone
+				new Firebase(common.FirebaseUrl)
+					.child(item.refkey)
+					.child("needs")
+					.update(clone, error => {
+						if (error) {
+							common.errorToast("Needs data could not be saved." + error);
+						} else {
+							common.successToast("Needs data saved successfully.");
+						}
+					});
 			}
         }
 
@@ -65,7 +77,7 @@ module hfc {
             });
         }
 
-		private reorderItems() {
+		private reorderItems(): void {
 			// reset the index values
 			var needs = needsvm.instance.get("item").get("needs");
 			var index = 0;

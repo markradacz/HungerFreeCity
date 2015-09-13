@@ -1282,6 +1282,8 @@ interface JQueryStatic {
 
     publish(topic: string, args?: any[]): any;
     subscribe(topic: string, callback: any): any;
+	findByPropertyValue(array: any[], propertyName: string, value: any): any;
+	indexByPropertyValue(array: any[], propertyName: string, value: any): number;
 }
 
 /**

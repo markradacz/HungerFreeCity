@@ -2419,6 +2419,8 @@ declare module kendo.ui {
         select(items: JQuery): void;
         select(items: any): void;
         setDataSource(dataSource: kendo.data.DataSource): void;
+		dataItems(): any[];
+		dataItem(selector: any): any;
     }
 
     interface ListViewOptions {

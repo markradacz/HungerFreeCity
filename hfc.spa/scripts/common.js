@@ -92,6 +92,27 @@ var hfc;
     })(kendo.data.ObservableObject);
     hfc.common = common;
 })(hfc || (hfc = {}));
+// extend jQuery with a new indexByPropertyValue() function that looks for an array item with a matching property value
+jQuery.extend({
+    indexByPropertyValue: function (array, propertyName, value) {
+        for (var i = 0; i < array.length; i++) {
+            if (array[i][propertyName] === value)
+                return i;
+        }
+        return undefined;
+    }
+});
+// extend jQuery with a new findByPropertyValue() function that looks for an array item with a matching property value
+jQuery.extend({
+    findByPropertyValue: function (array, propertyName, value) {
+        for (var i = 0; i < array.length; i++) {
+            var v = array[i];
+            if (v[propertyName] === value)
+                return v;
+        }
+        return null;
+    }
+});
 // extend jQuery with a new distinctByProperty() function that does an in-place edit of the array removing duplicates; favoring early values rather than latter
 jQuery.extend({
     distinctByProperty: function (obj, propertyName) {
@@ -139,22 +160,6 @@ jQuery.extend({
         array.splice(0, array.length);
         // add the items back in the sorted order
         $.each(copy, function (i, v) { array.push(v); });
-    }
-});
-// extend the DataSource to add a custom updateField function
-// updateField takes a JSON object with 4 attributes, keyField, keyValue, updateField and updateValue.
-// for example: to update the Age field, do this ds.updateField({ keyField: 'Id', keyValue: 'jaaron', updateField: 'Age', updateValue: 55 });
-jQuery.extend(true, kendo.data.DataSource.prototype, {
-    updateField: function (e) {
-        var _this = this;
-        var ds = this;
-        $.each(ds._data, function (idx, record) {
-            if (record[e.keyField] === e.keyValue) {
-                _this._data[idx][e.updateField] = e.updateValue;
-                _this.read(_this._data);
-            }
-        });
-        return false;
     }
 });
 // this adds 'placeholder' to the items listed in the jQuery .support object
@@ -351,12 +356,12 @@ var kendo;
                 return title;
             })(data_1.Binder);
             binders.title = title;
-            var databound = (function (_super) {
-                __extends(databound, _super);
-                function databound() {
+            var databoundX = (function (_super) {
+                __extends(databoundX, _super);
+                function databoundX() {
                     _super.apply(this, arguments);
                 }
-                databound.prototype.refresh = function () {
+                databoundX.prototype.refresh = function () {
                     var binding = this.bindings["databound"];
                     try {
                         // common.log("databound: on " + this.element.tagName + " with " + binding.path);
@@ -376,9 +381,9 @@ var kendo;
                         hfc.common.log("databound error with " + binding.path + " on " + this.element.tagName + " error: " + JSON.stringify(e));
                     }
                 };
-                return databound;
+                return databoundX;
             })(data_1.Binder);
-            binders.databound = databound;
+            binders.databoundX = databoundX;
             // get the count of a collection named in the binding
             var subcount = (function (_super) {
                 __extends(subcount, _super);
@@ -395,7 +400,7 @@ var kendo;
                 return subcount;
             })(data_1.Binder);
             binders.subcount = subcount;
-            // get the count of a collection named in the binding
+            // join the properties of a collection
             var combine = (function (_super) {
                 __extends(combine, _super);
                 function combine() {

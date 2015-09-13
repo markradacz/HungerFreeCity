@@ -16,10 +16,9 @@ var hfc;
             _super.apply(this, arguments);
             this.need = null;
         }
-        needsvm.prototype.setup = function (item, refpath) {
+        needsvm.prototype.setup = function (item) {
             needsvm.instance = this;
             this.set("item", item);
-            this.set("refpath", refpath);
             this.reorderItems();
         };
         needsvm.prototype.doAction = function (e) {
@@ -32,6 +31,22 @@ var hfc;
                     onRemove: function (e) { _this.onRemove(e); }
                 });
                 $("#editNeedPanel").data("kendoWindow").open().center();
+            }
+            else if (e.id === "save") {
+                // common.log("saving center data " + JSON.stringify(clone));
+                var item = this.get("item");
+                var clone = JSON.parse(JSON.stringify(item.needs)); // cheap way to get a deep clone
+                new Firebase(hfc.common.FirebaseUrl)
+                    .child(item.refkey)
+                    .child("needs")
+                    .update(clone, function (error) {
+                    if (error) {
+                        hfc.common.errorToast("Needs data could not be saved." + error);
+                    }
+                    else {
+                        hfc.common.successToast("Needs data saved successfully.");
+                    }
+                });
             }
         };
         needsvm.prototype.onEdit = function (e) {

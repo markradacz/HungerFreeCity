@@ -15,9 +15,28 @@ var hfc;
         function locationvm() {
             _super.apply(this, arguments);
         }
-        locationvm.prototype.setup = function (item, refpath) {
+        locationvm.prototype.setup = function (item) {
             this.set("item", item);
-            this.set("refpath", refpath);
+        };
+        locationvm.prototype.doAction = function (e) {
+            if (e.id === "edit") {
+            }
+            else if (e.id === "save") {
+                // common.log("saving center data " + JSON.stringify(clone));
+                var item = this.get("item");
+                var clone = JSON.parse(JSON.stringify(item.geometry)); // cheap way to get a deep clone
+                new Firebase(hfc.common.FirebaseUrl)
+                    .child(item.refkey)
+                    .child("geometry")
+                    .update(clone, function (error) {
+                    if (error) {
+                        hfc.common.errorToast("Location data could not be saved." + error);
+                    }
+                    else {
+                        hfc.common.successToast("Location data saved successfully.");
+                    }
+                });
+            }
         };
         locationvm.prototype.init = function () {
             var _this = this;

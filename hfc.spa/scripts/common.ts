@@ -85,6 +85,27 @@ module hfc {
     }
 }
 
+// extend jQuery with a new indexByPropertyValue() function that looks for an array item with a matching property value
+jQuery.extend({
+    indexByPropertyValue: (array: any[], propertyName: string, value: any): any => {
+		for (var i = 0; i < array.length; i++) {
+			if (array[i][propertyName] === value)
+				return i;
+		}
+		return undefined;
+    }
+});
+// extend jQuery with a new findByPropertyValue() function that looks for an array item with a matching property value
+jQuery.extend({
+    findByPropertyValue: (array: any[], propertyName: string, value: any) : any => {
+		for (var i = 0; i < array.length; i++) {
+			var v = array[i];
+			if (v[propertyName] === value) return v;
+		}
+	    return null;
+    }
+});
+
 // extend jQuery with a new distinctByProperty() function that does an in-place edit of the array removing duplicates; favoring early values rather than latter
 jQuery.extend({
     distinctByProperty: (obj: Array<any>, propertyName: string) => {
@@ -134,22 +155,6 @@ jQuery.extend({
 
 	    // add the items back in the sorted order
 	    $.each(copy, (i, v) => { array.push(v); });
-	}
-});
-
-// extend the DataSource to add a custom updateField function
-// updateField takes a JSON object with 4 attributes, keyField, keyValue, updateField and updateValue.
-// for example: to update the Age field, do this ds.updateField({ keyField: 'Id', keyValue: 'jaaron', updateField: 'Age', updateValue: 55 });
-jQuery.extend(true, kendo.data.DataSource.prototype, {
-	updateField: function(e) {
-		var ds = this;
-		$.each(ds._data, (idx, record) => {
-		    if(record[e.keyField] === e.keyValue) {
-		        this._data[idx][e.updateField]= e.updateValue;
-		        this.read(this._data);
-		    }
-		});
-		return false;
 	}
 });
 
@@ -308,7 +313,7 @@ module kendo.data.binders {
             $(that.element).attr("title", value);
         }
     }
-    export class databound extends Binder {
+    export class databoundX extends Binder {
         refresh() {
             var binding = this.bindings["databound"];
             try {
@@ -326,7 +331,6 @@ module kendo.data.binders {
             }
         }
     }
-
     // get the count of a collection named in the binding
     export class subcount extends Binder {
         refresh() {
@@ -337,8 +341,7 @@ module kendo.data.binders {
             $(that.element).text(len);
         }
     }
-
-    // get the count of a collection named in the binding
+    // join the properties of a collection
     export class combine extends Binder {
         refresh() {
             var binding = this.bindings["combine"];
@@ -356,7 +359,6 @@ module kendo.data.binders {
 	        }
         }
     }
-
     // apply animation to the element on appearance
     export class appearAnimation extends Binder {
         public refresh() : void {
@@ -426,7 +428,6 @@ module kendo.data.binders {
             effect.duration(1000).play();
         }
     }
-
     // Example: <span data-bind="formattedText: selectedBlock.LastUpdated" data-format="dddd MMM dd, yyyy hh:mmtt"></span>
     export class formattedText extends Binder {
         format: string;
@@ -441,8 +442,7 @@ module kendo.data.binders {
             }
         }
     }
-
-// Example: <span data-bind="date: selectedBlock.LastUpdated" data-dateformat="dddd MMM dd, yyyy hh:mmtt"></span>
+	// Example: <span data-bind="date: selectedBlock.LastUpdated" data-dateformat="dddd MMM dd, yyyy hh:mmtt"></span>
     export class date extends data.Binder {
         private dateformat: string;
         constructor(element: Element, bindings: { [key: string]: Binding; }, options?: any) {
@@ -457,8 +457,7 @@ module kendo.data.binders {
             }
         }
     }
-
-// format text from binding
+	// format text from binding
     //export class textFormat extends Binder {
     //    f: string;
     //    m: number;
@@ -487,32 +486,30 @@ module kendo.data.binders {
     //        }
     //    }
     //}
+	//kendo.data.binders.textFormat = kendo.data.binders.textFormat || kendo.data.Binder.extend({
+	//	init: function(element, bindings, options) {
+	//		kendo.data.Binder.fn.init.call(this, element, bindings, options);
+	//		var t = $(element);
+	//		this.f = t.data("format");
+	//		this.m = t.data("trim");
+	//		this.n = t.data("none");
+	//	},
+	//	refresh: function() {
+	//		var t = $(this.element),
+	//			v = this.bindings.textFormat.get(),
+	//			w = this.m;
 
-//kendo.data.binders.textFormat = kendo.data.binders.textFormat || kendo.data.Binder.extend({
-//	init: function(element, bindings, options) {
-//		kendo.data.Binder.fn.init.call(this, element, bindings, options);
-//		var t = $(element);
-//		this.f = t.data("format");
-//		this.m = t.data("trim");
-//		this.n = t.data("none");
-//	},
-//	refresh: function() {
-//		var t = $(this.element),
-//			v = this.bindings.textFormat.get(),
-//			w = this.m;
-
-//		if (this.n !== undefined && (v === undefined || v === null)) {
-//			t.html(this.n);
-//		} else {
-//			var x = kendo.toString(v, this.f);
-//			if (w !== undefined && x.length > w) {
-//				x = x.substr(0, w) + "...";
-//			}
-//			t.html(x);
-//		}
-//	}
-//});
-
+	//		if (this.n !== undefined && (v === undefined || v === null)) {
+	//			t.html(this.n);
+	//		} else {
+	//			var x = kendo.toString(v, this.f);
+	//			if (w !== undefined && x.length > w) {
+	//				x = x.substr(0, w) + "...";
+	//			}
+	//			t.html(x);
+	//		}
+	//	}
+	//});
     // toggle a CSS class
     // <div class="tile" data-bind="cssToggle: canRemove" data-class-true="already" data-class-false="new">
     export class cssToggle extends Binder {

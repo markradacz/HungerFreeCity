@@ -5,7 +5,6 @@
 module hfc {
     export class centervm extends kendo.data.ObservableObject {
         public item: any;
-        public refpath: string;
 
 		public doAction(e: any): void {
             if (e.id === "edit") {
@@ -14,27 +13,27 @@ module hfc {
 			}
         }
 
-		private closeButtonClick(e: any): void {
+		private saveButtonClick(e: any): void {
 			// Save the record
 			var clone = JSON.parse(JSON.stringify(this.get("item")));	// cheap way to get a deep clone
 			delete clone.favorite;	// remove this property
 			clone.lastModified = new Date().toISOString();
 
 			// common.log("saving center data " + JSON.stringify(clone));
-			var ref = new Firebase(common.FirebaseUrl);
-			ref.child(this.get("refpath")).update(clone, error => {
-				if (error) {
-					common.errorToast("Data could not be saved." + error);
-				} else {
-					common.successToast("Center saved successfully.");
-					$("#editCenterPanel").data("kendoWindow").close();
-				}
-			});
+			new Firebase(common.FirebaseUrl)
+				.child(this.get("item").refkey)
+				.update(clone, error => {
+					if (error) {
+						common.errorToast("Data could not be saved." + error);
+					} else {
+						common.successToast("Center saved successfully.");
+						$("#editCenterPanel").data("kendoWindow").close();
+					}
+				});
         }
 
-        public setup(item, refpath): void {
+        public setup(item): void {
             this.set("item", item);
-			this.set("refpath", refpath);
         }
 
         public init(): void {

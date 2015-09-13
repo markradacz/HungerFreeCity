@@ -147,7 +147,8 @@
 		},
 
 		// act upon a changed url of certain content type
-		refreshResource: function( url, type ) {
+		refreshResource: function ( url, type ) {
+			if (!type) type = "unk";
 			switch ( type.toLowerCase() ) {
 				// css files can be reloaded dynamically by replacing the link element                               
 				case "text/css":
@@ -169,11 +170,11 @@
 					Live.removeoldLinkElements();
 					break;
 
-					// check if an html resource is our current url, then reload                               
+				// check if an html resource is our current url, then reload
+				case "unk":
 				case "text/html":
 					//if (url != document.location.href)
 					//  return;
-
 					// local javascript changes cause a reload as well
 				case "text/javascript":
 				case "application/javascript":
