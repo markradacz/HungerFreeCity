@@ -119,6 +119,7 @@ module hfc {
         }
 
         public init(): void {
+			//super.init();
         }
     }
 }

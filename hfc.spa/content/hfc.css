@@ -107,23 +107,29 @@ label.favorite-star > input[type=checkbox]:checked + span:before {
 }
 
 .needItem {
-    width: 300px;
+    width: 320px;
     border: #71b1d1 solid 1px;
     border-radius: 10px;
     margin-bottom: 10px;
-    padding: 7px;
+    padding: 5px;
+    vertical-align: middle !important;
 }
-
 .needItem > span:first-child {
     width: 200px;
     text-wrap: normal;
 }
-
-div.needItem span.fa {
+.needItem span.fa {
     float: right !important;
-    line-height: 1em;
-    vertical-align: 0;
+    line-height: 1.75em;
+    vertical-align: middle;
     padding-left: 15px;
+}
+span.needIndex {
+    font-size: 2em;
+    font-weight: bold;
+    color: #71b1d1;
+    vertical-align: middle;
+    margin-right: 5px;
 }
 
 .k-listview span.fa.fa-bars {
@@ -166,6 +172,17 @@ button.confirmRemove {
     text-align: center;
     /*display: none;*/
     opacity: 0;
+}
+
+.userlist {
+    border-style: none;
+}
+.user-tile {
+    border: #71b1d1 solid 1px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    padding: 5px;
 }
 
 /***************************

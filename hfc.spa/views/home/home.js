@@ -24,6 +24,7 @@ var hfc;
         };
         homevm.prototype.init = function () {
             var _this = this;
+            //super.init();
             $.subscribe("loggedIn", function () { _this.set('loggedIn', true); });
             $.subscribe("loggedOff", function () { _this.set('loggedIn', false); });
             this.set('loggedIn', hfc.common.User ? true : false);

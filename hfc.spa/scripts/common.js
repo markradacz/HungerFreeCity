@@ -14,6 +14,9 @@ var hfc;
         function common() {
             _super.apply(this, arguments);
         }
+        common.hasRole = function (role) {
+            return common.User && common.User.roles && common.User.roles.indexOf(role) >= 0;
+        };
         common.animate = function (jelement, type) {
             var wrapper = kendo.fx(jelement);
             var effect = wrapper.fade("in");

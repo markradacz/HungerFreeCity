@@ -40,6 +40,7 @@ var hfc;
         };
         locationvm.prototype.init = function () {
             var _this = this;
+            //super.init();
             this.bind("change", function (e) {
                 var data = _this.get('item');
                 var lat = data.geometry.coordinates[0];

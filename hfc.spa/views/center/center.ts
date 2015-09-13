@@ -5,15 +5,21 @@
 module hfc {
     export class centervm extends kendo.data.ObservableObject {
         public item: any;
+        public editItem: any = {};
 
 		public doAction(e: any): void {
             if (e.id === "edit") {
+				var clone = JSON.parse(JSON.stringify(this.get("item")));	// cheap way to get a deep clone
+	            this.set("editItem", clone);
                 // popup a dialog box to edit the value
                 $("#editCenterPanel").data("kendoWindow").open().center();
+			} else if (e.id === "save") {
 			}
-        }
+		}
 
 		private saveButtonClick(e: any): void {
+            this.set("item", this.get("editItem"));
+
 			// Save the record
 			var clone = JSON.parse(JSON.stringify(this.get("item")));	// cheap way to get a deep clone
 			delete clone.favorite;	// remove this property
@@ -27,8 +33,8 @@ module hfc {
 						common.errorToast("Data could not be saved." + error);
 					} else {
 						common.successToast("Center saved successfully.");
-						$("#editCenterPanel").data("kendoWindow").close();
 					}
+					$("#editCenterPanel").data("kendoWindow").close();
 				});
         }
 
@@ -37,6 +43,7 @@ module hfc {
         }
 
         public init(): void {
+			//super.init();
         }
     }
 }

@@ -15,6 +15,7 @@ module hfc {
         }
 
         public init(): void {
+			//super.init();
             $.subscribe("loggedIn", () => { this.set('loggedIn', true); });
             $.subscribe("loggedOff", () => { this.set('loggedIn', false); });
             this.set('loggedIn', common.User ? true : false);

@@ -14,14 +14,20 @@ var hfc;
         __extends(centervm, _super);
         function centervm() {
             _super.apply(this, arguments);
+            this.editItem = {};
         }
         centervm.prototype.doAction = function (e) {
             if (e.id === "edit") {
+                var clone = JSON.parse(JSON.stringify(this.get("item"))); // cheap way to get a deep clone
+                this.set("editItem", clone);
                 // popup a dialog box to edit the value
                 $("#editCenterPanel").data("kendoWindow").open().center();
             }
+            else if (e.id === "save") {
+            }
         };
         centervm.prototype.saveButtonClick = function (e) {
+            this.set("item", this.get("editItem"));
             // Save the record
             var clone = JSON.parse(JSON.stringify(this.get("item"))); // cheap way to get a deep clone
             delete clone.favorite; // remove this property
@@ -35,14 +41,15 @@ var hfc;
                 }
                 else {
                     hfc.common.successToast("Center saved successfully.");
-                    $("#editCenterPanel").data("kendoWindow").close();
                 }
+                $("#editCenterPanel").data("kendoWindow").close();
             });
         };
         centervm.prototype.setup = function (item) {
             this.set("item", item);
         };
         centervm.prototype.init = function () {
+            //super.init();
         };
         return centervm;
     })(kendo.data.ObservableObject);

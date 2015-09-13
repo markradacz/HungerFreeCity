@@ -31,6 +31,7 @@ module hfc {
         }
 
         public init(): void {
+			//super.init();
             this.bind("change", e => {
                 var data = this.get('item');
                 var lat = data.geometry.coordinates[0];

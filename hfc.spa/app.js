@@ -18,6 +18,8 @@ var hfc;
             var _this = this;
             _super.apply(this, arguments);
             this.loggedIn = false;
+            this.isManager = false;
+            this.isAdmin = false;
             this.isLoggingIn = false;
             this.isRegistering = false;
             this.isResetting = false;
@@ -41,6 +43,7 @@ var hfc;
                 var userId = _this.get("userId");
                 var favRef = _this.ref.child("users").child(userId).child("favorites").ref();
                 favRef.set(hfc.common.User.favorites);
+                hfc.common.successToast("Saved favorites");
             };
         }
         appvm.prototype.showPanel = function (id, title) {
@@ -195,6 +198,10 @@ var hfc;
                         data.favorites = [];
                         mod = true;
                     }
+                    if (data.roles === undefined) {
+                        data.roles = ["user"];
+                        mod = true;
+                    }
                     if (mod)
                         uref.set(data);
                     hfc.common.User = data;
@@ -210,11 +217,15 @@ var hfc;
             if (hfc.common.User) {
                 hfc.common.successToast("Welcome " + hfc.common.User.email);
                 this.set("loggedIn", true);
+                this.set("isManager", hfc.common.hasRole("manager"));
+                this.set("isAdmin", hfc.common.hasRole("admin"));
                 this.set("email", hfc.common.User.email);
                 $.publish("loggedIn", [this.ref]);
             }
             else {
                 this.set("loggedIn", false);
+                this.set("isManager", false);
+                this.set("isAdmin", false);
                 //this.set('email', "");
                 //this.set('password', "");
                 hfc.common.successToast("Logged off");
@@ -222,6 +233,7 @@ var hfc;
             }
         };
         appvm.prototype.init = function () {
+            //super.init();
             // cache a reference to the nav links element
             this.set("nav", $("#nav-links"));
             //ref.onAuth(authData => {    // NOT CALLED when the user is already authenticated and remembered
@@ -256,8 +268,9 @@ define([
     "kendo",
     "views/home/home",
     "views/manage/manage",
-    "views/about/about"
-], function (kendo, home, manage, about) {
+    //"views/admin/admin"
+    "views/users/users"
+], function (kendo, home, manage, admin) {
     var vm = new hfc.appvm();
     kendo.bind("#applicationHost", vm);
     vm.init();
@@ -270,11 +283,23 @@ define([
         routeMissing: function (e) { hfc.common.errorToast("No Route Found" + e.url); },
         change: function (e) { vm.routeChange(e); } // whenever the route changes
     });
-    // Add new routes here...
-    router.route("/", function () { layout.showIn("#viewRoot", home); });
-    router.route("/manage", function () { layout.showIn("#viewRoot", manage); });
-    router.route("/about", function () { layout.showIn("#viewRoot", about); });
-    $.subscribe("loggedIn", function () { router.navigate("/manage"); });
+    // Add routes...
+    router.route("/", function () {
+        layout.showIn("#viewRoot", home);
+    });
+    router.route("/manage", function () {
+        if (hfc.common.hasRole("manager"))
+            layout.showIn("#viewRoot", manage);
+        else
+            router.navigate("/");
+    });
+    router.route("/admin", function () {
+        if (hfc.common.hasRole("admin"))
+            layout.showIn("#viewRoot", admin);
+        else
+            router.navigate("/");
+    });
+    //$.subscribe("loggedIn", () => { router.navigate("/manage"); });
     $.subscribe("loggedOff", function () { router.navigate("/"); });
     return router;
 });

@@ -119,6 +119,7 @@ var hfc;
             $("#editNeedPanel").data("kendoWindow").close();
         };
         needsvm.prototype.init = function () {
+            //super.init();
         };
         needsvm.instance = null; // set in the setup() method below
         return needsvm;

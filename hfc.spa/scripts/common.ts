@@ -7,6 +7,9 @@ module hfc {
 		User
 	    -----------------------------------------------------*/
         public static User: any = null;
+		public static hasRole(role: string): boolean {
+			return common.User && common.User.roles && common.User.roles.indexOf(role) >= 0;
+		}
 
         public static FirebaseUrl: string = 'https://amber-torch-2255.firebaseio.com/';
 
@@ -51,22 +54,22 @@ module hfc {
         /*-----------------------------------------------------
 		Toast Notifications
 	    -----------------------------------------------------*/
-        public static successToast(message: string): void  {
+        public static successToast(message: string): void {
             var w : kendo.ui.Notification = $("#notification").data("kendoNotification");
             if(w) w.show({ message: message }, "success");
         }
 
-        public static infoToast(message: string): void  {
+        public static infoToast(message: string): void {
             var w: kendo.ui.Notification = $("#notification").data("kendoNotification");
             if (w) w.show({ message: message }, "info");
         }
 
-        public static warningToast(message: string): void  {
+        public static warningToast(message: string): void {
             var w: kendo.ui.Notification = $("#notification").data("kendoNotification");
             if (w) w.show({ message: message }, "warning");
         }
 
-        public static errorToast(message: string): void  {
+        public static errorToast(message: string): void {
             var w: kendo.ui.Notification = $("#notification").data("kendoNotification");
             if (w) w.show({ message: message }, "error");
         }

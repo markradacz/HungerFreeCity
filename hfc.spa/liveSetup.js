@@ -12,7 +12,11 @@
 			"Views/location/location.html",
 			"Views/location/location.js",
 			"Views/center/center.html",
-			"Views/center/center.js"
+			"Views/center/center.js",
+			"Views/admin/admin.html",
+			"Views/admin/admin.js",
+			"Views/users/users.html",
+			"Views/users/users.js"
 		];
 	}
 	return null;

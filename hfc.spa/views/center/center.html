@@ -49,28 +49,49 @@
      data-visible="false"
      class="editPanel">
     <div>
-        <label class="k-edit-label">Name</label>
-        <input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.name" placeholder="Name" />
-        <label class="k-edit-label">Phone</label>
-        <input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.phone" placeholder="Phone" />
-        <label class="k-edit-label">Hours</label>
-        <input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.hours" placeholder="Hours" />
-        <label class="k-edit-label">Site URL</label>
-        <input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.site" placeholder="Site URL" />
-        <label class="k-edit-label">Address</label>
-        <input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.address.address1" placeholder="Address" />
-        <label class="k-edit-label">Address 2</label>
-        <input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.address.address2" placeholder="Address 2" />
-        <label class="k-edit-label">City</label>
-        <input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.address.city" placeholder="City" />
-        <label class="k-edit-label">State</label>
-        <input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.address.state" placeholder="State" />
-        <label class="k-edit-label">Zip</label>
-        <input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.address.zipcode" placeholder="Zip" />
-        <label class="k-edit-label">Notes</label>
-        <textarea class="k-textbox" rows="6" data-min-width="300" data-bind="combine: item.centerinfo" placeholder="Notes" style="width: 248px;"></textarea>
+        <div>
+            <label class="k-edit-label">Name</label>
+            <input type="text" class="k-textbox" data-min-width="300" data-bind="value: editItem.name" placeholder="Name" />
+        </div>
+        <div>
+            <label class="k-edit-label">Phone</label>
+            <input type="text" class="k-textbox" data-min-width="300" data-bind="value: editItem.phone" placeholder="Phone" />
+        </div>
+        <div>
+            <label class="k-edit-label">Hours</label>
+            <input type="text" class="k-textbox" data-min-width="300" data-bind="value: editItem.hours" placeholder="Hours" />
+        </div>
+        <div>
+            <label class="k-edit-label">Site URL</label>
+            <input type="text" class="k-textbox" data-min-width="300" data-bind="value: editItem.site" placeholder="Site URL" />
+        </div>
+        <div>
+            <label class="k-edit-label">Address</label>
+            <input type="text" class="k-textbox" data-min-width="300" data-bind="value: editItem.address.address1" placeholder="Address" />
+        </div>
+        <div>
+            <label class="k-edit-label">Address 2</label>
+            <input type="text" class="k-textbox" data-min-width="300" data-bind="value: editItem.address.address2" placeholder="Address 2" />
+        </div>
+        <div>
+            <label class="k-edit-label">City</label>
+            <input type="text" class="k-textbox" data-min-width="300" data-bind="value: editItem.address.city" placeholder="City" />
+        </div>
+        <div>
+            <label class="k-edit-label">State</label>
+            <input type="text" class="k-textbox" data-min-width="300" data-bind="value: editItem.address.state" placeholder="State" />
+        </div>
+        <div>
+            <label class="k-edit-label">Zip</label>
+            <input type="text" class="k-textbox" data-min-width="300" data-bind="value: editItem.address.zipcode" placeholder="Zip" />
+        </div>
+        <div>
+            <label class="k-edit-label">Notes</label>
+            <textarea class="k-textbox" rows="6" data-min-width="300" data-bind="combine: editItem.centerinfo" placeholder="Notes" style="width: 248px;"></textarea>
+        </div>
+
+        <button id="button" data-role="button" class="k-primary" data-bind="click: saveButtonClick" style="width: 100%;">
+            <span class="fa fa-floppy-o"></span><span> Save</span>
+        </button>
     </div>
-    <button id="button" data-role="button" class="k-primary" data-bind="click: saveButtonClick" style="width: 100%;">
-        <span class="fa fa-floppy-o"></span> <span> Save</span>
-    </button>
 </div>

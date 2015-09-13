@@ -50,13 +50,11 @@ var hfc;
             });
             that.centers.bind("change", function (e) {
                 if (e.action === "itemchange" && e.field === "favorite") {
-                    // common.log('favorite changed on the datasource!');
                     // so change the user's favorites and persist
                     hfc.common.User.favorites = that.centers
                         .filter(function (v) { return v.favorite; })
                         .map(function (v) { return v.centerid; });
-                    hfc.common.log("favorites are " + JSON.stringify(hfc.common.User.favorites));
-                    // persist the user's favorites
+                    //hfc.common.log("favorites are " + JSON.stringify(common.User.favorites));
                     $.publish("saveFavorites");
                 }
             });
@@ -131,26 +129,11 @@ var hfc;
             this.set("toolbarVisible", false);
             // remove on Firebase (and it may remove from centers list by callback)
             new Firebase(hfc.common.FirebaseUrl).child(item.refkey).set(null); // remove the item
-            // this.centers.remove(item);
         };
         managevm.prototype.tabToggle = function (e) {
-            //e.target jQuery The jQuery object that represents the command element.
-            //e.checked Boolean Boolean flag that indicates the button state.
-            //e.id String The id of the command element.
-            //e.sender kendo.ui.ToolBar The widget instance which fired the event.
-            //hfc.common.log("tab toggle: " + e.id + " --> " + e.checked);
-            //var row = this.modules.filter(function (r) { return r.id === e.id; });
-            //hfc.common.log("data: " + JSON.stringify(row));
             this.tabView(e.id);
         };
         managevm.prototype.tabView = function (id) {
-            //e.target jQuery The jQuery object that represents the command element.
-            //e.checked Boolean Boolean flag that indicates the button state.
-            //e.id String The id of the command element.
-            //e.sender kendo.ui.ToolBar The widget instance which fired the event.
-            //hfc.common.log("tab toggle: " + e.id + " --> " + e.checked);
-            //var row = this.modules.filter(function (r) { return r.id === e.id; });
-            //hfc.common.log("data: " + JSON.stringify(row));
             switch (id) {
                 case "needs":
                     this.layout.showIn("#viewConent", this.needsView, "swap");
@@ -167,7 +150,11 @@ var hfc;
             // called for each row bound!
             // if we have an item selected, then re-select it after a data refresh
             var curr = this.get("item");
+            if (!curr)
+                return;
             var listView = $("#centerlist").data("kendoListView");
+            if (!listView)
+                return;
             var all = listView.dataItems();
             var idx = $.indexByPropertyValue(all, "centerid", curr.centerid);
             if (idx >= 0) {
@@ -176,6 +163,7 @@ var hfc;
             }
         };
         managevm.prototype.init = function () {
+            //super.init();
             this.layout.render("#tabContent");
         };
         return managevm;

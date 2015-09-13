@@ -36,6 +36,12 @@
     <Content Include="Scripts\kendo\2015.2.805\kendo.dataviz.core.min.js" />
     <Content Include="Scripts\kendo\2015.2.805\kendo.dataviz.map.min.js" />
     <Content Include="Scripts\kendo\2015.2.805\kendo.drawing.min.js" />
+    <Content Include="Views\admin\admin.js.map" />
+    <Content Include="Views\users\users.js.map" />
+    <Content Include="Views\about\about.js.map" />
+    <TypeScriptCompile Include="Views\about\about.ts" />
+    <Content Include="Views\admin\admin.html" />
+    <Content Include="Views\admin\admin.js" />
     <Content Include="Views\center\center.js.map" />
     <Content Include="Views\location\location.js" />
     <Content Include="Views\needs\needs.js.map" />
@@ -1051,6 +1057,7 @@
     <TypeScriptCompile Include="Scripts\typings\firebase.d.ts" />
     <Content Include="Views\about\about.html" />
     <Content Include="Views\about\about.js" />
+    <TypeScriptCompile Include="Views\admin\admin.ts" />
     <TypeScriptCompile Include="Views\location\location.ts" />
     <TypeScriptCompile Include="Views\center\center.ts" />
     <TypeScriptCompile Include="Views\needs\needs.ts" />
@@ -1064,8 +1071,11 @@
     <Content Include="Views\home\home.js" />
     <Content Include="Views\needs\needs.html" />
     <Content Include="Views\needs\needs.js" />
+    <Content Include="Views\users\users.html" />
+    <Content Include="Views\users\users.js" />
     <Content Include="web.config" />
     <TypeScriptCompile Include="Scripts\typings\require.d.ts" />
+    <TypeScriptCompile Include="Views\users\users.ts" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\typings\jquery.d.ts" />

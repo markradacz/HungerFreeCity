@@ -8,6 +8,8 @@ module hfc {
         public email: string;
         public password: string;
         public loggedIn = false;
+        public isManager = false;
+        public isAdmin = false;
 		public isLoggingIn = false;
 		public isRegistering = false;
 		public isResetting = false;
@@ -92,12 +94,12 @@ module hfc {
 
             // validate registration
             if (email == null || !this.validateEmail(email)) {
-                common.errorToast("Invalid email address: " + email);
+                hfc.common.errorToast("Invalid email address: " + email);
                 return;
             }
 
             if (password == null || password === "") {
-                common.errorToast("Please provide a password");
+                hfc.common.errorToast("Please provide a password");
                 return;
             }
 
@@ -108,7 +110,7 @@ module hfc {
                 if (error) {
                     this.showError(error);
                 } else {
-                    common.successToast("Successfully registered");
+                    hfc.common.successToast("Successfully registered");
                     this.closePanel("#loginPanel");
                     this.loginButtonClick(e);
                 }
@@ -146,16 +148,16 @@ module hfc {
         private showError(error: any): void {
             switch (error.code) {
                 case "INVALID_EMAIL":
-                    common.errorToast("The specified user account email is invalid.");
+                    hfc.common.errorToast("The specified user account email is invalid.");
                     break;
                 case "INVALID_PASSWORD":
-                    common.errorToast("The specified user account password is incorrect.");
+                    hfc.common.errorToast("The specified user account password is incorrect.");
                     break;
                 case "INVALID_USER":
-                    common.errorToast("The specified user account does not exist.");
+                    hfc.common.errorToast("The specified user account does not exist.");
                     break;
                 default:
-                    common.errorToast("Error logging user in: " + error);
+                    hfc.common.errorToast("Error logging user in: " + error);
             }
         }
 
@@ -195,6 +197,11 @@ module hfc {
                         data.favorites = [];
                         mod = true;
                     }
+					if (data.roles === undefined) {
+                        data.roles = ["user"];
+                        mod = true;
+                    }
+
                     if (mod) uref.set(data);
                     common.User = data;
                     this.setlogin();
@@ -208,15 +215,19 @@ module hfc {
 
         private setlogin(): void {
             if (common.User) {
-                common.successToast("Welcome " + common.User.email);
+                hfc.common.successToast("Welcome " + common.User.email);
                 this.set("loggedIn", true);
+				this.set("isManager", common.hasRole("manager"));
+				this.set("isAdmin", common.hasRole("admin"));
                 this.set("email", common.User.email);
                 $.publish("loggedIn", [this.ref]);
             } else {
                 this.set("loggedIn", false);
+				this.set("isManager", false);
+				this.set("isAdmin", false);
                 //this.set('email', "");
                 //this.set('password', "");
-                common.successToast("Logged off");
+                hfc.common.successToast("Logged off");
                 $.publish("loggedOff");
             }
         }
@@ -225,9 +236,11 @@ module hfc {
             var userId = this.get("userId");
             var favRef = this.ref.child("users").child(userId).child("favorites").ref();
             favRef.set(common.User.favorites);
+			hfc.common.successToast("Saved favorites");
         }
 
         public init(): void {
+			//super.init();
             // cache a reference to the nav links element
             this.set("nav", $("#nav-links"));
 
@@ -264,9 +277,9 @@ define([
     "kendo",
     "views/home/home",
     "views/manage/manage",
-    "views/about/about"
-], (kendo, home, manage, about) => {
-
+    //"views/admin/admin"
+    "views/users/users"
+], (kendo, home, manage, admin) => {
     var vm = new hfc.appvm();
     kendo.bind("#applicationHost", vm);
     vm.init();
@@ -282,12 +295,24 @@ define([
         change(e) { vm.routeChange(e); } // whenever the route changes
     });
 
-    // Add new routes here...
-    router.route("/", () => { layout.showIn("#viewRoot", home); });
-    router.route("/manage", () => { layout.showIn("#viewRoot", manage); });
-    router.route("/about", () => { layout.showIn("#viewRoot", about); });
+    // Add routes...
+    router.route("/", () => {
+	    layout.showIn("#viewRoot", home);
+    });
+    router.route("/manage", () => {
+		if (hfc.common.hasRole("manager"))
+			layout.showIn("#viewRoot", manage);
+		else
+			router.navigate("/");
+    });
+    router.route("/admin", () => {
+		if (hfc.common.hasRole("admin"))
+			layout.showIn("#viewRoot", admin);
+		else
+			router.navigate("/");
+    });
 
-	$.subscribe("loggedIn", () => { router.navigate("/manage"); });
+	//$.subscribe("loggedIn", () => { router.navigate("/manage"); });
 	$.subscribe("loggedOff", () => { router.navigate("/"); });
 
     return router;

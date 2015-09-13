@@ -30,8 +30,6 @@ module hfc {
 					},
 					lastModified: new Date().toISOString(),
 					centerid: kendo.guid()
-					//onShowRemove: e => { this.onShowRemove(e); },
-					//onRemove: e => { this.onRemove(e); }
 				};
 
 				// save the new center to Firebase
@@ -94,28 +92,13 @@ module hfc {
 
 			// remove on Firebase (and it may remove from centers list by callback)
 			new Firebase(common.FirebaseUrl).child(item.refkey).set(null); // remove the item
-            // this.centers.remove(item);
 		}
 
 		public tabToggle(e: any): void {
-            //e.target jQuery The jQuery object that represents the command element.
-            //e.checked Boolean Boolean flag that indicates the button state.
-            //e.id String The id of the command element.
-            //e.sender kendo.ui.ToolBar The widget instance which fired the event.
-            //hfc.common.log("tab toggle: " + e.id + " --> " + e.checked);
-            //var row = this.modules.filter(function (r) { return r.id === e.id; });
-            //hfc.common.log("data: " + JSON.stringify(row));
 			this.tabView(e.id);
         }
 
 		public tabView(id: string): void {
-			//e.target jQuery The jQuery object that represents the command element.
-			//e.checked Boolean Boolean flag that indicates the button state.
-			//e.id String The id of the command element.
-			//e.sender kendo.ui.ToolBar The widget instance which fired the event.
-			//hfc.common.log("tab toggle: " + e.id + " --> " + e.checked);
-			//var row = this.modules.filter(function (r) { return r.id === e.id; });
-			//hfc.common.log("data: " + JSON.stringify(row));
 			switch (id) {
 				case "needs": this.layout.showIn("#viewConent", this.needsView, "swap"); break;
 				case "center": this.layout.showIn("#viewConent", this.centerView, "swap"); break;
@@ -127,7 +110,9 @@ module hfc {
 			// called for each row bound!
 			// if we have an item selected, then re-select it after a data refresh
 			var curr = this.get("item");
+			if (!curr) return;
 			var listView = $("#centerlist").data("kendoListView");
+			if (!listView) return;
 			var all = listView.dataItems();
 			var idx = $.indexByPropertyValue(all, "centerid", curr.centerid);
 			if (idx >= 0) {
@@ -137,6 +122,7 @@ module hfc {
 		}
 
         public init(): void {
+			//super.init();
             this.layout.render("#tabContent");
         }
 
@@ -171,13 +157,11 @@ module hfc {
 
 			that.centers.bind("change", e => {
 				if (e.action === "itemchange" && e.field === "favorite") {
-					// common.log('favorite changed on the datasource!');
 					// so change the user's favorites and persist
-					common.User.favorites = that.centers
+					hfc.common.User.favorites = that.centers
 						.filter((v: any) => v.favorite)
 						.map((v: any) => v.centerid);
-					common.log("favorites are " + JSON.stringify(common.User.favorites));
-					// persist the user's favorites
+					//hfc.common.log("favorites are " + JSON.stringify(common.User.favorites));
 					$.publish("saveFavorites");
 				}
 			});

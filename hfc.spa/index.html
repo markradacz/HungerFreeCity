@@ -33,7 +33,8 @@
                 <div class="collapse navbar-collapse" id="navbar-collapse">
                     <ul id="nav-links" class="nav navbar-nav">
                         <li><a href="#/"><span class="fa fa-lg fa-home"></span> Home</a></li>
-                        <li data-bind="visible: loggedIn"><a href="#/manage"><span class="fa fa-lg fa-heart-o"></span> Centers</a></li>
+                        <li data-bind="visible: isManager, enabled: loggedIn"><a href="#/manage"><span class="fa fa-lg fa-heart"></span> Centers</a></li>
+                        <li data-bind="visible: isAdmin, enabled: loggedIn"><a href="#/admin"><span class="fa fa-lg fa-cube"></span> Admin</a></li>
                     </ul>
 
                     <ul class="nav navbar-nav navbar-right">
@@ -120,19 +121,18 @@
                 </div>
             </div>
         </div>
-    </div>
-
-	<div id="notification"
+	    <div id="notification"
 	        data-role="notification"
 	        data-stacking="up"
-	        data-appendto="#content"
-	        data-templates='[
-			    { type: "success", template: "<div class=successNotification>#= message #</div>" },
-			    { type: "info", template: "<div class=infoNotification>#= message #</div>" },
-			    { type: "warning", template: "<div class=warningNotification>#= message #</div>" },
-			    { type: "error", template: "<div class=errorNotification>#= message #</div>" }
-		    ]'>
-	</div>
+	        data-appendto="#applicationHost"
+	        data-templates="[
+			    { type: 'success', template: '<div class=successNotification>#= message #</div>' },
+			    { type: 'info', template: '<div class=infoNotification>#= message #</div>' },
+			    { type: 'warning', template: '<div class=warningNotification>#= message #</div>' },
+			    { type: 'error', template: '<div class=errorNotification>#= message #</div>' }
+		    ]">
+	    </div>
+    </div>
     <script src="scripts/require.js" data-main="main"></script>
 </body>
 </html>
