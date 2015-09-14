@@ -25,7 +25,7 @@ var hfc;
                 ref.child("centers").on("value", function (data) {
                     that.centers.length = 0; // clear the current array
                     // join in the user's favorited centers, and add each to the collection
-                    if (hfc.common.User && hfc.common.User.favorites) {
+                    if (hfc.common.User) {
                         var key = data.key();
                         var all = [];
                         // convert object to an array
@@ -33,6 +33,7 @@ var hfc;
                             var c = v.val();
                             c.refkey = key + "/" + v.key();
                             c.favorite = $.inArray(c.centerid, hfc.common.User.favorites) >= 0;
+                            c.canEdit = $.inArray(c.centerid, hfc.common.User.centers) >= 0;
                             if (!c.needs)
                                 c.needs = [];
                             c.onShowRemove = function (e) { _this.onShowRemove(e); };
@@ -44,7 +45,10 @@ var hfc;
                                 return a.name.localeCompare(b.name);
                             return a.favorite ? -1 : 1;
                         });
-                        all.forEach(function (v) { that.centers.push(v); });
+                        all.forEach(function (v) {
+                            if (v.canEdit)
+                                that.centers.push(v);
+                        });
                     }
                 });
             });
@@ -76,9 +80,24 @@ var hfc;
                     lastModified: new Date().toISOString(),
                     centerid: kendo.guid()
                 };
+                // first, add the new center to this user's authorized centers
+                var user = hfc.common.User;
+                var centers = user.centers;
+                centers.push(center.centerid);
+                new Firebase(hfc.common.FirebaseUrl)
+                    .child("users")
+                    .child(user.userId)
+                    .child("centers")
+                    .set(centers, function (error) {
+                    if (error) {
+                        hfc.common.errorToast("Error saving: " + error);
+                    }
+                });
                 // save the new center to Firebase
                 this.set("item", center);
-                new Firebase(hfc.common.FirebaseUrl).child("centers").push(center, function (error) {
+                new Firebase(hfc.common.FirebaseUrl)
+                    .child("centers")
+                    .push(center, function (error) {
                     if (error) {
                         hfc.common.errorToast("Error saving: " + error);
                     }

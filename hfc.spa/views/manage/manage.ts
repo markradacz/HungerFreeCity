@@ -32,13 +32,30 @@ module hfc {
 					centerid: kendo.guid()
 				};
 
+				// first, add the new center to this user's authorized centers
+				var user = common.User;
+				var centers = user.centers;
+				centers.push(center.centerid);
+				new Firebase(common.FirebaseUrl)
+					.child("users")
+					.child(user.userId)
+					.child("centers")
+					.set(centers, error => {
+						if (error) {
+							common.errorToast("Error saving: " + error);
+						}
+					});
+
 				// save the new center to Firebase
 				this.set("item", center);
-				new Firebase(common.FirebaseUrl).child("centers").push(center, error => {
+				new Firebase(common.FirebaseUrl)
+					.child("centers")
+					.push(center, error => {
 					if (error) {
 						common.errorToast( "Error saving: " + error);
 					}					
 				});
+
             }
         }
 
@@ -133,7 +150,7 @@ module hfc {
                 ref.child("centers").on("value", data => {
 					that.centers.length = 0;	// clear the current array
                     // join in the user's favorited centers, and add each to the collection
-                    if (common.User && common.User.favorites) {
+                    if (common.User) {
 						var key = data.key();
 	                    var all = [];
 						// convert object to an array
@@ -141,6 +158,7 @@ module hfc {
 							var c = v.val();
 							c.refkey = key + "/" + v.key();
                             c.favorite = $.inArray(c.centerid, common.User.favorites) >= 0;
+                            c.canEdit = $.inArray(c.centerid, common.User.centers) >= 0;
 							if (!c.needs) c.needs = [];
 							c.onShowRemove = e => { this.onShowRemove(e); }
 							c.onRemove = e => { this.onRemove(e); }
@@ -150,7 +168,9 @@ module hfc {
 							if (a.favorite === b.favorite) return a.name.localeCompare(b.name);
 							return a.favorite ? -1 : 1;
 						});
-                        all.forEach( v => { that.centers.push(v); });
+                        all.forEach( v => {
+							if(v.canEdit) that.centers.push(v);
+                        });
                     }
                 });
             });

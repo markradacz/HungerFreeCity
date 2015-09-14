@@ -190,10 +190,14 @@ module hfc {
                 this.set("userId", authData.uid);
                 var uref = this.ref.child("users").child(authData.uid).ref();
                 uref.once("value", userData => {
-                    var data = userData.val() || {
-                        userId: authData.uid,
+	                var data = userData.val() || {
+		                userId: authData.uid,
+						firstName: "n/a",
+						lastName: "n/a",
                         email: authData.password.email,
-                        favorites: []
+                        favorites: [],
+						centers: [],
+						roles: ["user"]
                     };
                     var mod = false;
                     if (data.userId === undefined) {
@@ -214,6 +218,10 @@ module hfc {
                     }
                     if (data.favorites === undefined) {
                         data.favorites = [];
+                        mod = true;
+                    }
+                    if (data.centers === undefined) {
+                        data.centers = [];
                         mod = true;
                     }
 					if (data.roles === undefined) {
