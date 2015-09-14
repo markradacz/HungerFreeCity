@@ -9,7 +9,7 @@
 }
 
 define([
-    "text!views/about/about.html"
+    "text!../views/about/about.html"
 ], template => {
     var vm = new hfc.aboutvm();
     var view = new kendo.View(template, {

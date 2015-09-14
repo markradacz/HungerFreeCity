@@ -23,8 +23,6 @@ var hfc;
                 // popup a dialog box to edit the value
                 $("#editCenterPanel").data("kendoWindow").open().center();
             }
-            else if (e.id === "save") {
-            }
         };
         centervm.prototype.saveButtonClick = function (e) {
             this.set("item", this.get("editItem"));
@@ -56,7 +54,7 @@ var hfc;
     hfc.centervm = centervm;
 })(hfc || (hfc = {}));
 define([
-    'text!views/center/center.html'
+    'text!/views/center/center.html'
 ], function (template) {
     var vm = new hfc.centervm();
     var view = new kendo.View(template, {

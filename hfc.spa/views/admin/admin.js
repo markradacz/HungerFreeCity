@@ -35,8 +35,8 @@ var hfc;
     hfc.adminvm = adminvm;
 })(hfc || (hfc = {}));
 define([
-    "text!views/admin/admin.html",
-    "views/users/users"
+    "text!../views/admin/admin.html",
+    "/views/users/users.js"
 ], function (template, users) {
     var vm = new hfc.adminvm();
     vm.usersView = users;

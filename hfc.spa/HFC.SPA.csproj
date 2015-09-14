@@ -28,8 +28,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="animated_favicon1.gif" />
-    <Content Include="app.js" />
-    <Content Include="app.js.map" />
+    <Content Include="Scripts\app.js" />
+    <Content Include="Scripts\app.js.map" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="fonts\fontawesome-webfont.svg" />
@@ -417,11 +417,11 @@
     <Content Include="images\UserProvisioning.png" />
     <Content Include="images\Users.png" />
     <Content Include="index.html" />
-    <Content Include="liveSetup.js" />
-    <Content Include="kendo.js" />
-    <TypeScriptCompile Include="app.ts" />
-    <TypeScriptCompile Include="main.ts" />
-    <Content Include="main.js" />
+    <Content Include="Scripts\liveSetup.js" />
+    <Content Include="Scripts\kendo.js" />
+    <TypeScriptCompile Include="Scripts\app.ts" />
+    <TypeScriptCompile Include="Scripts\main.ts" />
+    <Content Include="Scripts\main.js" />
     <Content Include="packages.config" />
     <Content Include="Scripts\common.js.map" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
@@ -450,7 +450,7 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
-    <Content Include="main.js.map" />
+    <Content Include="Scripts\main.js.map" />
     <Content Include="firebase.json" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />

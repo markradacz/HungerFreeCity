@@ -171,10 +171,10 @@ var hfc;
     hfc.managevm = managevm;
 })(hfc || (hfc = {}));
 define([
-    "text!views/manage/manage.html",
-    "views/needs/needs",
-    "views/center/center",
-    "views/location/location"
+    "text!/views/manage/manage.html",
+    "/views/needs/needs.js",
+    "/views/center/center.js",
+    "/views/location/location.js"
 ], function (template, needs, center, location) {
     var vm = new hfc.managevm();
     vm.needsView = needs;

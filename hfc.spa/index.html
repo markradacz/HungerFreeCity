@@ -89,7 +89,13 @@
                     Already have an account? <a data-bind="click: showLogin">Log in.</a>
                 </div>
                 <div>
-                    <input type="email" class="k-textbox" data-min-width="300" data-bind="value: email" placeholder="Email Address" style="width: 100%;"/>
+                    <input type="text" class="k-textbox" data-min-width="300" data-bind="value: firstName" placeholder="First Name" style="width: 100%;" />
+                </div>
+                <div>
+                    <input type="text" class="k-textbox" data-min-width="300" data-bind="value: lastName" placeholder="Last Name" style="width: 100%;" />
+                </div>
+                <div>
+                    <input type="email" class="k-textbox" data-min-width="300" data-bind="value: email" placeholder="Email Address" style="width: 100%;" />
                 </div>
                 <div>
                     <input type="password" class="k-textbox" data-min-width="300" data-bind="value: password" placeholder="Password" style="width: 100%;"/>
@@ -133,6 +139,6 @@
 		    ]">
 	    </div>
     </div>
-    <script src="scripts/require.js" data-main="main"></script>
+    <script src="scripts/require.js" data-main="scripts/main"></script>
 </body>
 </html>

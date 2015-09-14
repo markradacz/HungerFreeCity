@@ -24,7 +24,7 @@ module hfc {
 }
 
 define([
-    'text!views/home/home.html'
+    'text!/views/home/home.html'
 ], homeTemplate => {
     var vm: hfc.homevm = new hfc.homevm();
     var view: kendo.View = new kendo.View(homeTemplate, {

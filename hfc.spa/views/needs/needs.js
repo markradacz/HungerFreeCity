@@ -39,7 +39,7 @@ var hfc;
                 new Firebase(hfc.common.FirebaseUrl)
                     .child(item.refkey)
                     .child("needs")
-                    .update(clone, function (error) {
+                    .set(clone, function (error) {
                     if (error) {
                         hfc.common.errorToast("Needs data could not be saved." + error);
                     }
@@ -127,7 +127,7 @@ var hfc;
     hfc.needsvm = needsvm;
 })(hfc || (hfc = {}));
 define([
-    "text!views/needs/needs.html",
+    "text!/views/needs/needs.html",
     "kendo"
 ], function (template) {
     var vm = new hfc.needsvm();

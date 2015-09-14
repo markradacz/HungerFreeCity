@@ -1,10 +1,12 @@
-﻿/// <reference path="scripts/typings/jquery.d.ts" />
-/// <reference path="scripts/typings/kendo.all.d.ts" />
-/// <reference path="scripts/typings/firebase.d.ts" />
-/// <reference path="scripts/typings/require.d.ts" />
-/// <reference path="scripts/common.ts" />
+﻿/// <reference path="typings/jquery.d.ts" />
+/// <reference path="typings/kendo.all.d.ts" />
+/// <reference path="typings/firebase.d.ts" />
+/// <reference path="typings/require.d.ts" />
+/// <reference path="common.ts" />
 module hfc {
     export class appvm extends kendo.data.ObservableObject {
+        public firstName: string;
+        public lastName: string;
         public email: string;
         public password: string;
         public loggedIn = false;
@@ -89,15 +91,24 @@ module hfc {
         }
 
         public registerButtonClick(e: any): void {
+            var firstName = this.get("firstName");
+            var lastName = this.get("lastName");
             var email = this.get("email");
             var password = this.get("password");
 
             // validate registration
+			if (firstName == null || firstName === "") {
+                hfc.common.errorToast("Please provide a First Name");
+                return;
+            }
+            if (lastName == null || lastName === "") {
+                hfc.common.errorToast("Please provide a Last Name");
+                return;
+            }
             if (email == null || !this.validateEmail(email)) {
                 hfc.common.errorToast("Invalid email address: " + email);
                 return;
             }
-
             if (password == null || password === "") {
                 hfc.common.errorToast("Please provide a password");
                 return;
@@ -193,6 +204,14 @@ module hfc {
                         data.email = authData.password.email;
                         mod = true;
                     }
+                    if (data.firstName === undefined) {
+                        data.firstName = this.firstName ? this.firstName : "n/a";
+                        mod = true;
+                    }
+                    if (data.lastName === undefined) {
+                        data.lastName = this.lastName ? this.lastName : "n/a";
+                        mod = true;
+                    }
                     if (data.favorites === undefined) {
                         data.favorites = [];
                         mod = true;
@@ -275,10 +294,10 @@ module hfc {
 
 define([
     "kendo",
-    "views/home/home",
-    "views/manage/manage",
-    //"views/admin/admin"
-    "views/users/users"
+    "/views/home/home.js",
+    "/views/manage/manage.js",
+    //"/views/admin/admin.js"
+    "/views/users/users.js"
 ], (kendo, home, manage, admin) => {
     var vm = new hfc.appvm();
     kendo.bind("#applicationHost", vm);

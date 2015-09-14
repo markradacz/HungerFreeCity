@@ -15,37 +15,75 @@ var hfc;
         function usersvm() {
             _super.call(this);
             this.users = new kendo.data.ObservableArray([]);
-            this.user = { email: "" };
+            this.user = { email: "", centers: [], roles: [] };
+            this.canEdit = false;
+            this.canView = false;
+            this.allRoles = ["user", "admin", "manager"];
+            this.centers = [];
             var that = this;
             $.subscribe("loggedIn", function (ref) {
                 ref.child("users").on("value", function (data) {
+                    // convert object to an array
+                    var all = [];
+                    data.forEach(function (v) {
+                        var u = v.val();
+                        if (!u.roles)
+                            u.roles = ["user"];
+                        if (!u.centers)
+                            u.centers = [];
+                        all.push(u);
+                    });
+                    all.sort(function (a, b) {
+                        return a.email.localeCompare(b.email);
+                    });
                     that.users.length = 0; // clear the current array
-                    // join in the user's favorited centers, and add each to the collection
-                    if (hfc.common.User && hfc.common.User.favorites) {
-                        var key = data.key();
-                        var all = [];
-                        // convert object to an array
-                        data.forEach(function (v) {
-                            var u = v.val();
-                            u.refkey = key + "/" + v.key();
-                            if (!u.roles)
-                                u.roles = ["user"];
-                            all.push(u);
-                        });
-                        all.sort(function (a, b) {
-                            return a.email.localeCompare(b.email);
-                        });
-                        all.forEach(function (v) { that.users.push(v); });
-                    }
+                    all.forEach(function (v) { that.users.push(v); });
+                });
+                ref.child("centers").on("value", function (data) {
+                    // convert object to an array
+                    var all = [];
+                    data.forEach(function (v) {
+                        var c = v.val();
+                        all.push(c);
+                    });
+                    all.sort(function (a, b) {
+                        return a.name.localeCompare(b.name);
+                    });
+                    that.centers.length = 0; // clear the current array
+                    all.forEach(function (v) { that.centers.push(v); });
                 });
             });
         }
         usersvm.prototype.showUser = function (e) {
-            // get the row of the collection to bind to the subviews
             var listView = $(e.sender.element).data("kendoListView");
             var index = listView.select().index();
             var user = this.users[index];
             this.set("user", user);
+            this.set("canView", true);
+            this.set("canEdit", false);
+        };
+        usersvm.prototype.doAction = function (e) {
+            var _this = this;
+            if (e.id === "edit") {
+                this.set("canEdit", true);
+            }
+            else if (e.id === "save") {
+                // Save the record
+                var clone = JSON.parse(JSON.stringify(this.get("user"))); // cheap way to get a deep clone
+                clone.lastModified = new Date().toISOString();
+                new Firebase(hfc.common.FirebaseUrl)
+                    .child("users")
+                    .child(clone.userId)
+                    .set(clone, function (error) {
+                    if (error) {
+                        hfc.common.errorToast("Data could not be saved." + error);
+                    }
+                    else {
+                        hfc.common.successToast("User saved successfully.");
+                    }
+                    _this.set("canEdit", false);
+                });
+            }
         };
         usersvm.prototype.init = function () {
         };
@@ -54,7 +92,7 @@ var hfc;
     hfc.usersvm = usersvm;
 })(hfc || (hfc = {}));
 define([
-    "text!views/users/users.html"
+    "text!/views/users/users.html"
 ], function (template) {
     var vm = new hfc.usersvm();
     return new kendo.View(template, {

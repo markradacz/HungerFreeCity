@@ -63,7 +63,7 @@ module hfc {
 }
 
 define([
-    'text!views/location/location.html'
+    'text!/views/location/location.html'
 ], template => {
     var vm = new hfc.locationvm();
     var view = new kendo.View(template, {

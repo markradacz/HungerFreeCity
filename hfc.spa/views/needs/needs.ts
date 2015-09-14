@@ -30,7 +30,7 @@ module hfc {
 				new Firebase(common.FirebaseUrl)
 					.child(item.refkey)
 					.child("needs")
-					.update(clone, error => {
+					.set(clone, error => {
 						if (error) {
 							common.errorToast("Needs data could not be saved." + error);
 						} else {
@@ -125,7 +125,7 @@ module hfc {
 }
 
 define([
-    "text!views/needs/needs.html",
+    "text!/views/needs/needs.html",
     "kendo"
 ], template => {
     var vm = new hfc.needsvm();

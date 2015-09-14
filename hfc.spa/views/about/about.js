@@ -20,7 +20,7 @@ var hfc;
     hfc.aboutvm = aboutvm;
 })(hfc || (hfc = {}));
 define([
-    "text!views/about/about.html"
+    "text!../views/about/about.html"
 ], function (template) {
     var vm = new hfc.aboutvm();
     var view = new kendo.View(template, {

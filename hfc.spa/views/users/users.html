@@ -13,14 +13,52 @@
             <script type="text/x-kendo-tmpl" id="user-template">
 				<div class="user-tile">
                     <dl>
-                        <dt data-bind="text: email" />
-                        <dd data-bind="combine: roles" />
+                        <dt>
+                            <span data-bind="text: firstName" />
+                            <span data-bind="text: lastName" />
+                        </dt>
+                        <dd data-bind="text: email" />
                     </dl>
 				</div>
 			</script>
         </td>
         <td style="padding-left: 20px; vertical-align: top;" data-bind="appearAnimation: slideLeft">
-            <h1 data-bind="appearAnimation: slideDown, html: user.email"></h1>
+            <div data-bind="visible: canView">
+                <h1 data-bind="appearAnimation: slideDown">
+                    <span data-bind="html: user.firstName"></span>
+                    <span data-bind="html: user.lastName"></span>
+                    <span data-bind="html: user.email"></span>
+                </h1>
+                <div class="tabtoolbar"
+                     data-role="toolbar"
+                     data-bind="events: { click: doAction }"
+                     data-items='[{
+                        type: "buttonGroup",
+                        buttons: [
+                            { spriteCssClass: "fa fa-pencil", text: " EDIT", "id": "edit" },
+                            { spriteCssClass: "fa fa-floppy-o", text: " SAVE", "id": "save" }
+                        ]
+                    }]'>
+                </div>
+
+                <h3>First Name</h3>
+                <input type="text" class="k-textbox" data-min-width="300" data-bind="value: user.firstName, enabled: canEdit" placeholder="First Name" />
+
+                <h3>Last Name</h3>
+                <input type="text" class="k-textbox" data-min-width="300" data-bind="value: user.lastName, enabled: canEdit" placeholder="Last Name" />
+
+                <h3>Roles</h3>
+                <select data-role="multiselect"
+                        data-value-primitive="true"
+                        data-bind="value: user.roles, source: allRoles, enabled: canEdit"></select>
+
+                <h3>Manager of Centers</h3>
+                <select data-role="multiselect"
+                        data-value-primitive="true"
+                        data-text-field="name"
+                        data-value-field="centerid"
+                        data-bind="value: user.centers, source: centers, enabled: canEdit"></select>
+            </div>
         </td>
     </tr>
 </table>

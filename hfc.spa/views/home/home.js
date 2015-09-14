@@ -34,7 +34,7 @@ var hfc;
     hfc.homevm = homevm;
 })(hfc || (hfc = {}));
 define([
-    'text!views/home/home.html'
+    'text!/views/home/home.html'
 ], function (homeTemplate) {
     var vm = new hfc.homevm();
     var view = new kendo.View(homeTemplate, {

@@ -73,7 +73,7 @@ var hfc;
     hfc.locationvm = locationvm;
 })(hfc || (hfc = {}));
 define([
-    'text!views/location/location.html'
+    'text!/views/location/location.html'
 ], function (template) {
     var vm = new hfc.locationvm();
     var view = new kendo.View(template, {

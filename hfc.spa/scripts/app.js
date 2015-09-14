@@ -5,11 +5,11 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = new __();
 };
 var _this = this;
-/// <reference path="scripts/typings/jquery.d.ts" />
-/// <reference path="scripts/typings/kendo.all.d.ts" />
-/// <reference path="scripts/typings/firebase.d.ts" />
-/// <reference path="scripts/typings/require.d.ts" />
-/// <reference path="scripts/common.ts" />
+/// <reference path="typings/jquery.d.ts" />
+/// <reference path="typings/kendo.all.d.ts" />
+/// <reference path="typings/firebase.d.ts" />
+/// <reference path="typings/require.d.ts" />
+/// <reference path="common.ts" />
 var hfc;
 (function (hfc) {
     var appvm = (function (_super) {
@@ -92,9 +92,19 @@ var hfc;
         };
         appvm.prototype.registerButtonClick = function (e) {
             var _this = this;
+            var firstName = this.get("firstName");
+            var lastName = this.get("lastName");
             var email = this.get("email");
             var password = this.get("password");
             // validate registration
+            if (firstName == null || firstName === "") {
+                hfc.common.errorToast("Please provide a First Name");
+                return;
+            }
+            if (lastName == null || lastName === "") {
+                hfc.common.errorToast("Please provide a Last Name");
+                return;
+            }
             if (email == null || !this.validateEmail(email)) {
                 hfc.common.errorToast("Invalid email address: " + email);
                 return;
@@ -194,6 +204,14 @@ var hfc;
                         data.email = authData.password.email;
                         mod = true;
                     }
+                    if (data.firstName === undefined) {
+                        data.firstName = _this.firstName ? _this.firstName : "n/a";
+                        mod = true;
+                    }
+                    if (data.lastName === undefined) {
+                        data.lastName = _this.lastName ? _this.lastName : "n/a";
+                        mod = true;
+                    }
                     if (data.favorites === undefined) {
                         data.favorites = [];
                         mod = true;
@@ -266,10 +284,10 @@ var hfc;
 })(hfc || (hfc = {}));
 define([
     "kendo",
-    "views/home/home",
-    "views/manage/manage",
-    //"views/admin/admin"
-    "views/users/users"
+    "/views/home/home.js",
+    "/views/manage/manage.js",
+    //"/views/admin/admin.js"
+    "/views/users/users.js"
 ], function (kendo, home, manage, admin) {
     var vm = new hfc.appvm();
     kendo.bind("#applicationHost", vm);

@@ -13,7 +13,6 @@ module hfc {
 	            this.set("editItem", clone);
                 // popup a dialog box to edit the value
                 $("#editCenterPanel").data("kendoWindow").open().center();
-			} else if (e.id === "save") {
 			}
 		}
 
@@ -49,7 +48,7 @@ module hfc {
 }
 
 define([
-    'text!views/center/center.html'
+    'text!/views/center/center.html'
 ], template => {
     var vm = new hfc.centervm();
     var view = new kendo.View(template, {
