@@ -314,7 +314,7 @@ define([
         layout.showIn("#viewRoot", home);
     });
     router.route("/manage", function () {
-        if (hfc.common.hasRole("manager"))
+        if (hfc.common.hasRole("manager") || hfc.common.hasRole("admin"))
             layout.showIn("#viewRoot", manage);
         else
             router.navigate("/");
