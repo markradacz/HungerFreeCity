@@ -1,4 +1,12 @@
-﻿h1 {
+﻿body {
+    background-color: #D0E5F0;
+}
+#content {
+    background-color: #ffffff;
+    border: 1px solid #71b1d1;
+	border-radius: 15px;
+}
+h1 {
     color: #71b1d1;
     margin-bottom: .1em;
     margin-top: .1em;

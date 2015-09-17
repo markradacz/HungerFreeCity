@@ -16,8 +16,8 @@
 	<link href="content/hfc.css" rel="stylesheet" />
 </head>
 <body>
-    <div id="applicationHost" data-bind="appearAnimation: slideDown">
-        <nav class="navbar navbar-default navbar-static-top">
+    <div id="applicationHost">
+        <nav class="navbar navbar-default navbar-static-top" data-bind="appearAnimation: slideDown">
             <div class="container">
                 <div class="navbar-header" style="text-wrap: none;">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
@@ -38,7 +38,7 @@
                     </ul>
 
                     <ul class="nav navbar-nav navbar-right">
-                        <li data-bind="visible: loggedIn"><a class="k-link"><span>Welcome </span><span data-bind="text: email" /></a></li>
+                        <li data-bind="visible: loggedIn"><a class="k-link"><span class="fa fa-lg fa-user"></span> <span data-bind="text: firstName" /></a></li>
                         <li data-bind="visible: loggedIn"><a class="k-link" data-bind="click: logoff"><span class="fa fa-lg fa-sign-out"></span> Log Off</a></li>
                         <li data-bind="invisible: loggedIn"><a class="k-link" data-bind="click: showRegister"><span class="fa fa-lg fa-user"></span> Sign up</a></li>
                         <li data-bind="invisible: loggedIn"><a class="k-link" data-bind="click: showLogin"><span class="fa fa-lg fa-sign-in"></span> Log in</a></li>

@@ -1,8 +1,7 @@
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var _this = this;
 /// <reference path="typings/jquery.d.ts" />
@@ -246,6 +245,8 @@ var hfc;
                 this.set("isManager", hfc.common.hasRole("manager"));
                 this.set("isAdmin", hfc.common.hasRole("admin"));
                 this.set("email", hfc.common.User.email);
+                this.set("firstName", hfc.common.User.firstName);
+                this.set("lastName", hfc.common.User.lastName);
                 $.publish("loggedIn", [this.ref]);
             }
             else {

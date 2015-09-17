@@ -1,8 +1,7 @@
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /// <reference path="typings/jquery.d.ts" />
 /// <reference path="typings/kendo.all.d.ts" />
@@ -427,6 +426,35 @@ var kendo;
                 return combine;
             })(data_1.Binder);
             binders.combine = combine;
+            // join the properties of a collection
+            var top10 = (function (_super) {
+                __extends(top10, _super);
+                function top10() {
+                    _super.apply(this, arguments);
+                }
+                top10.prototype.refresh = function () {
+                    var binding = this.bindings["top10"];
+                    var collection = binding.source[binding.path['coll']];
+                    if (collection === undefined || collection === null) {
+                        // try to walk the . notation of the path
+                        var matches = /([^\.]+)\.(.*)/.exec(binding.path['coll']);
+                        collection = binding.source[matches[1]][matches[2]];
+                    }
+                    if (collection === undefined || collection === null) {
+                        $(this.element).text("");
+                    }
+                    else {
+                        var prop = binding.path["prop"].replace(/'/g, "");
+                        var all = collection.slice(0, 10).map(function (v) {
+                            return "<li>" + v[prop] + "</li>";
+                        });
+                        //var sep = binding.path["sep"].replace(/'/g, "");
+                        $(this.element).html("<ol>" + all.join("") + "</ol>");
+                    }
+                };
+                return top10;
+            })(data_1.Binder);
+            binders.top10 = top10;
             // apply animation to the element on appearance
             var appearAnimation = (function (_super) {
                 __extends(appearAnimation, _super);

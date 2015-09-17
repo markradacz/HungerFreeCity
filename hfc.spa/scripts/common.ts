@@ -362,6 +362,29 @@ module kendo.data.binders {
 	        }
         }
     }
+	// join the properties of a collection
+    export class top10 extends Binder {
+        refresh() {
+            var binding = this.bindings["top10"];
+            var collection: any[] = binding.source[binding.path['coll']];
+			if (collection === undefined || collection === null) {
+				// try to walk the . notation of the path
+				var matches = /([^\.]+)\.(.*)/.exec(binding.path['coll']);
+				collection = binding.source[matches[1]][matches[2]];
+			}
+			if (collection === undefined || collection === null) {
+				$(this.element).text("");
+			} else {
+				var prop = binding.path["prop"].replace(/'/g, "");
+				var all = collection.slice(0, 10).map(v => {
+					return "<li>" + v[prop] + "</li>";
+				});
+				//var sep = binding.path["sep"].replace(/'/g, "");
+				$(this.element).html("<ol>" + all.join("") + "</ol>");
+			}
+        }
+    }
+
     // apply animation to the element on appearance
     export class appearAnimation extends Binder {
         public refresh() : void {

@@ -3,6 +3,7 @@
 		window.AdditionalLinks = [
 			"index.html",
 			"scripts/app.js",
+			"scripts/common.js",
 			"Views/home/home.html",
 			"Views/home/home.js",
 			"Views/manage/manage.html",

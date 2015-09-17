@@ -247,6 +247,8 @@ module hfc {
 				this.set("isManager", common.hasRole("manager"));
 				this.set("isAdmin", common.hasRole("admin"));
                 this.set("email", common.User.email);
+                this.set("firstName", common.User.firstName);
+                this.set("lastName", common.User.lastName);
                 $.publish("loggedIn", [this.ref]);
             } else {
                 this.set("loggedIn", false);
