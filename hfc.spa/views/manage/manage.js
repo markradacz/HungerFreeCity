@@ -200,7 +200,7 @@ define([
     vm.locationView = location;
     return new kendo.View(template, {
         model: vm,
-        show: function () { hfc.common.animate(this.element, "slideUp"); },
+        show: function () { hfc.common.animate(this.element); },
         init: function () { vm.init(); }
     });
 });

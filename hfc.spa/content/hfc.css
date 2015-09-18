@@ -1,10 +1,29 @@
 ﻿body {
     background-color: #D0E5F0;
+    background-image: url('/images/hfc-bg.png');
+    background-repeat: no-repeat;
+    background-position-y: 50px;
+}
+.navbar {
+    margin-bottom: 5px;
 }
 #content {
     background-color: #ffffff;
     border: 1px solid #71b1d1;
 	border-radius: 15px;
+    padding-bottom: 20px;
+
+    /* Box Shadow */
+    /* Opera */
+    -o-box-shadow: 5px 5px 5px #666;
+    /* IE */
+    -ms-box-shadow: 5px 5px 5px #666;
+    /* Mozilla FireFox */
+    -moz-box-shadow: 5px 5px 5px #666;
+    /* Google Chrome */
+    -webkit-box-shadow: 5px 5px 5px #666;
+    /* Normal */
+    box-shadow: 5px 5px 5px #666;
 }
 h1 {
     color: #71b1d1;

@@ -89,7 +89,7 @@ define([
 
     return new kendo.View(template, {
         model: vm,
-        show() { hfc.common.animate(this.element, "slideUp"); },
+        show() { hfc.common.animate(this.element); },
         init() { vm.init(); }
     });
 });

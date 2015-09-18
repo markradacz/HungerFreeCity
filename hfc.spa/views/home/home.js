@@ -75,7 +75,7 @@ define([
     var vm = new hfc.homevm();
     var view = new kendo.View(homeTemplate, {
         model: vm,
-        show: function () { hfc.common.animate(this.element, "slideUp"); },
+        show: function () { hfc.common.animate(this.element); },
         init: function () { vm.init(); }
     });
     return view;
