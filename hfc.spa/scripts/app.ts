@@ -69,6 +69,14 @@ module hfc {
 			this.appear("#forgotView");
 		}
 
+        public showUser(e: any): void {
+			this.showPanel("#userPanel", "User Profile");
+		}
+
+		public userPanelCloseClick(e: any): void {
+			this.closePanel("#userPanel");		
+		}
+
 		private appear(id: string): void {
 			var w = kendo.fx($(id));
 			var fx = w.fade("in");
@@ -117,12 +125,23 @@ module hfc {
             this.ref.createUser({
                 email: email,
                 password: password
-            }, (error) => {
+            }, (error, userData) => {
                 if (error) {
                     this.showError(error);
                 } else {
+					// save the user's profile
+					common.User = {
+						userId: userData.uid,
+						firstName: firstName,
+						lastName: lastName,
+                        email: userData.password.email,
+                        favorites: [],
+						centers: [],
+						roles: ["user"]
+                    };
+					this.ref.child("users").child(userData.uid).ref().set(common.User);
+
                     hfc.common.successToast("Successfully registered");
-                    this.closePanel("#loginPanel");
                     this.loginButtonClick(e);
                 }
             });
@@ -191,7 +210,7 @@ module hfc {
                 var uref = this.ref.child("users").child(authData.uid).ref();
                 uref.once("value", userData => {
 	                var data = userData.val() || {
-		                userId: authData.uid,
+						userId: null,	// set to null so users without a profile will get one
 						firstName: "n/a",
 						lastName: "n/a",
                         email: authData.password.email,
@@ -200,7 +219,7 @@ module hfc {
 						roles: ["user"]
                     };
                     var mod = false;
-                    if (data.userId === undefined) {
+                    if (data.userId === null) {
                         data.userId = authData.uid;
                         mod = true;
                     }

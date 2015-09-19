@@ -28,6 +28,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="animated_favicon1.gif" />
+    <Content Include="images\hfc-bg.png" />
     <Content Include="images\hfc-logo-sq.png" />
     <Content Include="Scripts\app.js" />
     <Content Include="Scripts\app.js.map" />

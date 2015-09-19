@@ -1,11 +1,11 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Hunger Free City</title>
-	<meta name="description" content="">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Hunger Free City</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="icon" type="image/gif" href="animated_favicon1.gif">
     <link href="content/bootstrap.css" rel="stylesheet" />
@@ -13,7 +13,7 @@
     <link href="content/kendo/2015.2.805/kendo.bootstrap.min.css" rel="stylesheet" />
     <link href="content/kendo/2015.2.805/kendo.silver.min.css" rel="stylesheet" />
     <link href="content/font-awesome.css" rel="stylesheet" />
-	<link href="content/hfc.css" rel="stylesheet" />
+    <link href="content/hfc.css" rel="stylesheet" />
 </head>
 <body>
     <div id="applicationHost">
@@ -38,7 +38,7 @@
                     </ul>
 
                     <ul class="nav navbar-nav navbar-right">
-                        <li data-bind="visible: loggedIn"><a class="k-link"><span class="fa fa-lg fa-user"></span> <span data-bind="text: firstName" /></a></li>
+                        <li data-bind="visible: loggedIn"><a class="k-link" data-bind="click: showUser"><span class="fa fa-lg fa-user"></span> <span data-bind="text: firstName"></span></a></li>
                         <li data-bind="visible: loggedIn"><a class="k-link" data-bind="click: logoff"><span class="fa fa-lg fa-sign-out"></span> Log Off</a></li>
                         <li data-bind="invisible: loggedIn"><a class="k-link" data-bind="click: showRegister"><span class="fa fa-lg fa-user"></span> Sign up</a></li>
                         <li data-bind="invisible: loggedIn"><a class="k-link" data-bind="click: showLogin"><span class="fa fa-lg fa-sign-in"></span> Log in</a></li>
@@ -63,16 +63,16 @@
              data-visible="false"
              data-bind="events: {close: panelClosed}"
              class="editPanel">
-            
+
             <div id="loginView" data-bind="visible: isLoggingIn">
                 <div>
                     <a data-bind="click: showRegister">Or, sign up.</a>
                 </div>
                 <div>
-                    <input type="email" class="k-textbox" data-bind="value: email" placeholder="Email Address" style="width: 100%;"/>
+                    <input type="email" class="k-textbox" data-bind="value: email" placeholder="Email Address" style="width: 100%;" />
                 </div>
                 <div>
-                    <input type="password" class="k-textbox" data-bind="value: password" placeholder="Password" style="width: 100%;"/>
+                    <input type="password" class="k-textbox" data-bind="value: password" placeholder="Password" style="width: 100%;" />
                 </div>
                 <div>
                     <button data-role="button" class="k-primary" data-bind="click: loginButtonClick" style="width: 100%;">
@@ -98,7 +98,7 @@
                     <input type="email" class="k-textbox" data-min-width="300" data-bind="value: email" placeholder="Email Address" style="width: 100%;" />
                 </div>
                 <div>
-                    <input type="password" class="k-textbox" data-min-width="300" data-bind="value: password" placeholder="Password" style="width: 100%;"/>
+                    <input type="password" class="k-textbox" data-min-width="300" data-bind="value: password" placeholder="Password" style="width: 100%;" />
                 </div>
                 <div>
                     <button data-role="button" class="k-primary" data-bind="click: registerButtonClick" style="width: 100%;">
@@ -115,7 +115,7 @@
                     Enter your email address and we'll send you a link to reset your password.
                 </div>
                 <div>
-                    <input type="email" class="k-textbox" data-min-width="300" data-bind="value: email" placeholder="Email Address" style="width: 100%;"/>
+                    <input type="email" class="k-textbox" data-min-width="300" data-bind="value: email" placeholder="Email Address" style="width: 100%;" />
                 </div>
                 <div>
                     <button data-role="button" class="k-primary" data-bind="click: resetPasswordButtonClick" style="width: 100%;">
@@ -127,12 +127,51 @@
                 </div>
             </div>
         </div>
-	    <div id="notification"
-	        data-role="notification"
-	        data-stacking="up"
-	        data-appendto="#applicationHost"
-	        data-templates="[
-			    { type: 'success', template: '<div class=successNotification>#= message #</div>' },
+
+        <div id="userPanel" style="display: none"
+             data-role="window"
+             data-title="User Info"
+             data-draggable="true"
+             data-modal="true"
+             data-scrollable="false"
+             data-pinned="false"
+             data-resizable="false"
+             data-actions="['Close']"
+             data-position='{ top: "5%", left: "80%" }'
+             data-visible="false"
+             data-bind="events: {close: panelClosed}"
+             class="editPanel">
+            <div>
+                <div>
+                    <label>Email Address</label>
+                    <input type="email" class="k-textbox" data-bind="value: email" placeholder="Email Address" style="width: 100%;" />
+                </div>
+                <div>
+                    <label>Password</label>
+                    <input type="password" class="k-textbox" data-bind="value: password" placeholder="Password" style="width: 100%;" />
+                </div>
+                <div>
+                    <label>First Name</label>
+                    <input type="text" class="k-textbox" data-bind="value: firstName" placeholder="First Name" style="width: 100%;" />
+                </div>
+                <div>
+                    <label>Last Name</label>
+                    <input type="text" class="k-textbox" data-bind="value: lastName" placeholder="Last Name" style="width: 100%;" />
+                </div>
+                <div>
+                    <button data-role="button" class="k-primary" data-bind="click: userPanelCloseClick" style="width: 100%;">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="notification"
+             data-role="notification"
+             data-stacking="up"
+             data-appendto="#applicationHost"
+             data-templates="[
+                { type: 'success', template: '<div class=successNotification>#= message #</div>' },
 			    { type: 'info', template: '<div class=infoNotification>#= message #</div>' },
 			    { type: 'warning', template: '<div class=warningNotification>#= message #</div>' },
 			    { type: 'error', template: '<div class=errorNotification>#= message #</div>' }

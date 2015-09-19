@@ -71,6 +71,12 @@ var hfc;
             this.showPanel("#loginPanel", "Reset Password");
             this.appear("#forgotView");
         };
+        appvm.prototype.showUser = function (e) {
+            this.showPanel("#userPanel", "User Profile");
+        };
+        appvm.prototype.userPanelCloseClick = function (e) {
+            this.closePanel("#userPanel");
+        };
         appvm.prototype.appear = function (id) {
             var w = kendo.fx($(id));
             var fx = w.fade("in");
@@ -115,13 +121,23 @@ var hfc;
             this.ref.createUser({
                 email: email,
                 password: password
-            }, function (error) {
+            }, function (error, userData) {
                 if (error) {
                     _this.showError(error);
                 }
                 else {
+                    // save the user's profile
+                    hfc.common.User = {
+                        userId: userData.uid,
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: userData.password.email,
+                        favorites: [],
+                        centers: [],
+                        roles: ["user"]
+                    };
+                    _this.ref.child("users").child(userData.uid).ref().set(hfc.common.User);
                     hfc.common.successToast("Successfully registered");
-                    _this.closePanel("#loginPanel");
                     _this.loginButtonClick(e);
                 }
             });
@@ -190,7 +206,7 @@ var hfc;
                 var uref = this.ref.child("users").child(authData.uid).ref();
                 uref.once("value", function (userData) {
                     var data = userData.val() || {
-                        userId: authData.uid,
+                        userId: null,
                         firstName: "n/a",
                         lastName: "n/a",
                         email: authData.password.email,
@@ -199,7 +215,7 @@ var hfc;
                         roles: ["user"]
                     };
                     var mod = false;
-                    if (data.userId === undefined) {
+                    if (data.userId === null) {
                         data.userId = authData.uid;
                         mod = true;
                     }
