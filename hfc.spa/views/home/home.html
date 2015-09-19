@@ -1,19 +1,25 @@
 ﻿<h1 data-bind="html: title, appearAnimation: slideDown"></h1>
-<p>Welcome!</p>
-<p>
-    This site is where Food Bank administrators can login and manage their top needs--which are then made available to donors using the Hunger Free City Mobile App.
-    The goal is for donors to know your top needs, where you donation centers are, and to avoid buying supplies you don't really need.
-</p>
+<div data-bind="invisible: loggedIn">
+    <h2>Sign Up (Free!) to Improve Food Bank Donations</h2>
+    <ul>
+        <li>See the top needs of your favorite local donation centers</li>
+        <li>Find donation centers</li>
+        <li>Also use our Mobile App (coming soon!)</li>
+        <li>As a Food Bank administrator, use Hunger Free City to manage your top needs</li>
+    </ul>
 
-<button id="button" data-role="button" class="k-primary" data-bind="invisible: loggedIn, click: doRegister" style="width: 200px;">
-    <span class="fa fa-lg fa-user"></span>
-    Sign up
-</button>
+    <button id="button" data-role="button" class="k-primary" data-bind="click: doRegister" style="width: 200px;">
+        <span class="fa fa-lg fa-user"></span> Sign up
+    </button>
 
-<button id="button" data-role="button" class="k-primary" data-bind="invisible: loggedIn, click: doLogin" style="width: 200px;">
-    <span class="fa fa-lg fa-sign-in"></span>
-    Log in
-</button>
+    <button id="button" data-role="button" class="k-primary" data-bind="click: doLogin" style="width: 200px;">
+        <span class="fa fa-lg fa-sign-in"></span> Log in
+    </button>
+</div>
+
+<div data-bind="visible: loggedIn">
+    <h2>Donation Centers and Top Needs</h2>
+</div>
 
 <div id="allcenterlist"
      class="centerlist"

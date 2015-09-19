@@ -40,8 +40,11 @@ var hfc;
             };
             this.saveFavorites = function () {
                 var userId = _this.get("userId");
-                var favRef = _this.ref.child("users").child(userId).child("favorites").ref();
-                favRef.set(hfc.common.User.favorites);
+                _this.ref
+                    .child("users")
+                    .child(userId)
+                    .child("favorites")
+                    .set(hfc.common.User.favorites);
                 hfc.common.successToast("Saved favorites");
             };
         }
@@ -72,9 +75,34 @@ var hfc;
             this.appear("#forgotView");
         };
         appvm.prototype.showUser = function (e) {
-            this.showPanel("#userPanel", "User Profile");
+            this.showPanel("#userPanel", this.get("email"));
         };
-        appvm.prototype.userPanelCloseClick = function (e) {
+        appvm.prototype.saveUserData = function (e) {
+            var firstName = this.get("firstName");
+            var lastName = this.get("lastName");
+            if (firstName == null || firstName === "") {
+                hfc.common.errorToast("Please provide a First Name");
+                return;
+            }
+            if (lastName == null || lastName === "") {
+                hfc.common.errorToast("Please provide a Last Name");
+                return;
+            }
+            // save the updated data to the user's profile, as well as the common.User object
+            var mod = false;
+            if (hfc.common.User.firstName !== firstName) {
+                hfc.common.User.firstName = firstName;
+                mod = true;
+            }
+            if (hfc.common.User.lastName !== lastName) {
+                hfc.common.User.lastName = lastName;
+                mod = true;
+            }
+            if (mod) {
+                // save the user's profile
+                this.ref.child("users").child(hfc.common.User.userId).set(hfc.common.User);
+                hfc.common.successToast("Update User information successfully");
+            }
             this.closePanel("#userPanel");
         };
         appvm.prototype.appear = function (id) {
@@ -136,7 +164,7 @@ var hfc;
                         centers: [],
                         roles: ["user"]
                     };
-                    _this.ref.child("users").child(userData.uid).ref().set(hfc.common.User);
+                    _this.ref.child("users").child(userData.uid).set(hfc.common.User);
                     hfc.common.successToast("Successfully registered");
                     _this.loginButtonClick(e);
                 }
@@ -189,8 +217,7 @@ var hfc;
         };
         appvm.prototype.routeChange = function (e) {
             // select the nav link based on the current route
-            var active = this.nav.find("a[href=\"#" + e.url + "\"]").parent();
-            // if the nav link exists...
+            var active = this.nav.find("a[href=\"#" + e.url + "\"]").parent(); // if the nav link exists...
             if (active.length > 0) {
                 // remove the active class from all links
                 this.nav.find("li").removeClass("active");

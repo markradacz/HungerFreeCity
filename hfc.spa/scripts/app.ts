@@ -22,7 +22,7 @@ module hfc {
         private userId: string;
 
         private showPanel(id: string, title: string): void {
-            var p = $(id).data("kendoWindow");
+            const p = $(id).data("kendoWindow");
 			p.title(title);
 
 			if (this.get("isPanelShowing"))
@@ -70,16 +70,44 @@ module hfc {
 		}
 
         public showUser(e: any): void {
-			this.showPanel("#userPanel", "User Profile");
+			this.showPanel("#userPanel", this.get("email"));
 		}
 
-		public userPanelCloseClick(e: any): void {
-			this.closePanel("#userPanel");		
+		public saveUserData(e: any): void {
+			const firstName = this.get("firstName");
+            const lastName = this.get("lastName");
+
+			if (firstName == null || firstName === "") {
+                hfc.common.errorToast("Please provide a First Name");
+                return;
+            }
+            if (lastName == null || lastName === "") {
+                hfc.common.errorToast("Please provide a Last Name");
+                return;
+            }
+
+			// save the updated data to the user's profile, as well as the common.User object
+			let mod = false;
+			if (common.User.firstName !== firstName) {
+				common.User.firstName = firstName;
+				mod = true;
+			}
+			if (common.User.lastName !== lastName) {
+				common.User.lastName = lastName;
+				mod = true;
+			}
+
+			if (mod) {
+				// save the user's profile
+				this.ref.child("users").child(common.User.userId).set(common.User);	
+				hfc.common.successToast("Update User information successfully");
+			}
+			this.closePanel("#userPanel");
 		}
 
 		private appear(id: string): void {
-			var w = kendo.fx($(id));
-			var fx = w.fade("in");
+			const w = kendo.fx($(id));
+			const fx = w.fade("in");
 			// fx.add(w.slideIn("up"));
 			// fx.add(w.zoom("in"));
 			// fx.add(w.expand("horizontal"));
@@ -94,15 +122,15 @@ module hfc {
         }
 
         private validateEmail(email: string): boolean {
-            var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+            let re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
             return re.test(email);
         }
 
         public registerButtonClick(e: any): void {
-            var firstName = this.get("firstName");
-            var lastName = this.get("lastName");
-            var email = this.get("email");
-            var password = this.get("password");
+            const firstName = this.get("firstName");
+            const lastName = this.get("lastName");
+            const email = this.get("email");
+            const password = this.get("password");
 
             // validate registration
 			if (firstName == null || firstName === "") {
@@ -139,7 +167,7 @@ module hfc {
 						centers: [],
 						roles: ["user"]
                     };
-					this.ref.child("users").child(userData.uid).ref().set(common.User);
+					this.ref.child("users").child(userData.uid).set(common.User);
 
                     hfc.common.successToast("Successfully registered");
                     this.loginButtonClick(e);
@@ -193,8 +221,7 @@ module hfc {
 
         public routeChange(e: any): void {
             // select the nav link based on the current route
-            var active = this.nav.find("a[href=\"#" + e.url + "\"]").parent();
-            // if the nav link exists...
+	        const active = this.nav.find("a[href=\"#" + e.url + "\"]").parent(); // if the nav link exists...
             if (active.length > 0) {
                 // remove the active class from all links
                 this.nav.find("li").removeClass("active");
@@ -207,8 +234,8 @@ module hfc {
             if (authData) {
                 // get the user's profile data
                 this.set("userId", authData.uid);
-                var uref = this.ref.child("users").child(authData.uid).ref();
-                uref.once("value", userData => {
+	            const uref = this.ref.child("users").child(authData.uid).ref();
+	            uref.once("value", userData => {
 	                var data = userData.val() || {
 						userId: null,	// set to null so users without a profile will get one
 						firstName: "n/a",
@@ -281,9 +308,12 @@ module hfc {
         }
 
         private saveFavorites = () => {
-            var userId = this.get("userId");
-            var favRef = this.ref.child("users").child(userId).child("favorites").ref();
-            favRef.set(common.User.favorites);
+	        const userId = this.get("userId");
+	        this.ref
+				.child("users")
+				.child(userId)
+				.child("favorites")
+				.set(common.User.favorites);
 			hfc.common.successToast("Saved favorites");
         }
 
