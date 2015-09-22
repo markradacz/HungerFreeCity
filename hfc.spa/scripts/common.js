@@ -1,11 +1,11 @@
+/// <reference path="typings/jquery.d.ts" />
+/// <reference path="typings/kendo.all.d.ts" />
+/*global alert,$,self,models,data,document,window,kendo,jQuery*/
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/// <reference path="typings/jquery.d.ts" />
-/// <reference path="typings/kendo.all.d.ts" />
-/*global alert,$,self,models,data,document,window,kendo,jQuery*/
 var hfc;
 (function (hfc) {
     var common = (function (_super) {
@@ -197,13 +197,14 @@ var kendo;
         (function (binders) {
             var widget;
             (function (widget) {
+                var Binder = kendo.data.Binder;
                 var onEnter = (function (_super) {
                     __extends(onEnter, _super);
                     function onEnter(element, bindings, options) {
                         _super.call(this, element, bindings, options);
                     }
                     onEnter.prototype.init = function (element, bindings, options) {
-                        data.Binder.fn.init.call(this, element, bindings, options);
+                        _super.prototype.init.call(this, element, bindings, options);
                         var binding = this.bindings["onEnter"];
                         $(element.input).bind("keydown", function (e) {
                             if (e.which === 13) {
@@ -216,7 +217,7 @@ var kendo;
                     onEnter.prototype.refresh = function () {
                     };
                     return onEnter;
-                })(data.Binder);
+                })(Binder);
                 widget.onEnter = onEnter;
                 var onKeyUp = (function (_super) {
                     __extends(onKeyUp, _super);
@@ -224,7 +225,7 @@ var kendo;
                         _super.call(this, element, bindings, options);
                     }
                     onKeyUp.prototype.init = function (element, bindings, options) {
-                        data.Binder.fn.init.call(this, element, bindings, options);
+                        _super.prototype.init.call(this, element, bindings, options);
                         var binding = this.bindings["onKeyUp"];
                         $(element.element[0]).bind("keyup", function (e) {
                             var fn = binding.source.get(binding.path);
@@ -235,7 +236,7 @@ var kendo;
                     onKeyUp.prototype.refresh = function () {
                     };
                     return onKeyUp;
-                })(data.Binder);
+                })(Binder);
                 widget.onKeyUp = onKeyUp;
                 var onComboKeyUp = (function (_super) {
                     __extends(onComboKeyUp, _super);
@@ -243,7 +244,7 @@ var kendo;
                         _super.call(this, element, bindings, options);
                     }
                     onComboKeyUp.prototype.init = function (element, bindings, options) {
-                        data.Binder.fn.init.call(this, element, bindings, options);
+                        _super.prototype.init.call(this, element, bindings, options);
                         var binding = this.bindings["onComboKeyUp"];
                         $(element.input[0]).bind("keyup", function (e) {
                             var fn = binding.source.get(binding.path);
@@ -254,7 +255,7 @@ var kendo;
                     onComboKeyUp.prototype.refresh = function () {
                     };
                     return onComboKeyUp;
-                })(data.Binder);
+                })(Binder);
                 widget.onComboKeyUp = onComboKeyUp;
             })(widget = binders.widget || (binders.widget = {}));
         })(binders = data.binders || (data.binders = {}));
@@ -409,6 +410,7 @@ var kendo;
                     _super.apply(this, arguments);
                 }
                 combine.prototype.refresh = function () {
+                    var element = $(this.element);
                     var binding = this.bindings["combine"];
                     var collection = binding.source[binding.path];
                     if (collection === undefined || collection === null) {
@@ -417,10 +419,18 @@ var kendo;
                         collection = binding.source[matches[1]][matches[2]];
                     }
                     if (collection === undefined || collection === null) {
-                        $(this.element).text("");
+                        element.text("");
                     }
                     else {
-                        $(this.element).text(collection.join("\n"));
+                        element.text(collection.join("\n"));
+                        element.one("change", { element: element, collection: collection }, function (e) {
+                            var txt = e.data.element.val();
+                            if (txt !== "") {
+                                // process the back-path to update the viewmodel from the element
+                                e.data.collection.splice(0, e.data.collection.length); // empty the current collection
+                                txt.split(/\s?[;\n]\s?/).forEach(function (v) { return e.data.collection.push(v); });
+                            }
+                        });
                     }
                 };
                 return combine;
@@ -555,7 +565,7 @@ var kendo;
                     }
                 };
                 return date;
-            })(data.Binder);
+            })(data_1.Binder);
             binders.date = date;
             // format text from binding
             //export class textFormat extends Binder {

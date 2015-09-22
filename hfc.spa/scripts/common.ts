@@ -1,6 +1,7 @@
 ﻿/// <reference path="typings/jquery.d.ts" />
 /// <reference path="typings/kendo.all.d.ts" />
 /*global alert,$,self,models,data,document,window,kendo,jQuery*/
+
 module hfc {
     export class common extends kendo.data.ObservableObject {
         /*-----------------------------------------------------
@@ -164,14 +165,14 @@ jQuery.extend({
 // this adds 'placeholder' to the items listed in the jQuery .support object
 jQuery(() => {
     jQuery.support["placeholder"] = false;
-    var test = document.createElement("input");
+    const test = document.createElement("input");
     if ("placeholder" in test) jQuery.support["placeholder"] = true;
 });
 
 // This adds placeholder support to browsers that wouldn't otherwise support it
 jQuery(() => {
     if (!$.support["placeholder"]) { 
-        var active = document.activeElement;
+        const active = document.activeElement;
         $(":text").focus(function () {
             if ($(this).attr("placeholder") !== "" && $(this).val() === $(this).attr("placeholder")) {
                 $(this).val("").removeClass("k-readonly");
@@ -188,17 +189,20 @@ jQuery(() => {
 });
 
 module kendo.data.binders.widget {
-    export class onEnter extends Binder {
+	import Binder = kendo.data.Binder;
+	import Binding = kendo.data.Binding;
+
+	export class onEnter extends Binder {
         constructor(element: Element, bindings: { [key: string]: Binding; }, options?: any) {
             super(element, bindings, options);
         }
 
         init(element: any, bindings: { [key: string]: Binding; }, options?: any) {
- 		    data.Binder.fn.init.call(this, element, bindings, options);
+ 		    super.init(element, bindings, options);
 		    var binding = this.bindings["onEnter"];
 		    $(element.input).bind("keydown", function(e) {
 			    if (e.which === 13) {
-				    var fn = binding.source.get(binding.path);
+					const fn = binding.source.get(binding.path);
 				    if (fn) fn(e, this, binding.source);
 			    }
 		    });
@@ -214,10 +218,10 @@ module kendo.data.binders.widget {
         }
 
         init(element: any, bindings: { [key: string]: Binding; }, options?: any) {
-            data.Binder.fn.init.call(this, element, bindings, options);
+            super.init(element, bindings, options);
             var binding = this.bindings["onKeyUp"];
             $(element.element[0]).bind("keyup", function (e) {
-                var fn = binding.source.get(binding.path);
+                const fn = binding.source.get(binding.path);
                 if (fn) fn(e, this, binding.source);
             });
         }
@@ -232,10 +236,10 @@ module kendo.data.binders.widget {
         }
 
         init(element: any, bindings: { [key: string]: Binding; }, options?: any) {
-            data.Binder.fn.init.call(this, element, bindings, options);
+            super.init(element, bindings, options);
             var binding = this.bindings["onComboKeyUp"];
             $(element.input[0]).bind("keyup", function (e) {
-                var fn = binding.source.get(binding.path);
+                const fn = binding.source.get(binding.path);
                 if (fn) fn(e, this, binding.source);
             });
         }
@@ -287,42 +291,42 @@ module kendo.data.binders.widget {
 module kendo.data.binders {
     export class selected extends Binder {
         refresh() {
-            var that = this;
-            var value = that.bindings["isChecked"].get();
-            var isChecked = /^true$|^1$/i.test(value);
+            const that = this;
+            const value = that.bindings["isChecked"].get();
+            const isChecked = /^true$|^1$/i.test(value);
             $(that.element).prop("checked", isChecked ? "checked" : "");
        }
     }
     export class isChecked extends Binder {
         refresh() {
-            var that = this;
-            var value = that.bindings["isChecked"].get();
-            var isChecked = /^true$|^1$/i.test(value);
+            const that = this;
+            const value = that.bindings["isChecked"].get();
+            const isChecked = /^true$|^1$/i.test(value);
             $(that.element).prop("checked", isChecked ? "checked" : "");
         }
     }
     export class tileColor extends Binder {
         refresh() {
-            var that = this;
-            var action = that.bindings["tileColor"].get();
+            const that = this;
+            const action = that.bindings["tileColor"].get();
             ["add", "remove", "nochange"].forEach(a => { $(this.element).toggleClass(a, false); });
             $(that.element).toggleClass(action, true);
         }
     }
     export class title extends Binder {
         refresh() {
-            var that = this;
-            var value = that.bindings["title"].get();
+            const that = this;
+            const value = that.bindings["title"].get();
             $(that.element).attr("title", value);
         }
     }
     export class databoundX extends Binder {
         refresh() {
-            var binding = this.bindings["databound"];
+            const binding = this.bindings["databound"];
             try {
                 // common.log("databound: on " + this.element.tagName + " with " + binding.path);
                 // var fn = that.bindings["databound"].get();	// calls the function! don't want that
-                var fn = binding.source.get(binding.path);
+                let fn = binding.source.get(binding.path);
                 if (!fn) fn = eval(binding.path);	// see if we can get a function reference by an eval
                 if (!fn) fn = window[binding.path];	// see if we can get a function reference within the global window object
                 if (fn) fn(this.element, binding.source);
@@ -337,46 +341,54 @@ module kendo.data.binders {
     // get the count of a collection named in the binding
     export class subcount extends Binder {
         refresh() {
-            var that = this;
-            var binding = this.bindings["subcount"];
-            var collection = binding.source[binding.path];
-            var len = (collection === undefined || collection === null) ? 0 : collection.length;
+            const that = this;
+            const binding = this.bindings["subcount"];
+            const collection = binding.source[binding.path];
+            const len = (collection === undefined || collection === null) ? 0 : collection.length;
             $(that.element).text(len);
         }
     }
     // join the properties of a collection
     export class combine extends Binder {
-        refresh() {
-            var binding = this.bindings["combine"];
-            var collection : any[] = binding.source[binding.path];
-	        if (collection === undefined || collection === null) {
-		        // try to walk the . notation of the path
-		        var matches = /([^\.]+)\.(.*)/.exec(binding.path);
-		        collection = binding.source[matches[1]][matches[2]];
-	        }
-
+		refresh() {
+			const element = $(this.element);
+			const binding = this.bindings["combine"];
+            let collection = binding.source[binding.path];
 			if (collection === undefined || collection === null) {
-		        $(this.element).text("");
-	        }  else {
-				$(this.element).text(collection.join("\n"));
-	        }
-        }
+				// try to walk the . notation of the path
+				const matches = /([^\.]+)\.(.*)/.exec(binding.path);
+				collection = binding.source[matches[1]][matches[2]];
+			}
+			if (collection === undefined || collection === null) {
+		        element.text("");
+	        } else {
+				element.text(collection.join("\n"));
+				element.one("change", { element: element, collection: collection }, e => {
+					const txt = e.data.element.val();
+					if (txt !== "") {
+						// process the back-path to update the viewmodel from the element
+						e.data.collection.splice(0, e.data.collection.length);	// empty the current collection
+						txt.split(/\s?[;\n]\s?/).forEach(v => e.data.collection.push(v));
+					}
+				});
+			}
+		}
     }
 	// join the properties of a collection
     export class top10 extends Binder {
         refresh() {
-            var binding = this.bindings["top10"];
-            var collection: any[] = binding.source[binding.path['coll']];
+            const binding = this.bindings["top10"];
+            let collection: any[] = binding.source[binding.path['coll']];
 			if (collection === undefined || collection === null) {
 				// try to walk the . notation of the path
-				var matches = /([^\.]+)\.(.*)/.exec(binding.path['coll']);
+				const matches = /([^\.]+)\.(.*)/.exec(binding.path['coll']);
 				collection = binding.source[matches[1]][matches[2]];
 			}
 			if (collection === undefined || collection === null) {
 				$(this.element).text("");
 			} else {
-				var prop = binding.path["prop"].replace(/'/g, "");
-				var all = collection.slice(0, 10).map(v => {
+				const prop = binding.path["prop"].replace(/'/g, "");
+				const all = collection.slice(0, 10).map(v => {
 					return "<li>" + v[prop] + "</li>";
 				});
 				//var sep = binding.path["sep"].replace(/'/g, "");
@@ -388,13 +400,13 @@ module kendo.data.binders {
     // apply animation to the element on appearance
     export class appearAnimation extends Binder {
         public refresh() : void {
-            var that = this;
-            var binding = this.bindings["appearAnimation"];
-            var type = binding.path;
+            const that = this;
+            const binding = this.bindings["appearAnimation"];
+            let type = binding.path;
 
             //common.log("appearAnimation: " + type);
 
-            var random = [
+            const random = [
                 "expandHorizontal",
                 "slideLeft",
                 "slideRight",
@@ -403,7 +415,7 @@ module kendo.data.binders {
                 "zoomIn"
             ];
 
-            var slides = [
+            const slides = [
                 "slideLeft",
                 "slideRight",
                 "slideUp",
@@ -417,8 +429,8 @@ module kendo.data.binders {
 
             // common.log("performing animation: " + type + " of " + binding.path);
 
-            var wrapper = kendo.fx($(that.element));
-            var effect = wrapper.fade("in");
+            const wrapper = kendo.fx($(that.element));
+            let effect = wrapper.fade("in");
             switch (type) {
                 //case "fadeIn":
                 //effect = wrapper.fade( "in" );
@@ -462,23 +474,23 @@ module kendo.data.binders {
             this.format = $(element).data("format");
         }
         refresh() {
-            var data = this.bindings["formattedText"].get();
+            const data = this.bindings["formattedText"].get();
             if (data) {
                 $(this.element).text(kendo.toString(data, this.format));
             }
         }
     }
 	// Example: <span data-bind="date: selectedBlock.LastUpdated" data-dateformat="dddd MMM dd, yyyy hh:mmtt"></span>
-    export class date extends data.Binder {
+    export class date extends Binder {
         private dateformat: string;
         constructor(element: Element, bindings: { [key: string]: Binding; }, options?: any) {
             super(element, bindings, options);
             this.dateformat = $(element).data("dateformat");
         }
         public refresh() {
-            var data = this.bindings["date"].get();
+            const data = this.bindings["date"].get();
             if (data) {
-                var dateObj = new Date(data);
+                const dateObj = new Date(data);
                 $(this.element).text(kendo.toString(dateObj, this.dateformat));
             }
         }
@@ -543,14 +555,14 @@ module kendo.data.binders {
         nc: string;
         constructor(element: Element, bindings: { [key: string]: Binding; }, options?: any) {
             super(element, bindings, options);
-            var t = $(element);
+            const t = $(element);
             this.c = t.data("class") || t.data("classTrue") || "enabled";
             this.nc = t.data("class") || t.data("classFalse") || "disabled";
         }
         refresh() {
-            var e = $(this.element);
-            var binding = this.bindings["cssToggle"];
-            var val = binding.source[binding.path];
+            const e = $(this.element);
+            const binding = this.bindings["cssToggle"];
+            const val = binding.source[binding.path];
             // var val = binding.get();
             if (val) {
                 e.addClass(this.c);
