@@ -9,8 +9,8 @@
 	"kendo/2015.2.805/kendo.listview.min",
 	"kendo/2015.2.805/kendo.multiselect.min",
 	"kendo/2015.2.805/kendo.notification.min",
-	"kendo/2015.2.805/kendo.dataviz.core.min",
-	"kendo/2015.2.805/kendo.dataviz.map.min",
+	//"kendo/2015.2.805/kendo.dataviz.core.min",
+	//"kendo/2015.2.805/kendo.dataviz.map.min",
 	"kendo/2015.2.805/kendo.drawing.min"
 ], function() {
 	return kendo;

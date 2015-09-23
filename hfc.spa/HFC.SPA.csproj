@@ -35,12 +35,14 @@
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="fonts\fontawesome-webfont.svg" />
+    <Content Include="Scripts\async.js" />
     <Content Include="Scripts\kendo\2015.2.805\kendo.dataviz.core.min.js" />
     <Content Include="Scripts\kendo\2015.2.805\kendo.dataviz.map.min.js" />
     <Content Include="Scripts\kendo\2015.2.805\kendo.drawing.min.js" />
     <Content Include="Views\admin\admin.js.map" />
     <Content Include="Views\users\users.js.map" />
     <Content Include="Views\about\about.js.map" />
+    <TypeScriptCompile Include="Scripts\typings\google.maps.d.ts" />
     <TypeScriptCompile Include="Views\about\about.ts" />
     <Content Include="Views\admin\admin.html" />
     <Content Include="Views\admin\admin.js" />

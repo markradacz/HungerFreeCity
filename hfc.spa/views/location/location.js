@@ -7,6 +7,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 /// <reference path="../../scripts/typings/jquery.d.ts" />
 /// <reference path="../../scripts/typings/kendo.all.d.ts" />
 /// <reference path="../../scripts/common.ts" />
+/// <reference path="../../scripts/typings/google.maps.d.ts" />
 var hfc;
 (function (hfc) {
     var locationvm = (function (_super) {
@@ -15,7 +16,40 @@ var hfc;
             _super.apply(this, arguments);
         }
         locationvm.prototype.setup = function (item) {
+            var _this = this;
             this.set("item", item);
+            var lat = item.geometry.coordinates[0];
+            var lng = item.geometry.coordinates[1];
+            if (lat < 0 && lng > 0) {
+                lat = item.geometry.coordinates[1];
+                lng = item.geometry.coordinates[0];
+            }
+            this.set("lat", lat);
+            this.set("lng", lng);
+            var mapelement = document.getElementById("map");
+            if (!mapelement)
+                return;
+            var map = new google.maps.Map(mapelement, {
+                zoom: 14,
+                center: { lat: lat, lng: lng },
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                disableDefaultUI: true
+            });
+            var marker = new google.maps.Marker({
+                position: { lat: lat, lng: lng },
+                draggable: true,
+                animation: google.maps.Animation.DROP,
+                map: map,
+                title: item.name
+            });
+            google.maps.event.addListener(marker, 'drag', function (e) {
+                _this.set("lat", e.latLng.lat());
+                _this.set("lng", e.latLng.lng());
+            });
+            google.maps.event.addListener(marker, 'dragend', function (e) {
+                _this.set("lat", e.latLng.lat());
+                _this.set("lng", e.latLng.lng());
+            });
         };
         locationvm.prototype.doAction = function (e) {
             if (e.id === "edit") {
@@ -23,6 +57,8 @@ var hfc;
             else if (e.id === "save") {
                 // common.log("saving center data " + JSON.stringify(clone));
                 var item = this.get("item");
+                item.geometry.coordinates[0] = this.get("lat");
+                item.geometry.coordinates[1] = this.get("lng");
                 var clone = JSON.parse(JSON.stringify(item.geometry)); // cheap way to get a deep clone
                 new Firebase(hfc.common.FirebaseUrl)
                     .child(item.refkey)
@@ -38,34 +74,6 @@ var hfc;
             }
         };
         locationvm.prototype.init = function () {
-            var _this = this;
-            //super.init();
-            this.bind("change", function (e) {
-                var data = _this.get('item');
-                var lat = data.geometry.coordinates[0];
-                var lng = data.geometry.coordinates[1];
-                $("#map").kendoMap({
-                    center: [lat, lng],
-                    zoom: 15,
-                    controls: {
-                        attribution: false,
-                        navigator: false,
-                        zoom: false
-                    },
-                    layers: [{
-                            type: "tile",
-                            urlTemplate: "http://#= subdomain #.tile.openstreetmap.org/#= zoom #/#= x #/#= y #.png",
-                            subdomains: ["a", "b", "c"],
-                            attribution: "&copy; <a href='http://osm.org/copyright'>OpenStreetMap contributors</a>"
-                        }],
-                    markers: [{
-                            location: [lat, lng],
-                            shape: "pinTarget",
-                            tooltip: { content: data.name }
-                        }]
-                });
-                //$("#map").data("kendoMap").resize(true);
-            });
         };
         return locationvm;
     })(kendo.data.ObservableObject);

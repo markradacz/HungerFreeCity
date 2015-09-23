@@ -9,6 +9,7 @@ require.config({
 		'pubsub': "pubsub",
 		'bootstrap': "bootstrap",
 		'firebase': "firebase",
+		'async': "async",
 		'text': "text",
 		'kendo': "kendo",
 		'common': "common",
@@ -33,7 +34,7 @@ require.config({
             deps: ["jQuery", "kendo"]
         },
 		'app': {
-            deps: ["jQuery", "kendo", "common", "pubsub", "bootstrap", "firebase", "text", "live"]
+            deps: ["jQuery", "kendo", "common", "pubsub", "bootstrap", "firebase", "text", "async", "live"]
         }
     }
 } );
