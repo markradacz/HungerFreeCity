@@ -356,7 +356,8 @@ define([
     "/views/home/home.js",
     "/views/manage/manage.js",
     //"/views/admin/admin.js"
-    "/views/users/users.js"
+    "/views/users/users.js",
+	"async!https://maps.googleapis.com/maps/api/js?key=AIzaSyBBYD5QWtAgLlUEDApmcU007QZzSnTPCto&sensor=false"
 ], (kendo, home, manage, admin) => {
     var vm = new hfc.appvm();
     kendo.bind("#applicationHost", vm);

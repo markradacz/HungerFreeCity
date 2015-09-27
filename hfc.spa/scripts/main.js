@@ -14,7 +14,6 @@ require.config({
         'common': "common",
         'liveSetup': "liveSetup",
         'live': "live",
-        'map': "async!https://maps.googleapis.com/maps/api/js?key=AIzaSyBBYD5QWtAgLlUEDApmcU007QZzSnTPCto&sensor=false",
         'app': "app"
     },
     shim: {
@@ -34,7 +33,7 @@ require.config({
             deps: ["jQuery", "kendo"]
         },
         'app': {
-            deps: ["jQuery", "kendo", "common", "pubsub", "bootstrap", "firebase", "text", "async", "live", "map"]
+            deps: ["jQuery", "kendo", "common", "pubsub", "bootstrap", "firebase", "text", "async", "live"]
         }
     }
 });
