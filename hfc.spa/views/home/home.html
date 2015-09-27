@@ -8,54 +8,31 @@
         <li>As a Food Bank administrator, use Hunger Free City to manage your top needs</li>
     </ul>
 
-    <button id="button" data-role="button" class="k-primary" data-bind="click: doRegister" style="width: 200px;">
+    <button data-role="button" class="k-primary" data-bind="click: doRegister" style="width: 200px;">
         <span class="fa fa-lg fa-user"></span> Sign up
     </button>
 
-    <button id="button" data-role="button" class="k-primary" data-bind="click: doLogin" style="width: 200px;">
+    <button data-role="button" class="k-primary" data-bind="click: doLogin" style="width: 200px;">
         <span class="fa fa-lg fa-sign-in"></span> Log in
     </button>
 </div>
 
 <div data-bind="visible: loggedIn">
     <h2>Donation Centers and Top Needs</h2>
-</div>
-
-<div id="allcenterlist"
-     class="centerlist"
-     data-role="listview"
-     data-selectable="false"
-     data-template="alltemplate"
-     data-bind="source: centers, visible: loggedIn"
-     style="padding-top: 20px; height: 500px; overflow: auto">
-</div>
-<script type="text/x-kendo-tmpl" id="alltemplate">
-    <div class="center-tile">
-        <table style="width: 100%">
-            <tr>
-                <td style="width: 350px">
-                    <dl>
-                        <dt data-bind="text: name" />
-                        <dd data-bind="text: address.address1" />
-                        <dd data-bind="text: address.address2" />
-                        <dd>
-                            <span data-bind="text: address.city" />
-                            <span data-bind="text: address.state" />
-                            <span data-bind="text: address.zipcode" />
-                        </dd>
-                        <dd data-bind="text: phone" />
-                    </dl>
-                </td>
-                <td>
-                    <div data-bind="top10: { coll: needs, prop: 'name' }"></div>
-                </td>
-                <td style="vertical-align: top; text-align: center; width: 20px;">
-                    <label class="favorite-star">
-                        <input type="checkbox" data-bind="checked: favorite" />
-                        <span class="fa fa-2x"></span>
-                    </label>
-                </td>
-            </tr>
-        </table>
+    <h3>Our top need now: <span data-bind="text: topNeeds"></span></h3>
+    <div id="homeTabToolbar"
+         class="tabtoolbar"
+         data-role="toolbar"
+         data-bind="events: { toggle: tabToggle }"
+         data-items='[{
+            type: "buttonGroup",
+            buttons: [
+                { spriteCssClass: "fa fa-star", text: " FAVORITES", togglable: true, group: "tab", "id": "favorites" },
+                { spriteCssClass: "fa fa-map-o", text: " MAP", togglable: true, group: "tab", "id": "map" },
+                { spriteCssClass: "fa fa-list", text: " ALL", togglable: true, group: "tab", "id": "all" }
+            ]
+        }]'>
     </div>
-</script>
+    <div id="homeTabContent">
+    </div>
+</div>

@@ -1,0 +1,43 @@
+﻿<div id="allcenterlist"
+     class="centerlist"
+     data-role="listview"
+     data-selectable="false"
+     data-template="alltemplate"
+     data-bind="source: centers"
+     style="padding-top: 20px; height: 500px; overflow: auto">
+</div>
+<script type="text/x-kendo-tmpl" id="alltemplate">
+    <div class="center-tile">
+        <table style="width: 100%">
+            <tr>
+                <td style="width: 350px">
+                    <dl>
+                        <dt data-bind="text: name" />
+                        <dd data-bind="text: address.address1" />
+                        <dd data-bind="text: address.address2" />
+                        <dd>
+                            <span data-bind="text: address.city" />
+                            <span data-bind="text: address.state" />
+                            <span data-bind="text: address.zipcode" />
+                        </dd>
+                        <dd data-bind="text: phone" />
+                    </dl>
+                </td>
+                <td>
+                    <dl>
+                        <dt>Top Needs</dt>
+                        <dd>
+                            <div data-bind="top10: { coll: needs, prop: 'name' }"></div>
+                        </dd>
+                    </dl>
+                </td>
+                <td style="vertical-align: top; text-align: center; width: 20px;">
+                    <label class="favorite-star">
+                        <input type="checkbox" data-bind="checked: favorite" />
+                        <span class="fa fa-2x"></span>
+                    </label>
+                </td>
+            </tr>
+        </table>
+    </div>
+</script>

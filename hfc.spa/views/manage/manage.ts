@@ -12,11 +12,11 @@ module hfc {
         public centers = new kendo.data.ObservableArray([]);
         public item: any = { name: "" };
 
-        private layout = new kendo.Layout("<div id='viewConent'/>");
+        private layout = new kendo.Layout("<div id='viewContent'/>");
 
         public doAction(e: any): void {
             if (e.id === "addcenter") {
-				var center = {
+				const center = {
 					name: "New Center",
 					hours: "",
 					phone: "",
@@ -33,8 +33,8 @@ module hfc {
 				};
 
 				// first, add the new center to this user's authorized centers
-				var user = common.User;
-				var centers = user.centers;
+				const user = common.User;
+				const centers = user.centers;
 				centers.push(center.centerid);
 				new Firebase(common.FirebaseUrl)
 					.child("users")
@@ -61,13 +61,13 @@ module hfc {
 
         public showCenter(e: any) {
             // get the row of the collection to bind to the subviews
-            var listView = $(e.sender.element).data("kendoListView");
-            var index = listView.select().index();
-            var item = this.centers[index];
+            const listView = $(e.sender.element).data("kendoListView");
+            const index = listView.select().index();
+            const item = this.centers[index];
 			this.set("item", item);
 
 			$("#centerlist button.confirmRemove").each(function () {
-                var op = $(this).css("opacity");
+                const op = $(this).css("opacity");
                 if (op > "0") {
                     $(this).animate({ width: 0, height: "100%", opacity: 0 }, 200);
                 }
@@ -78,8 +78,8 @@ module hfc {
             (<locationvm>this.locationView.model).setup(item);
 
             // select the Needs button in the toolbar if there isn't anything selected
-            var tabtoolbar = $("#tabtoolbar").data("kendoToolBar");
-			var selected = tabtoolbar.getSelectedFromGroup("tab");
+            const tabtoolbar = $("#tabtoolbar").data("kendoToolBar");
+			const selected = tabtoolbar.getSelectedFromGroup("tab");
 			if (selected.length === 0) {
 				tabtoolbar.toggle("#needs", true);
 				this.tabView("needs");
@@ -90,8 +90,8 @@ module hfc {
         }
 
 		public onShowRemove(e: any): void {
-            var listView = $("#centerlist").data("kendoListView");
-            var elem = listView.select()[0];
+            const listView = $("#centerlist").data("kendoListView");
+            const elem = listView.select()[0];
 			$(elem)
 				.find(".confirmRemove")
 				.animate({ width: "70px", height: "100%", opacity: 1.0 }, 400);
@@ -100,11 +100,11 @@ module hfc {
 
 		public onRemove(e: any): void {
             // find which item is selected
-            var listView = $("#centerlist").data("kendoListView");
-            var index = listView.select().index();
-            var item = this.centers[index];
+            const listView = $("#centerlist").data("kendoListView");
+            const index = listView.select().index();
+            const item = this.centers[index];
 
-			this.layout.showIn("#viewConent", this.blankView, "swap");
+			this.layout.showIn("#viewContent", this.blankView, "swap");
 			this.set("toolbarVisible", false);
 
 			// remove on Firebase (and it may remove from centers list by callback)
@@ -117,23 +117,23 @@ module hfc {
 
 		public tabView(id: string): void {
 			switch (id) {
-				case "needs": this.layout.showIn("#viewConent", this.needsView, "swap"); break;
-				case "center": this.layout.showIn("#viewConent", this.centerView, "swap"); break;
-				case "location": this.layout.showIn("#viewConent", this.locationView, "swap"); break;
+				case "needs": this.layout.showIn("#viewContent", this.needsView, "swap"); break;
+				case "center": this.layout.showIn("#viewContent", this.centerView, "swap"); break;
+				case "location": this.layout.showIn("#viewContent", this.locationView, "swap"); break;
 			}
 		}
 
 		public listBound(e: any): void {
 			// called for each row bound!
 			// if we have an item selected, then re-select it after a data refresh
-			var curr = this.get("item");
+			const curr = this.get("item");
 			if (!curr) return;
-			var listView = $("#centerlist").data("kendoListView");
+			const listView = $("#centerlist").data("kendoListView");
 			if (!listView) return;
-			var all = listView.dataItems();
-			var idx = $.indexByPropertyValue(all, "centerid", curr.centerid);
+			const all = listView.dataItems();
+			const idx = $.indexByPropertyValue(all, "centerid", curr.centerid);
 			if (idx >= 0) {
-				var sel = listView.element.children()[idx];
+				const sel = listView.element.children()[idx];
 				listView.select(sel);
 			}
 		}
@@ -194,7 +194,7 @@ define([
     "/views/needs/needs.js",
     "/views/center/center.js",
     "/views/location/location.js",
-	'async!https://maps.googleapis.com/maps/api/js?key=AIzaSyBBYD5QWtAgLlUEDApmcU007QZzSnTPCto&sensor=false'
+	"async!https://maps.googleapis.com/maps/api/js?key=AIzaSyBBYD5QWtAgLlUEDApmcU007QZzSnTPCto&sensor=false"
 ], (template, needs, center, location) => {
     var vm = new hfc.managevm();
     vm.needsView = needs;

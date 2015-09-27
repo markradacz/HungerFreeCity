@@ -11,46 +11,11 @@ var hfc;
     var homevm = (function (_super) {
         __extends(homevm, _super);
         function homevm() {
-            _super.call(this);
+            _super.apply(this, arguments);
             this.title = "Home";
+            this.topNeeds = "";
             this.loggedIn = false;
-            this.centers = new kendo.data.ObservableArray([]);
-            var that = this;
-            $.subscribe("loggedIn", function (ref) {
-                ref.child("centers").on("value", function (data) {
-                    that.centers.length = 0; // clear the current array
-                    // join in the user's favorited centers, and add each to the collection
-                    if (hfc.common.User) {
-                        var all = [];
-                        // convert object to an array
-                        data.forEach(function (v) {
-                            var c = v.val();
-                            c.favorite = $.inArray(c.centerid, hfc.common.User.favorites) >= 0;
-                            if (!c.needs)
-                                c.needs = [];
-                            all.push(c);
-                        });
-                        all.sort(function (a, b) {
-                            if (a.favorite === b.favorite)
-                                return a.name.localeCompare(b.name);
-                            return a.favorite ? -1 : 1;
-                        });
-                        all.forEach(function (v) {
-                            that.centers.push(v);
-                        });
-                    }
-                });
-            });
-            that.centers.bind("change", function (e) {
-                if (e.action === "itemchange" && e.field === "favorite") {
-                    // so change the user's favorites and persist
-                    hfc.common.User.favorites = that.centers
-                        .filter(function (v) { return v.favorite; })
-                        .map(function (v) { return v.centerid; });
-                    //hfc.common.log("favorites are " + JSON.stringify(common.User.favorites));
-                    $.publish("saveFavorites");
-                }
-            });
+            this.layout = new kendo.Layout("<div id='homeViewContent'/>");
         }
         homevm.prototype.doLogin = function (e) {
             $.publish("showLogin");
@@ -58,22 +23,51 @@ var hfc;
         homevm.prototype.doRegister = function (e) {
             $.publish("showRegister");
         };
+        homevm.prototype.tabToggle = function (e) {
+            this.tabView(e.id);
+        };
+        homevm.prototype.tabView = function (id) {
+            switch (id) {
+                case "favorites":
+                    this.layout.showIn("#homeViewContent", this.favoritesView, "swap");
+                    break;
+                case "map":
+                    this.layout.showIn("#homeViewContent", this.mapView, "swap");
+                    break;
+                case "all":
+                    this.layout.showIn("#homeViewContent", this.allView, "swap");
+                    break;
+            }
+        };
         homevm.prototype.init = function () {
             var _this = this;
             //super.init();
-            $.subscribe("loggedIn", function () { _this.set("loggedIn", true); });
+            $.subscribe("loggedIn", function () {
+                _this.set("loggedIn", true);
+                var toolbar = $("#homeTabToolbar").data("kendoToolBar");
+                toolbar.toggle("#favorites", true);
+                _this.tabView("favorites");
+            });
             $.subscribe("loggedOff", function () { _this.set("loggedIn", false); });
+            $.subscribe("topNeeds", function (top) { _this.set("topNeeds", top); });
             this.set("loggedIn", hfc.common.User ? true : false);
+            this.layout.render("#homeTabContent");
         };
         return homevm;
     })(kendo.data.ObservableObject);
     hfc.homevm = homevm;
 })(hfc || (hfc = {}));
 define([
-    "text!/views/home/home.html"
-], function (homeTemplate) {
+    "text!/views/home/home.html",
+    "/views/favorites/favorites.js",
+    "/views/map/map.js",
+    "/views/all/all.js"
+], function (template, favorites, map, all) {
     var vm = new hfc.homevm();
-    var view = new kendo.View(homeTemplate, {
+    vm.favoritesView = favorites;
+    vm.mapView = map;
+    vm.allView = all;
+    var view = new kendo.View(template, {
         model: vm,
         show: function () { hfc.common.animate(this.element); },
         init: function () { vm.init(); }

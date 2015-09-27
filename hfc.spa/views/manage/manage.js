@@ -18,7 +18,7 @@ var hfc;
             this.blankView = new kendo.View("<div/>");
             this.centers = new kendo.data.ObservableArray([]);
             this.item = { name: "" };
-            this.layout = new kendo.Layout("<div id='viewConent'/>");
+            this.layout = new kendo.Layout("<div id='viewContent'/>");
             var that = this;
             $.subscribe("loggedIn", function (ref) {
                 ref.child("centers").on("value", function (data) {
@@ -143,7 +143,7 @@ var hfc;
             var listView = $("#centerlist").data("kendoListView");
             var index = listView.select().index();
             var item = this.centers[index];
-            this.layout.showIn("#viewConent", this.blankView, "swap");
+            this.layout.showIn("#viewContent", this.blankView, "swap");
             this.set("toolbarVisible", false);
             // remove on Firebase (and it may remove from centers list by callback)
             new Firebase(hfc.common.FirebaseUrl).child(item.refkey).set(null); // remove the item
@@ -154,13 +154,13 @@ var hfc;
         managevm.prototype.tabView = function (id) {
             switch (id) {
                 case "needs":
-                    this.layout.showIn("#viewConent", this.needsView, "swap");
+                    this.layout.showIn("#viewContent", this.needsView, "swap");
                     break;
                 case "center":
-                    this.layout.showIn("#viewConent", this.centerView, "swap");
+                    this.layout.showIn("#viewContent", this.centerView, "swap");
                     break;
                 case "location":
-                    this.layout.showIn("#viewConent", this.locationView, "swap");
+                    this.layout.showIn("#viewContent", this.locationView, "swap");
                     break;
             }
         };
@@ -193,7 +193,7 @@ define([
     "/views/needs/needs.js",
     "/views/center/center.js",
     "/views/location/location.js",
-    'async!https://maps.googleapis.com/maps/api/js?key=AIzaSyBBYD5QWtAgLlUEDApmcU007QZzSnTPCto&sensor=false'
+    "async!https://maps.googleapis.com/maps/api/js?key=AIzaSyBBYD5QWtAgLlUEDApmcU007QZzSnTPCto&sensor=false"
 ], function (template, needs, center, location) {
     var vm = new hfc.managevm();
     vm.needsView = needs;

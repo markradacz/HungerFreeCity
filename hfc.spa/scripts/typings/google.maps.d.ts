@@ -43,7 +43,7 @@ declare module google.maps {
         getZoom(): number;
         panBy(x: number, y: number): void;
         panTo(latLng: LatLng | LatLngLiteral): void;
-        panToBounds(latLngBounds: LatLngBounds): void;
+        panToBounds(latLngBounds: LatLngBounds | LatLngBoundsLiteral): void;
         setCenter(latlng: LatLng | LatLngLiteral): void;
         setHeading(heading: number): void;
         setMapTypeId(mapTypeId: MapTypeId | string): void;
@@ -1646,6 +1646,7 @@ declare module google.maps {
     }
 
     export type LatLngLiteral = { lat: number; lng: number }
+    export type LatLngBoundsLiteral = { north: number; east: number; south: number; west: number }
 
     export class LatLngBounds {
         constructor(sw?: LatLng, ne?: LatLng);

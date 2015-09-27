@@ -36,12 +36,19 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Scripts\async.js" />
-    <Content Include="Scripts\kendo\2015.2.805\kendo.dataviz.core.min.js" />
-    <Content Include="Scripts\kendo\2015.2.805\kendo.dataviz.map.min.js" />
     <Content Include="Scripts\kendo\2015.2.805\kendo.drawing.min.js" />
     <Content Include="Views\admin\admin.js.map" />
+    <Content Include="Views\all\all.html" />
+    <Content Include="Views\all\all.js" />
+    <Content Include="Views\favorites\favorites.html" />
+    <Content Include="Views\favorites\favorites.js" />
+    <Content Include="Views\map\map.html" />
+    <Content Include="Views\map\map.js" />
     <Content Include="Views\users\users.js.map" />
     <Content Include="Views\about\about.js.map" />
+    <Content Include="Views\all\all.js.map" />
+    <Content Include="Views\favorites\favorites.js.map" />
+    <Content Include="Views\map\map.js.map" />
     <TypeScriptCompile Include="Scripts\typings\google.maps.d.ts" />
     <TypeScriptCompile Include="Views\about\about.ts" />
     <Content Include="Views\admin\admin.html" />
@@ -1062,8 +1069,11 @@
     <Content Include="Views\about\about.html" />
     <Content Include="Views\about\about.js" />
     <TypeScriptCompile Include="Views\admin\admin.ts" />
+    <TypeScriptCompile Include="Views\all\all.ts" />
+    <TypeScriptCompile Include="Views\favorites\favorites.ts" />
     <TypeScriptCompile Include="Views\location\location.ts" />
     <TypeScriptCompile Include="Views\center\center.ts" />
+    <TypeScriptCompile Include="Views\map\map.ts" />
     <TypeScriptCompile Include="Views\needs\needs.ts" />
     <TypeScriptCompile Include="Views\manage\manage.ts" />
     <Content Include="Views\center\center.html" />
@@ -1085,6 +1095,7 @@
     <TypeScriptCompile Include="Scripts\typings\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\kendo.all.d.ts" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
   </PropertyGroup>
