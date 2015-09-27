@@ -192,8 +192,7 @@ define([
     "text!/views/manage/manage.html",
     "/views/needs/needs.js",
     "/views/center/center.js",
-    "/views/location/location.js",
-    "async!https://maps.googleapis.com/maps/api/js?key=AIzaSyBBYD5QWtAgLlUEDApmcU007QZzSnTPCto&sensor=false"
+    "/views/location/location.js"
 ], function (template, needs, center, location) {
     var vm = new hfc.managevm();
     vm.needsView = needs;
