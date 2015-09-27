@@ -35,7 +35,8 @@ require.config({
         'app': {
             deps: ["jQuery", "kendo", "common", "pubsub", "bootstrap", "firebase", "text", "async", "live"]
         }
-    }
+    },
+    waitSeconds: 0
 });
 define([
     "app"
