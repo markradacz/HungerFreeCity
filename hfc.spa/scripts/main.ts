@@ -44,6 +44,7 @@ define( [
     "app"
 ], (app) => {
 	app.start();
+	setTimeout(() => { $(".loader").fadeOut("slow");}, 700);
 });
 
 // Stop Form Submission of Enter Key Press

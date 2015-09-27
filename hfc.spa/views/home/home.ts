@@ -3,7 +3,6 @@
 /// <reference path='../../scripts/common.ts' />
 module hfc {
     export class homevm extends kendo.data.ObservableObject {
-        public title: string = "Home";
         public topNeeds: string = "";
         public loggedIn: boolean = false;
         public favoritesView: kendo.View;

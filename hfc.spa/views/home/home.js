@@ -12,7 +12,6 @@ var hfc;
         __extends(homevm, _super);
         function homevm() {
             _super.apply(this, arguments);
-            this.title = "Home";
             this.topNeeds = "";
             this.loggedIn = false;
             this.layout = new kendo.Layout("<div id='homeViewContent'/>");
