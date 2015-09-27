@@ -100,6 +100,8 @@ module hfc {
 				<div>${center.hours}</div>
 				<b>Notes</b><br/>
 				<div>${center.centerinfo.join("\n")}</div>
+				<b>Site</b><br/>
+				<a href="${center.site}" target="blank" style="white-space:nowrap;">${center.site} <span class="fa fa-external-link" /></a>
 				</td><td style='vertical-align:top;'>
 				<b>Top Needs</b><br/>
 				<ol style='padding:0;margin-left:15px;'>${center.needs.slice(0, 10).map(v => `<li>${v.name}</li>`).join("")}</ol>
