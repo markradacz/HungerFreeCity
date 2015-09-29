@@ -364,7 +364,11 @@ define([
     vm.init();
 
     var layout: kendo.Layout = new kendo.Layout("<div id=\"viewRoot\"/>", {
-        show: () => { hfc.common.animate(this.element); }
+        show: () => {
+			hfc.common.animate(this.element);
+			//$(".loader").fadeOut("slow");
+			setTimeout(() => { $(".loader").fadeOut("slow"); }, 700);
+        }
     });
 
     // Setup the application router

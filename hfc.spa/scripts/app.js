@@ -346,7 +346,11 @@ define([
     kendo.bind("#applicationHost", vm);
     vm.init();
     var layout = new kendo.Layout("<div id=\"viewRoot\"/>", {
-        show: function () { hfc.common.animate(_this.element); }
+        show: function () {
+            hfc.common.animate(_this.element);
+            //$(".loader").fadeOut("slow");
+            setTimeout(function () { $(".loader").fadeOut("slow"); }, 700);
+        }
     });
     // Setup the application router
     var router = new kendo.Router({
