@@ -160,7 +160,7 @@ var hfc;
                     this.layout.showIn("#viewContent", this.centerView, "swap");
                     break;
                 case "location":
-                    this.layout.showIn("#viewContent", this.locationView, "swap");
+                    this.layout.showIn("#viewContent", this.locationView);
                     break;
             }
         };

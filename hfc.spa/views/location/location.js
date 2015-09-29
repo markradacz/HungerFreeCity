@@ -15,9 +15,51 @@ var hfc;
         function locationvm() {
             _super.apply(this, arguments);
         }
-        locationvm.prototype.setup = function (item) {
+        locationvm.prototype.initMap = function () {
             var _this = this;
-            this.set("item", item);
+            var mapInfo = this.computeMap();
+            if (!this.map) {
+                var mapelement = document.getElementById("locationMap");
+                if (mapelement) {
+                    this.map = new google.maps.Map(mapelement, {
+                        zoom: 14,
+                        center: mapInfo.center,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP,
+                        disableDefaultUI: true
+                    });
+                }
+            }
+            if (this.map) {
+                this.map.setCenter(mapInfo.center);
+                if (this.marker) {
+                    //this.marker.setMap(null); // remove prior marker from map
+                    this.infowindow.close();
+                    this.marker.setTitle(this.item.name);
+                    this.marker.setPosition({ lat: this.lat, lng: this.lng });
+                    this.marker.setAnimation(google.maps.Animation.DROP);
+                }
+                else {
+                    this.marker = new google.maps.Marker({
+                        position: { lat: this.lat, lng: this.lng },
+                        draggable: false,
+                        animation: google.maps.Animation.DROP,
+                        map: this.map,
+                        title: this.item.name
+                    });
+                    google.maps.event.addListener(this.marker, 'drag', function (e) {
+                        _this.set("lat", e.latLng.lat());
+                        _this.set("lng", e.latLng.lng());
+                    });
+                    google.maps.event.addListener(this.marker, 'dragend', function (e) {
+                        _this.set("lat", e.latLng.lat());
+                        _this.set("lng", e.latLng.lng());
+                    });
+                    this.infowindow = new google.maps.InfoWindow({ content: "Drag Me to the correct location" });
+                }
+            }
+        };
+        locationvm.prototype.computeMap = function () {
+            var item = this.get("item");
             var lat = item.geometry.coordinates[0];
             var lng = item.geometry.coordinates[1];
             if (lat < 0 && lng > 0) {
@@ -26,35 +68,23 @@ var hfc;
             }
             this.set("lat", lat);
             this.set("lng", lng);
-            var mapelement = document.getElementById("map");
-            if (!mapelement)
-                return;
-            var map = new google.maps.Map(mapelement, {
-                zoom: 14,
-                center: { lat: lat, lng: lng },
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
-                disableDefaultUI: true
-            });
-            var marker = new google.maps.Marker({
-                position: { lat: lat, lng: lng },
-                draggable: true,
-                animation: google.maps.Animation.DROP,
-                map: map,
-                title: item.name
-            });
-            google.maps.event.addListener(marker, 'drag', function (e) {
-                _this.set("lat", e.latLng.lat());
-                _this.set("lng", e.latLng.lng());
-            });
-            google.maps.event.addListener(marker, 'dragend', function (e) {
-                _this.set("lat", e.latLng.lat());
-                _this.set("lng", e.latLng.lng());
-            });
+            // set the map center to the lat/lng location
+            return {
+                center: { lat: lat, lng: lng }
+            };
+        };
+        locationvm.prototype.setup = function (item) {
+            this.set("item", item);
+            this.initMap();
         };
         locationvm.prototype.doAction = function (e) {
             if (e.id === "edit") {
+                this.marker.setDraggable(true);
+                this.infowindow.open(this.map, this.marker);
             }
             else if (e.id === "save") {
+                this.marker.setDraggable(false);
+                this.infowindow.close();
                 // common.log("saving center data " + JSON.stringify(clone));
                 var item = this.get("item");
                 item.geometry.coordinates[0] = this.get("lat");
@@ -85,7 +115,7 @@ define([
     var vm = new hfc.locationvm();
     var view = new kendo.View(template, {
         model: vm,
-        show: function () { hfc.common.animate(this.element); },
+        show: function () { hfc.common.animate(this.element, "fadeIn"); vm.initMap(); },
         init: function () { vm.init(); }
     });
     return view;

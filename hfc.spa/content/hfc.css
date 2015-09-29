@@ -229,6 +229,29 @@ button.confirmRemove {
 }
 
 /***************************
+* Map
+***************************/
+#homeMap, #locationMap {
+    border: 1px solid #71b1d1;
+	border-radius: 15px;
+    padding-bottom: 20px;
+    width: 100%;
+    height: 500px;
+
+    /* Box Shadow */
+    /* Opera */
+    -o-box-shadow: 5px 5px 5px #666;
+    /* IE */
+    -ms-box-shadow: 5px 5px 5px #666;
+    /* Mozilla FireFox */
+    -moz-box-shadow: 5px 5px 5px #666;
+    /* Google Chrome */
+    -webkit-box-shadow: 5px 5px 5px #666;
+    /* Normal */
+    box-shadow: 5px 5px 5px #666;    
+}
+
+/***************************
 * Notifications
 ***************************/
 .notification {

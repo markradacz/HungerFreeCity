@@ -119,7 +119,7 @@ module hfc {
 			switch (id) {
 				case "needs": this.layout.showIn("#viewContent", this.needsView, "swap"); break;
 				case "center": this.layout.showIn("#viewContent", this.centerView, "swap"); break;
-				case "location": this.layout.showIn("#viewContent", this.locationView, "swap"); break;
+				case "location": this.layout.showIn("#viewContent", this.locationView); break;
 			}
 		}
 
