@@ -115,9 +115,6 @@ label.favorite-star > input[type=checkbox]:checked + span:before {
     vertical-align: top;
     padding: 5px;
 }
-.center-tile td:last-child {
-    text-align: right;
-}
 .center-tile dl {
     margin-top: 0;
     margin-bottom: 0;
