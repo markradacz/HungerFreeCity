@@ -29,6 +29,7 @@ var hfc;
                     onShowRemove: function (e) { _this.onShowRemove(e); },
                     onRemove: function (e) { _this.onRemove(e); }
                 });
+                this.set("adding", true);
                 $("#editNeedPanel").data("kendoWindow").open().center();
             }
             else if (e.id === "save") {
@@ -53,6 +54,7 @@ var hfc;
             var listView = $("#needsList").data("kendoListView");
             var index = listView.select().index();
             this.set("need", this.item.needs[index]);
+            this.set("adding", false);
             $("#editNeedPanel").data("kendoWindow").open().center();
         };
         needsvm.prototype.onShowRemove = function (e) {
@@ -112,9 +114,12 @@ var hfc;
             });
         };
         needsvm.prototype.saveButtonClick = function (e) {
-            var needs = this.get("item").get("needs");
-            needs.unshift(this.get("need"));
-            this.reorderItems();
+            if (this.get("adding")) {
+                var needs = this.get("item").get("needs");
+                needs.unshift(this.get("need"));
+                this.reorderItems();
+                this.set("adding", false);
+            }
             $("#editNeedPanel").data("kendoWindow").close();
         };
         needsvm.prototype.init = function () {

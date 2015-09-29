@@ -84,22 +84,24 @@ var hfc;
             // clear any markers first
             this.markers.forEach(function (m) { return m.setMap(null); }); // removes current markers
             this.markers.length = 0;
-            // add markers to the map
-            this.centers.forEach(function (c) {
-                var lat = c.geometry.coordinates[0];
-                var lng = c.geometry.coordinates[1];
-                var marker = new google.maps.Marker({
-                    position: { lat: lat, lng: lng },
-                    draggable: false,
-                    //label: c.name,
-                    title: c.name,
-                    map: _this.map,
-                    animation: google.maps.Animation.DROP
-                });
-                marker.addListener('click', function () {
-                    _this.showInfo(c, marker);
-                });
-                _this.markers.push(marker);
+            // add markers to the map over time
+            this.centers.forEach(function (c, i) {
+                window.setTimeout(function (ctr) {
+                    var lat = ctr.geometry.coordinates[0];
+                    var lng = ctr.geometry.coordinates[1];
+                    var marker = new google.maps.Marker({
+                        position: { lat: lat, lng: lng },
+                        draggable: false,
+                        //label: ctr.name,
+                        title: ctr.name,
+                        map: _this.map,
+                        animation: google.maps.Animation.DROP
+                    });
+                    marker.addListener('click', function () {
+                        _this.showInfo(ctr, marker);
+                    });
+                    _this.markers.push(marker);
+                }, i * 300, c);
             });
         };
         mapvm.prototype.showInfo = function (center, marker) {

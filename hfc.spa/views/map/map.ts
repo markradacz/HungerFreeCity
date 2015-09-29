@@ -67,22 +67,24 @@ module hfc {
 			this.markers.forEach(m => m.setMap(null));	// removes current markers
 			this.markers.length = 0;
 
-			// add markers to the map
-			this.centers.forEach(c => {
-				var lat = c.geometry.coordinates[0];
-				var lng = c.geometry.coordinates[1];
-				var marker = new google.maps.Marker({
-					position: { lat: lat, lng: lng },
-					draggable: false,
-					//label: c.name,
-					title: c.name, // + " " + lat + " " + lng,
-					map: this.map,
-					animation: google.maps.Animation.DROP
-				});
-				marker.addListener('click', () => {
-					this.showInfo(c, marker);
-				});
-				this.markers.push(marker);
+			// add markers to the map over time
+			this.centers.forEach((c, i) => {
+				window.setTimeout(ctr => {
+					var lat = ctr.geometry.coordinates[0];
+					var lng = ctr.geometry.coordinates[1];
+					var marker = new google.maps.Marker({
+						position: { lat: lat, lng: lng },
+						draggable: false,
+						//label: ctr.name,
+						title: ctr.name, // + " " + lat + " " + lng,
+						map: this.map,
+						animation: google.maps.Animation.DROP
+					});
+					marker.addListener('click', () => {
+						this.showInfo(ctr, marker);
+					});
+					this.markers.push(marker);
+				}, i * 300, c);
 			});
 		}
 

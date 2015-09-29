@@ -7,6 +7,7 @@ module hfc {
         public static instance: needsvm = null; // set in the setup() method below
         public need: any = null;
         public item: any;
+		public adding: boolean;
  
         public setup(item): void {
             needsvm.instance = this;
@@ -22,11 +23,12 @@ module hfc {
 					onShowRemove: e => { this.onShowRemove(e); },
 					onRemove: e => { this.onRemove(e); }
 				});
+	            this.set("adding", true);
                 $("#editNeedPanel").data("kendoWindow").open().center();
 			} else if (e.id === "save") {
 				// common.log("saving center data " + JSON.stringify(clone));
-				var item = this.get("item");
-				var clone = JSON.parse(JSON.stringify(item.needs));	// cheap way to get a deep clone
+	            const item = this.get("item");
+				const clone = JSON.parse(JSON.stringify(item.needs));	// cheap way to get a deep clone
 				new Firebase(common.FirebaseUrl)
 					.child(item.refkey)
 					.child("needs")
@@ -42,15 +44,16 @@ module hfc {
 
         public onEdit(e: any): void {
             // popup a dialog box to edit the value
-            var listView = $("#needsList").data("kendoListView");
-            var index = listView.select().index();
+            const listView = $("#needsList").data("kendoListView");
+            const index = listView.select().index();
             this.set("need", this.item.needs[index]);
+			this.set("adding", false);
             $("#editNeedPanel").data("kendoWindow").open().center();
         }
 
         public onShowRemove(e: any): void {
-            var listView = $("#needsList").data("kendoListView");
-            var elem = listView.select()[0];
+            const listView = $("#needsList").data("kendoListView");
+            const elem = listView.select()[0];
             $(elem)
 				.find("button.confirmRemove")
 				.animate({ display: "inline", width: "70px", opacity: 1.0 }, 400); 
@@ -58,9 +61,9 @@ module hfc {
 
         public onRemove(e: any): void {
             // find which item is selected
-            var listView = $("#needsList").data("kendoListView");
-            var index = listView.select().index();
-            var item = this.item.needs[index];
+            const listView = $("#needsList").data("kendoListView");
+            const index = listView.select().index();
+            const item = this.item.needs[index];
             this.item.needs.remove(item);
 			this.reorderItems();
        }
@@ -70,7 +73,7 @@ module hfc {
             //var index = listView.select().index();
             //var item = listView.dataSource.view()[index];
             $(".needItem button.confirmRemove").each(function () {
-                var op = $(this).css("opacity");
+                const op = $(this).css("opacity");
                 if (op > "0") {
                     $(this).animate({ display: "none", width: "0px", opacity: 0 }, 200);
                 }
@@ -79,7 +82,7 @@ module hfc {
 
 		private reorderItems(): void {
 			// reset the index values
-			var needs = needsvm.instance.get("item").get("needs");
+			const needs = needsvm.instance.get("item").get("needs");
 			var index = 0;
 			needs.forEach((v: any) => {
 				v.set("index", ++index);
@@ -100,7 +103,7 @@ module hfc {
                     return element.clone().removeClass("k-state-selected");
                 },
                 change(e) {
-                    var oldIndex = e.oldIndex,
+                    const oldIndex = e.oldIndex,
                         newIndex = e.newIndex,
                         needs = needsvm.instance.get("item").get("needs"),
                         need = needs[oldIndex];
@@ -112,10 +115,13 @@ module hfc {
         }
 
         private saveButtonClick(e: any): void {
-			var needs = this.get("item").get("needs");
-			needs.unshift(this.get("need"));
-			this.reorderItems();
-            $("#editNeedPanel").data("kendoWindow").close();
+	        if (this.get("adding")) {
+		        const needs = this.get("item").get("needs");
+		        needs.unshift(this.get("need"));
+		        this.reorderItems();
+				this.set("adding", false);
+	        }
+	        $("#editNeedPanel").data("kendoWindow").close();
         }
 
         public init(): void {
