@@ -32,22 +32,22 @@ var hfc;
                 this.set("adding", true);
                 $("#editNeedPanel").data("kendoWindow").open().center();
             }
-            else if (e.id === "save") {
-                // common.log("saving center data " + JSON.stringify(clone));
-                var item = this.get("item");
-                var clone = JSON.parse(JSON.stringify(item.needs)); // cheap way to get a deep clone
-                new Firebase(hfc.common.FirebaseUrl)
-                    .child(item.refkey)
-                    .child("needs")
-                    .set(clone, function (error) {
-                    if (error) {
-                        hfc.common.errorToast("Needs data could not be saved." + error);
-                    }
-                    else {
-                        hfc.common.successToast("Needs data saved successfully.");
-                    }
-                });
-            }
+        };
+        needsvm.prototype.saveNeeds = function () {
+            // common.log("saving center data " + JSON.stringify(clone));
+            var item = this.get("item");
+            var clone = JSON.parse(JSON.stringify(item.needs)); // cheap way to get a deep clone
+            var ref = new Firebase(hfc.common.FirebaseUrl).child(item.refkey);
+            ref.child("needs")
+                .set(clone, function (error) {
+                if (error) {
+                    hfc.common.errorToast("Needs data could not be saved." + error);
+                }
+                else {
+                    hfc.common.successToast("Needs data saved successfully.");
+                    ref.update({ lastModified: new Date().toISOString() });
+                }
+            });
         };
         needsvm.prototype.onEdit = function (e) {
             // popup a dialog box to edit the value
@@ -61,7 +61,7 @@ var hfc;
             var listView = $("#needsList").data("kendoListView");
             var elem = listView.select()[0];
             $(elem)
-                .find("button.confirmRemove")
+                .find("button.confirmRemoveNeed")
                 .animate({ display: "inline", width: "70px", opacity: 1.0 }, 400);
         };
         needsvm.prototype.onRemove = function (e) {
@@ -71,12 +71,13 @@ var hfc;
             var item = this.item.needs[index];
             this.item.needs.remove(item);
             this.reorderItems();
+            this.saveNeeds();
         };
         needsvm.prototype.onItemSelected = function (e) {
             //var listView = $('#needsList').data("kendoListView");
             //var index = listView.select().index();
             //var item = listView.dataSource.view()[index];
-            $(".needItem button.confirmRemove").each(function () {
+            $(".needItem button.confirmRemoveNeed").each(function () {
                 var op = $(this).css("opacity");
                 if (op > "0") {
                     $(this).animate({ display: "none", width: "0px", opacity: 0 }, 200);
@@ -110,6 +111,7 @@ var hfc;
                     needs.remove(need);
                     needs.splice(newIndex, 0, need); // insert at new index
                     needsvm.instance.reorderItems();
+                    window.setTimeout(function () { needsvm.instance.saveNeeds(); }, 1); // background save
                 }
             });
         };
@@ -121,6 +123,7 @@ var hfc;
                 this.set("adding", false);
             }
             $("#editNeedPanel").data("kendoWindow").close();
+            this.saveNeeds();
         };
         needsvm.prototype.init = function () {
             //super.init();

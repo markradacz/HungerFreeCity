@@ -21,6 +21,10 @@
 <h3>Phone</h3>
 <div data-bind="text: item.phone"></div>
 
+<h3>Type</h3>
+<div data-bind="text: item.centertype.name"></div>
+<div data-bind="text: item.centertype.description"></div>
+
 <h3>Hours</h3>
 <div data-bind="text: item.hours"></div>
 
@@ -55,8 +59,14 @@
         </div>
         <div>
             <label class="k-edit-label">Phone</label>
-            <input type="text" class="k-textbox" data-min-width="300" data-bind="value: editItem.phone" placeholder="Phone" />
+            <input type="text" class="k-textbox" data-min-width="300" data-bind="value: editItem.phone" placeholder="Phone"/>
         </div>
+
+        <div>
+            <label class="k-edit-label">Type</label>
+            <div data-bind="text: editItem.centertype.name"></div>
+        </div>
+
         <div>
             <label class="k-edit-label">Hours</label>
             <input type="text" class="k-textbox" data-min-width="300" data-bind="value: editItem.hours" placeholder="Hours" />

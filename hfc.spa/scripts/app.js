@@ -285,7 +285,7 @@ var hfc;
             if (hfc.common.User) {
                 hfc.common.successToast("Welcome " + hfc.common.User.email);
                 this.set("loggedIn", true);
-                this.set("isManager", hfc.common.hasRole("manager"));
+                this.set("isManager", hfc.common.hasRole("manager") || hfc.common.hasRole("admin"));
                 this.set("isAdmin", hfc.common.hasRole("admin"));
                 this.set("email", hfc.common.User.email);
                 this.set("firstName", hfc.common.User.firstName);

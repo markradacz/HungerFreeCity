@@ -84,7 +84,7 @@ module hfc {
 						this.showInfo(ctr, marker);
 					});
 					this.markers.push(marker);
-				}, i * 300, c);
+				}, (i * 1000)/(i + 1), c);
 			});
 		}
 

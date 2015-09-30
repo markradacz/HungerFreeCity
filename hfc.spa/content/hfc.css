@@ -183,7 +183,7 @@ a.removeIcon {
     color: red;
 }
 
-button.confirmRemove {
+button.confirmRemove, button.confirmRemoveNeed {
     width: 0;
     height: 100%;
     line-height: 100%;

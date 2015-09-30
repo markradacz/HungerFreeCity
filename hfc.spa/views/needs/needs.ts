@@ -25,22 +25,24 @@ module hfc {
 				});
 	            this.set("adding", true);
                 $("#editNeedPanel").data("kendoWindow").open().center();
-			} else if (e.id === "save") {
-				// common.log("saving center data " + JSON.stringify(clone));
-	            const item = this.get("item");
-				const clone = JSON.parse(JSON.stringify(item.needs));	// cheap way to get a deep clone
-				new Firebase(common.FirebaseUrl)
-					.child(item.refkey)
-					.child("needs")
-					.set(clone, error => {
-						if (error) {
-							common.errorToast("Needs data could not be saved." + error);
-						} else {
-							common.successToast("Needs data saved successfully.");
-						}
-					});
 			}
         }
+
+		private saveNeeds(): void {
+			// common.log("saving center data " + JSON.stringify(clone));
+			const item = this.get("item");
+			const clone = JSON.parse(JSON.stringify(item.needs));	// cheap way to get a deep clone
+			var ref = new Firebase(common.FirebaseUrl).child(item.refkey);
+			ref.child("needs")
+				.set(clone, error => {
+					if (error) {
+						common.errorToast("Needs data could not be saved." + error);
+					} else {
+						common.successToast("Needs data saved successfully.");
+						ref.update({ lastModified: new Date().toISOString() });
+					}
+				});
+		}
 
         public onEdit(e: any): void {
             // popup a dialog box to edit the value
@@ -55,7 +57,7 @@ module hfc {
             const listView = $("#needsList").data("kendoListView");
             const elem = listView.select()[0];
             $(elem)
-				.find("button.confirmRemove")
+				.find("button.confirmRemoveNeed")
 				.animate({ display: "inline", width: "70px", opacity: 1.0 }, 400); 
         }
 
@@ -66,13 +68,14 @@ module hfc {
             const item = this.item.needs[index];
             this.item.needs.remove(item);
 			this.reorderItems();
-       }
+	        this.saveNeeds();
+        }
 
         public onItemSelected(e: any): void {
             //var listView = $('#needsList').data("kendoListView");
             //var index = listView.select().index();
             //var item = listView.dataSource.view()[index];
-            $(".needItem button.confirmRemove").each(function () {
+            $(".needItem button.confirmRemoveNeed").each(function () {
                 const op = $(this).css("opacity");
                 if (op > "0") {
                     $(this).animate({ display: "none", width: "0px", opacity: 0 }, 200);
@@ -110,6 +113,7 @@ module hfc {
                     needs.remove(need);
                     needs.splice(newIndex, 0, need); // insert at new index
 					needsvm.instance.reorderItems();
+					window.setTimeout(() => { needsvm.instance.saveNeeds() }, 1);	// background save
                 }
             });
         }
@@ -122,6 +126,7 @@ module hfc {
 				this.set("adding", false);
 	        }
 	        $("#editNeedPanel").data("kendoWindow").close();
+			this.saveNeeds();
         }
 
         public init(): void {

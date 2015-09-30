@@ -15,15 +15,18 @@ var hfc;
             var _this = this;
             _super.call(this);
             this.toolbarVisible = false;
+            this.isAdmin = false;
             this.blankView = new kendo.View("<div/>");
             this.centers = new kendo.data.ObservableArray([]);
             this.item = { name: "" };
             this.layout = new kendo.Layout("<div id='viewContent'/>");
             var that = this;
             $.subscribe("loggedIn", function (ref) {
+                var isadmin = hfc.common.hasRole("admin");
+                _this.set("isAdmin", isadmin);
                 ref.child("centers").on("value", function (data) {
                     that.centers.length = 0; // clear the current array
-                    // join in the user's favorited centers, and add each to the collection
+                    // join in the user's centers, and add each to the collection
                     if (hfc.common.User) {
                         var key = data.key();
                         var all = [];
@@ -31,18 +34,18 @@ var hfc;
                         data.forEach(function (v) {
                             var c = v.val();
                             c.refkey = key + "/" + v.key();
-                            c.favorite = $.inArray(c.centerid, hfc.common.User.favorites) >= 0;
-                            c.canEdit = $.inArray(c.centerid, hfc.common.User.centers) >= 0;
+                            c.canEdit = isadmin || $.inArray(c.centerid, hfc.common.User.centers) >= 0;
                             if (!c.needs)
                                 c.needs = [];
+                            if (!c.centertype)
+                                c.centertype = hfc.common.CenterTypes[0];
                             c.onShowRemove = function (e) { _this.onShowRemove(e); };
                             c.onRemove = function (e) { _this.onRemove(e); };
+                            c.isAdmin = _this.get("isAdmin");
                             all.push(c);
                         });
                         all.sort(function (a, b) {
-                            if (a.favorite === b.favorite)
-                                return a.name.localeCompare(b.name);
-                            return a.favorite ? -1 : 1;
+                            return a.name.localeCompare(b.name);
                         });
                         all.forEach(function (v) {
                             if (v.canEdit)
@@ -51,21 +54,15 @@ var hfc;
                     }
                 });
             });
-            that.centers.bind("change", function (e) {
-                if (e.action === "itemchange" && e.field === "favorite") {
-                    // so change the user's favorites and persist
-                    hfc.common.User.favorites = that.centers
-                        .filter(function (v) { return v.favorite; })
-                        .map(function (v) { return v.centerid; });
-                    //hfc.common.log("favorites are " + JSON.stringify(common.User.favorites));
-                    $.publish("saveFavorites");
-                }
-            });
         }
         managevm.prototype.doAction = function (e) {
             if (e.id === "addcenter") {
+                if (!this.get("isAdmin")) {
+                    hfc.common.errorToast("Insufficient privilege to create a center. Must be an Admin.");
+                    return;
+                }
                 var center = {
-                    name: "New Center",
+                    name: " New Center",
                     hours: "",
                     phone: "",
                     site: "",
@@ -77,7 +74,8 @@ var hfc;
                         type: "Point"
                     },
                     lastModified: new Date().toISOString(),
-                    centerid: kendo.guid()
+                    centerid: kendo.guid(),
+                    centertype: hfc.common.CenterTypes[0]
                 };
                 // first, add the new center to this user's authorized centers
                 var user = hfc.common.User;
@@ -136,7 +134,6 @@ var hfc;
             $(elem)
                 .find(".confirmRemove")
                 .animate({ width: "70px", height: "100%", opacity: 1.0 }, 400);
-            // display: "inline", 
         };
         managevm.prototype.onRemove = function (e) {
             // find which item is selected
@@ -145,8 +142,10 @@ var hfc;
             var item = this.centers[index];
             this.layout.showIn("#viewContent", this.blankView, "swap");
             this.set("toolbarVisible", false);
-            // remove on Firebase (and it may remove from centers list by callback)
-            new Firebase(hfc.common.FirebaseUrl).child(item.refkey).set(null); // remove the item
+            // remove on Firebase (and it will remove from centers list by callback)
+            new Firebase(hfc.common.FirebaseUrl)
+                .child(item.refkey)
+                .set(null); // remove the item
         };
         managevm.prototype.tabToggle = function (e) {
             this.tabView(e.id);

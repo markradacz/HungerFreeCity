@@ -5,6 +5,7 @@
 module hfc {
     export class managevm extends kendo.data.ObservableObject {
         public toolbarVisible = false;
+		public isAdmin = false;
         public needsView: kendo.View;
         public centerView: kendo.View;
         public locationView: kendo.View;
@@ -16,8 +17,12 @@ module hfc {
 
         public doAction(e: any): void {
             if (e.id === "addcenter") {
+				if (!this.get("isAdmin")) {
+					common.errorToast("Insufficient privilege to create a center. Must be an Admin.");
+					return;
+				}
 				const center = {
-					name: "New Center",
+					name: " New Center",
 					hours: "",
 					phone: "",
 					site: "",
@@ -29,7 +34,8 @@ module hfc {
 						type: "Point"
 					},
 					lastModified: new Date().toISOString(),
-					centerid: kendo.guid()
+					centerid: kendo.guid(),
+					centertype: hfc.common.CenterTypes[0]
 				};
 
 				// first, add the new center to this user's authorized centers
@@ -55,7 +61,6 @@ module hfc {
 						common.errorToast( "Error saving: " + error);
 					}					
 				});
-
             }
         }
 
@@ -95,7 +100,6 @@ module hfc {
 			$(elem)
 				.find(".confirmRemove")
 				.animate({ width: "70px", height: "100%", opacity: 1.0 }, 400);
-			// display: "inline", 
         }
 
 		public onRemove(e: any): void {
@@ -107,8 +111,10 @@ module hfc {
 			this.layout.showIn("#viewContent", this.blankView, "swap");
 			this.set("toolbarVisible", false);
 
-			// remove on Firebase (and it may remove from centers list by callback)
-			new Firebase(common.FirebaseUrl).child(item.refkey).set(null); // remove the item
+			// remove on Firebase (and it will remove from centers list by callback)
+			new Firebase(common.FirebaseUrl)
+				.child(item.refkey)
+				.set(null); // remove the item
 		}
 
 		public tabToggle(e: any): void {
@@ -147,9 +153,12 @@ module hfc {
             super();
 			var that = this;
             $.subscribe("loggedIn", (ref: Firebase) => {
+				const isadmin = hfc.common.hasRole("admin");
+				this.set("isAdmin", isadmin);
+
                 ref.child("centers").on("value", data => {
 					that.centers.length = 0;	// clear the current array
-                    // join in the user's favorited centers, and add each to the collection
+                    // join in the user's centers, and add each to the collection
                     if (common.User) {
 						var key = data.key();
 	                    var all = [];
@@ -157,34 +166,23 @@ module hfc {
 						data.forEach(v => {
 							var c = v.val();
 							c.refkey = key + "/" + v.key();
-                            c.favorite = $.inArray(c.centerid, common.User.favorites) >= 0;
-                            c.canEdit = $.inArray(c.centerid, common.User.centers) >= 0;
+                            c.canEdit = isadmin || $.inArray(c.centerid, hfc.common.User.centers) >= 0;
 							if (!c.needs) c.needs = [];
+							if (!c.centertype) c.centertype = hfc.common.CenterTypes[0];
 							c.onShowRemove = e => { this.onShowRemove(e); }
 							c.onRemove = e => { this.onRemove(e); }
+							c.isAdmin = this.get("isAdmin");
 							all.push(c);
 						});
 						all.sort((a: any, b: any) => {
-							if (a.favorite === b.favorite) return a.name.localeCompare(b.name);
-							return a.favorite ? -1 : 1;
+							return a.name.localeCompare(b.name);
 						});
-                        all.forEach( v => {
+                        all.forEach(v => {
 							if(v.canEdit) that.centers.push(v);
                         });
                     }
                 });
             });
-
-			that.centers.bind("change", e => {
-				if (e.action === "itemchange" && e.field === "favorite") {
-					// so change the user's favorites and persist
-					hfc.common.User.favorites = that.centers
-						.filter((v: any) => v.favorite)
-						.map((v: any) => v.centerid);
-					//hfc.common.log("favorites are " + JSON.stringify(common.User.favorites));
-					$.publish("saveFavorites");
-				}
-			});
         }
     }
 }

@@ -89,7 +89,12 @@ var hfc;
         User
         -----------------------------------------------------*/
         common.User = null;
-        common.FirebaseUrl = 'https://amber-torch-2255.firebaseio.com/';
+        common.FirebaseUrl = 'https://hungerfreecity.firebaseio.com/';
+        common.CenterTypes = [
+            { id: "DONATE", name: "Donation Center", description: "Collects donations and delivers to a local Food Bank" },
+            { id: "PANTRY", name: "Food Pantry", description: "Food Pantry collects donations for their own distribution, and delivers to a local Food Bank" },
+            { id: "BANK", name: "Food Bank", description: "Collects donations and distributes to folks in need through multiple outlets" }
+        ];
         return common;
     })(kendo.data.ObservableObject);
     hfc.common = common;

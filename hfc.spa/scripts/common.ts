@@ -12,7 +12,13 @@ module hfc {
 			return common.User && common.User.roles && common.User.roles.indexOf(role) >= 0;
 		}
 
-        public static FirebaseUrl: string = 'https://amber-torch-2255.firebaseio.com/';
+        public static FirebaseUrl: string = 'https://hungerfreecity.firebaseio.com/';
+
+		public static CenterTypes = [
+			{ id: "DONATE", name: "Donation Center", description: "Collects donations and delivers to a local Food Bank" },
+			{ id: "PANTRY", name: "Food Pantry", description: "Food Pantry collects donations for their own distribution, and delivers to a local Food Bank" },
+			{ id: "BANK", name: "Food Bank", description: "Collects donations and distributes to folks in need through multiple outlets" }
+		];
 
 		public static animate(jelement: JQuery, type?: string) {
             var wrapper = kendo.fx(jelement);

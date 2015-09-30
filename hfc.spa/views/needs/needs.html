@@ -4,8 +4,7 @@
     data-items='[{
         type: "buttonGroup",
         buttons: [
-            { spriteCssClass: "fa fa-plus", text: " ADD NEED", "id": "add" },
-            { spriteCssClass: "fa fa-floppy-o", text: " SAVE", "id": "save" }
+            { spriteCssClass: "fa fa-plus", text: " ADD NEED", "id": "add" }
         ]
     }]'>
 </div>
@@ -19,7 +18,7 @@
 </div>
 <script type="text/x-kendo-tmpl" id="needItemTemplate">
     <div class="needItem">
-        <button class="confirmRemove" data-bind="click: onRemove">REMOVE</button>
+        <button class="confirmRemoveNeed" data-bind="click: onRemove">REMOVE</button>
         <span class="needIndex" data-bind="text: index" />
         <span data-bind="text: name" />
         <span class="fa fa-lg fa-bars" />

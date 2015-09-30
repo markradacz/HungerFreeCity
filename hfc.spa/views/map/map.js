@@ -101,7 +101,7 @@ var hfc;
                         _this.showInfo(ctr, marker);
                     });
                     _this.markers.push(marker);
-                }, i * 300, c);
+                }, (i * 1000) / (i + 1), c);
             });
         };
         mapvm.prototype.showInfo = function (center, marker) {

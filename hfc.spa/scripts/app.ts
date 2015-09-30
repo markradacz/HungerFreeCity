@@ -158,7 +158,7 @@ module hfc {
                     this.showError(error);
                 } else {
 					// save the user's profile
-					common.User = {
+					hfc.common.User = {
 						userId: userData.uid,
 						firstName: firstName,
 						lastName: lastName,
@@ -167,7 +167,7 @@ module hfc {
 						centers: [],
 						roles: ["user"]
                     };
-					this.ref.child("users").child(userData.uid).set(common.User);
+					this.ref.child("users").child(userData.uid).set(hfc.common.User);
 
                     hfc.common.successToast("Successfully registered");
                     this.loginButtonClick(e);
@@ -290,7 +290,7 @@ module hfc {
             if (common.User) {
                 hfc.common.successToast("Welcome " + common.User.email);
                 this.set("loggedIn", true);
-				this.set("isManager", common.hasRole("manager"));
+				this.set("isManager", common.hasRole("manager") || common.hasRole("admin"));
 				this.set("isAdmin", common.hasRole("admin"));
                 this.set("email", common.User.email);
                 this.set("firstName", common.User.firstName);

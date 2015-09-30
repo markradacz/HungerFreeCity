@@ -4,7 +4,7 @@
             <h1 data-bind="appearAnimation: slideDown">Centers</h1>
             <div class="tabtoolbar"
                  data-role="toolbar"
-                 data-bind="events: { click: doAction }"
+                 data-bind="visible: isAdmin, events: { click: doAction }"
                  data-items='[{
                     type: "buttonGroup",
                     buttons: [
@@ -41,11 +41,7 @@
                                 </dl>
                             </td>
 							<td style="vertical-align: top; text-align: center; width: 20px;">
-								<label class="favorite-star">
-									<input type="checkbox" data-bind="checked: favorite" />
-									<span class="fa fa-2x"></span>
-								</label><br/>
-                                <a class="removeIcon" data-bind="click: onShowRemove"><span class="fa fa-2x fa-trash" /></a>
+                                <a class="removeIcon" data-bind="visible: isAdmin, click: onShowRemove"><span class="fa fa-2x fa-trash" /></a>
 							</td>
 						</tr>
 					</table>
