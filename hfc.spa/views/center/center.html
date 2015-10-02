@@ -64,7 +64,12 @@
 
         <div>
             <label class="k-edit-label">Type</label>
-            <div data-bind="text: editItem.centertype.name"></div>
+            <input class="k-combobox"data-min-width="300" data-role="combobox"
+                   data-value-primitive="false"
+                   data-placeholder="Choose Type"
+                   data-text-field="name"
+                   data-value-field="id"
+                   data-bind="value: editItem.centertype, source: CenterTypes" />
         </div>
 
         <div>

@@ -35,7 +35,7 @@ module hfc {
 					},
 					lastModified: new Date().toISOString(),
 					centerid: kendo.guid(),
-					centertype: hfc.common.CenterTypes[0]
+					centertype: hfc.common.CenterTypes[0].id
 				};
 
 				// first, add the new center to this user's authorized centers
@@ -168,7 +168,7 @@ module hfc {
 							c.refkey = key + "/" + v.key();
                             c.canEdit = isadmin || $.inArray(c.centerid, hfc.common.User.centers) >= 0;
 							if (!c.needs) c.needs = [];
-							if (!c.centertype) c.centertype = hfc.common.CenterTypes[0];
+							if (!c.centertype) c.centertype = hfc.common.CenterTypes[0].id;
 							c.onShowRemove = e => { this.onShowRemove(e); }
 							c.onRemove = e => { this.onRemove(e); }
 							c.isAdmin = this.get("isAdmin");

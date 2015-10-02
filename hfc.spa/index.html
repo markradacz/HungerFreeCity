@@ -13,7 +13,7 @@
     <link href="https://kendo.cdn.telerik.com/2015.2.805/styles/kendo.bootstrap.min.css" rel="stylesheet" />
     <link href="https://kendo.cdn.telerik.com/2015.2.805/styles/kendo.silver.min.css" rel="stylesheet" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" />
-    <link href="content/hfc.css" rel="stylesheet" />
+    <link href="hfc.css" rel="stylesheet" />
     <style type="text/css">
         .loader {
             position: fixed;
@@ -107,6 +107,9 @@
                     <input type="text" class="k-textbox" data-min-width="300" data-bind="value: lastName" placeholder="Last Name" style="width: 100%;" />
                 </div>
                 <div>
+                    <input type="text" class="k-textbox" data-min-width="300" data-bind="value: phone" placeholder="Mobile Phone Number" style="width: 100%;" />
+                </div>
+               <div>
                     <input type="email" class="k-textbox" data-min-width="300" data-bind="value: email" placeholder="Email Address" style="width: 100%;" />
                 </div>
                 <div>
@@ -161,6 +164,10 @@
                 <div>
                     <label>Last Name</label>
                     <input type="text" class="k-textbox" data-bind="value: lastName" placeholder="Last Name" style="width: 100%;" />
+                </div>
+                <div>
+                    <label>Mobile Phone Number</label>
+                    <input type="text" class="k-textbox" data-bind="value: phone" placeholder="Mobile Phone Number" style="width: 100%;" />
                 </div>
                 <div>
                     <button data-role="button" class="k-primary" data-bind="click: saveUserData" style="width: 100%;">

@@ -56,7 +56,7 @@
     <Content Include="Views\location\location.js" />
     <Content Include="Views\needs\needs.js.map" />
     <Content Include="Views\location\location.js.map" />
-    <Content Include="Content\hfc.css" />
+    <Content Include="hfc.css" />
     <Content Include="favicon.ico" />
     <Content Include="index.html" />
     <Content Include="Scripts\liveSetup.js" />

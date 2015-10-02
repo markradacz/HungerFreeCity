@@ -80,6 +80,7 @@ var hfc;
         appvm.prototype.saveUserData = function (e) {
             var firstName = this.get("firstName");
             var lastName = this.get("lastName");
+            var phone = this.get("phone");
             if (firstName == null || firstName === "") {
                 hfc.common.errorToast("Please provide a First Name");
                 return;
@@ -98,10 +99,14 @@ var hfc;
                 hfc.common.User.lastName = lastName;
                 mod = true;
             }
+            if (hfc.common.User.phone !== phone) {
+                hfc.common.User.phone = phone;
+                mod = true;
+            }
             if (mod) {
                 // save the user's profile
                 this.ref.child("users").child(hfc.common.User.userId).set(hfc.common.User);
-                hfc.common.successToast("Update User information successfully");
+                hfc.common.successToast("User information updated");
             }
             this.closePanel("#userPanel");
         };
@@ -129,6 +134,7 @@ var hfc;
             var lastName = this.get("lastName");
             var email = this.get("email");
             var password = this.get("password");
+            var phone = this.get("phone");
             // validate registration
             if (firstName == null || firstName === "") {
                 hfc.common.errorToast("Please provide a First Name");
@@ -154,19 +160,32 @@ var hfc;
                     _this.showError(error);
                 }
                 else {
-                    // save the user's profile
-                    hfc.common.User = {
-                        userId: userData.uid,
-                        firstName: firstName,
-                        lastName: lastName,
-                        email: userData.password.email,
-                        favorites: [],
-                        centers: [],
-                        roles: ["user"]
-                    };
-                    _this.ref.child("users").child(userData.uid).set(hfc.common.User);
-                    hfc.common.successToast("Successfully registered");
-                    _this.loginButtonClick(e);
+                    // login
+                    _this.ref.authWithPassword({
+                        email: email,
+                        password: password
+                    }, function (error, authData) {
+                        if (error) {
+                            _this.showError(error);
+                        }
+                        else {
+                            // save the user's profile
+                            hfc.common.User = {
+                                userId: userData.uid,
+                                firstName: firstName,
+                                lastName: lastName,
+                                phone: phone,
+                                email: email,
+                                favorites: [],
+                                centers: [],
+                                roles: ["user"]
+                            };
+                            _this.ref.child("users").child(userData.uid).set(hfc.common.User);
+                            hfc.common.successToast("Successfully registered");
+                            _this.closePanel("#loginPanel");
+                            _this.setlogin();
+                        }
+                    });
                 }
             });
         };
@@ -195,7 +214,7 @@ var hfc;
                     _this.showError(error);
                 }
                 else {
-                    hfc.common.successToast("Password reset email sent successfully");
+                    hfc.common.successToast("Password reset email sent");
                     _this.closePanel("#loginPanel");
                 }
             });
@@ -232,15 +251,7 @@ var hfc;
                 this.set("userId", authData.uid);
                 var uref = this.ref.child("users").child(authData.uid).ref();
                 uref.once("value", function (userData) {
-                    var data = userData.val() || {
-                        userId: null,
-                        firstName: "n/a",
-                        lastName: "n/a",
-                        email: authData.password.email,
-                        favorites: [],
-                        centers: [],
-                        roles: ["user"]
-                    };
+                    var data = userData.val();
                     var mod = false;
                     if (data.userId === null) {
                         data.userId = authData.uid;
@@ -250,12 +261,16 @@ var hfc;
                         data.email = authData.password.email;
                         mod = true;
                     }
+                    if (data.phone === undefined) {
+                        data.phone = _this.get("phone") ? _this.get("phone") : "n/a";
+                        mod = true;
+                    }
                     if (data.firstName === undefined) {
-                        data.firstName = _this.firstName ? _this.firstName : "n/a";
+                        data.firstName = _this.get("firstName") ? _this.get("firstName") : "n/a";
                         mod = true;
                     }
                     if (data.lastName === undefined) {
-                        data.lastName = _this.lastName ? _this.lastName : "n/a";
+                        data.lastName = _this.get("lastName") ? _this.get("lastName") : "n/a";
                         mod = true;
                     }
                     if (data.favorites === undefined) {
@@ -288,6 +303,7 @@ var hfc;
                 this.set("isManager", hfc.common.hasRole("manager") || hfc.common.hasRole("admin"));
                 this.set("isAdmin", hfc.common.hasRole("admin"));
                 this.set("email", hfc.common.User.email);
+                this.set("phone", hfc.common.User.phone);
                 this.set("firstName", hfc.common.User.firstName);
                 this.set("lastName", hfc.common.User.lastName);
                 $.publish("loggedIn", [this.ref]);
@@ -296,8 +312,6 @@ var hfc;
                 this.set("loggedIn", false);
                 this.set("isManager", false);
                 this.set("isAdmin", false);
-                //this.set('email', "");
-                //this.set('password', "");
                 hfc.common.successToast("Logged off");
                 $.publish("loggedOff");
             }

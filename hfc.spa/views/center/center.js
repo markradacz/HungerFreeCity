@@ -14,6 +14,7 @@ var hfc;
         function centervm() {
             _super.apply(this, arguments);
             this.editItem = {};
+            this.CenterTypes = hfc.common.CenterTypes;
         }
         centervm.prototype.doAction = function (e) {
             if (e.id === "edit") {

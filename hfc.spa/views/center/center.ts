@@ -6,6 +6,7 @@ module hfc {
     export class centervm extends kendo.data.ObservableObject {
         public item: any;
         public editItem: any = {};
+		public CenterTypes = hfc.common.CenterTypes;
 
 		public doAction(e: any): void {
             if (e.id === "edit") {

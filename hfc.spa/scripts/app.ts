@@ -8,6 +8,7 @@ module hfc {
         public firstName: string;
         public lastName: string;
         public email: string;
+        public phone: string;
         public password: string;
         public loggedIn = false;
         public isManager = false;
@@ -76,6 +77,7 @@ module hfc {
 		public saveUserData(e: any): void {
 			const firstName = this.get("firstName");
             const lastName = this.get("lastName");
+            const phone = this.get("phone");
 
 			if (firstName == null || firstName === "") {
                 hfc.common.errorToast("Please provide a First Name");
@@ -96,11 +98,15 @@ module hfc {
 				common.User.lastName = lastName;
 				mod = true;
 			}
+			if (common.User.phone !== phone) {
+				common.User.phone = phone;
+				mod = true;
+			}
 
 			if (mod) {
 				// save the user's profile
-				this.ref.child("users").child(common.User.userId).set(common.User);	
-				hfc.common.successToast("Update User information successfully");
+				this.ref.child("users").child(hfc.common.User.userId).set(hfc.common.User);	
+				hfc.common.successToast("User information updated");
 			}
 			this.closePanel("#userPanel");
 		}
@@ -117,7 +123,7 @@ module hfc {
         public logoff(): void {
             // Unauthenticate the client
             this.ref.unauth();
-            common.User = null;
+            hfc.common.User = null;
             this.setlogin();
         }
 
@@ -131,6 +137,7 @@ module hfc {
             const lastName = this.get("lastName");
             const email = this.get("email");
             const password = this.get("password");
+            const phone = this.get("phone");
 
             // validate registration
 			if (firstName == null || firstName === "") {
@@ -157,20 +164,32 @@ module hfc {
                 if (error) {
                     this.showError(error);
                 } else {
-					// save the user's profile
-					hfc.common.User = {
-						userId: userData.uid,
-						firstName: firstName,
-						lastName: lastName,
-                        email: userData.password.email,
-                        favorites: [],
-						centers: [],
-						roles: ["user"]
-                    };
-					this.ref.child("users").child(userData.uid).set(hfc.common.User);
+					// login
+					this.ref.authWithPassword({
+						email: email,
+						password: password
+					}, (error, authData) => {
+						if (error) {
+							this.showError(error);
+						} else {
+							// save the user's profile
+							hfc.common.User = {
+								userId: userData.uid,
+								firstName: firstName,
+								lastName: lastName,
+								phone: phone,
+								email: email,
+								favorites: [],
+								centers: [],
+								roles: ["user"]
+							};
+							this.ref.child("users").child(userData.uid).set(hfc.common.User);
 
-                    hfc.common.successToast("Successfully registered");
-                    this.loginButtonClick(e);
+							hfc.common.successToast("Successfully registered");
+							this.closePanel("#loginPanel");
+							this.setlogin();
+						}
+					});
                 }
             });
         }
@@ -197,7 +216,7 @@ module hfc {
                 if (error) {
                     this.showError(error);
                 } else {
-                    common.successToast("Password reset email sent successfully");
+                    hfc.common.successToast("Password reset email sent");
                     this.closePanel("#loginPanel");
                 }
             });
@@ -236,15 +255,7 @@ module hfc {
                 this.set("userId", authData.uid);
 	            const uref = this.ref.child("users").child(authData.uid).ref();
 	            uref.once("value", userData => {
-	                var data = userData.val() || {
-						userId: null,	// set to null so users without a profile will get one
-						firstName: "n/a",
-						lastName: "n/a",
-                        email: authData.password.email,
-                        favorites: [],
-						centers: [],
-						roles: ["user"]
-                    };
+					var data = userData.val();
                     var mod = false;
                     if (data.userId === null) {
                         data.userId = authData.uid;
@@ -254,12 +265,16 @@ module hfc {
                         data.email = authData.password.email;
                         mod = true;
                     }
+                    if (data.phone === undefined) {
+                        data.phone = this.get("phone") ? this.get("phone") : "n/a";
+                        mod = true;
+                    }
                     if (data.firstName === undefined) {
-                        data.firstName = this.firstName ? this.firstName : "n/a";
+                        data.firstName = this.get("firstName") ? this.get("firstName") : "n/a";
                         mod = true;
                     }
                     if (data.lastName === undefined) {
-                        data.lastName = this.lastName ? this.lastName : "n/a";
+                        data.lastName = this.get("lastName") ? this.get("lastName") : "n/a";
                         mod = true;
                     }
                     if (data.favorites === undefined) {
@@ -276,7 +291,7 @@ module hfc {
                     }
 
                     if (mod) uref.set(data);
-                    common.User = data;
+                    hfc.common.User = data;
                     this.setlogin();
                 });
             }
@@ -287,21 +302,20 @@ module hfc {
         }
 
         private setlogin(): void {
-            if (common.User) {
+            if (hfc.common.User) {
                 hfc.common.successToast("Welcome " + common.User.email);
                 this.set("loggedIn", true);
-				this.set("isManager", common.hasRole("manager") || common.hasRole("admin"));
-				this.set("isAdmin", common.hasRole("admin"));
-                this.set("email", common.User.email);
-                this.set("firstName", common.User.firstName);
-                this.set("lastName", common.User.lastName);
+				this.set("isManager", hfc.common.hasRole("manager") || hfc.common.hasRole("admin"));
+				this.set("isAdmin", hfc.common.hasRole("admin"));
+                this.set("email", hfc.common.User.email);
+                this.set("phone", hfc.common.User.phone);
+                this.set("firstName", hfc.common.User.firstName);
+                this.set("lastName", hfc.common.User.lastName);
                 $.publish("loggedIn", [this.ref]);
             } else {
                 this.set("loggedIn", false);
 				this.set("isManager", false);
 				this.set("isAdmin", false);
-                //this.set('email', "");
-                //this.set('password', "");
                 hfc.common.successToast("Logged off");
                 $.publish("loggedOff");
             }
@@ -313,7 +327,7 @@ module hfc {
 				.child("users")
 				.child(userId)
 				.child("favorites")
-				.set(common.User.favorites);
+				.set(hfc.common.User.favorites);
 			hfc.common.successToast("Saved favorites");
         }
 

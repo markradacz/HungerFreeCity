@@ -38,7 +38,7 @@ var hfc;
                             if (!c.needs)
                                 c.needs = [];
                             if (!c.centertype)
-                                c.centertype = hfc.common.CenterTypes[0];
+                                c.centertype = hfc.common.CenterTypes[0].id;
                             c.onShowRemove = function (e) { _this.onShowRemove(e); };
                             c.onRemove = function (e) { _this.onRemove(e); };
                             c.isAdmin = _this.get("isAdmin");
@@ -75,7 +75,7 @@ var hfc;
                     },
                     lastModified: new Date().toISOString(),
                     centerid: kendo.guid(),
-                    centertype: hfc.common.CenterTypes[0]
+                    centertype: hfc.common.CenterTypes[0].id
                 };
                 // first, add the new center to this user's authorized centers
                 var user = hfc.common.User;
