@@ -17,6 +17,8 @@ var hfc;
         }
         needsvm.prototype.setup = function (item) {
             needsvm.instance = this;
+            if (!item.alignment)
+                item.alignment = "";
             this.set("item", item);
             this.reorderItems();
         };

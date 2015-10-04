@@ -369,10 +369,11 @@ define([
     "kendo",
     "/views/home/home.js",
     "/views/manage/manage.js",
-    //"/views/admin/admin.js"
-    "/views/users/users.js",
+    "/views/admin/admin.js",
+    //"/views/users/users.js",
+    "/views/about/about.js",
 	"async!https://maps.googleapis.com/maps/api/js?key=AIzaSyBBYD5QWtAgLlUEDApmcU007QZzSnTPCto&sensor=false"
-], (kendo, home, manage, admin) => {
+], (kendo, home, manage, admin, about) => {
     var vm = new hfc.appvm();
     kendo.bind("#applicationHost", vm);
     vm.init();
@@ -395,6 +396,9 @@ define([
     // Add routes...
     router.route("/", () => {
 	    layout.showIn("#viewRoot", home);
+    });
+    router.route("/about", () => {
+		layout.showIn("#viewRoot", about);
     });
     router.route("/manage", () => {
 		if (hfc.common.hasRole("manager") || hfc.common.hasRole("admin"))

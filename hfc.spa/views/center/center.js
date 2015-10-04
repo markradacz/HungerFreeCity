@@ -13,35 +13,33 @@ var hfc;
         __extends(centervm, _super);
         function centervm() {
             _super.apply(this, arguments);
-            this.editItem = {};
+            this.canEdit = false;
             this.CenterTypes = hfc.common.CenterTypes;
         }
         centervm.prototype.doAction = function (e) {
+            var _this = this;
             if (e.id === "edit") {
-                var clone = JSON.parse(JSON.stringify(this.get("item"))); // cheap way to get a deep clone
-                this.set("editItem", clone);
-                // popup a dialog box to edit the value
-                $("#editCenterPanel").data("kendoWindow").open().center();
+                this.set("canEdit", true);
             }
-        };
-        centervm.prototype.saveButtonClick = function (e) {
-            this.set("item", this.get("editItem"));
-            // Save the record
-            var clone = JSON.parse(JSON.stringify(this.get("item"))); // cheap way to get a deep clone
-            delete clone.favorite; // remove this property
-            clone.lastModified = new Date().toISOString();
-            // common.log("saving center data " + JSON.stringify(clone));
-            new Firebase(hfc.common.FirebaseUrl)
-                .child(this.get("item").refkey)
-                .update(clone, function (error) {
-                if (error) {
-                    hfc.common.errorToast("Data could not be saved." + error);
-                }
-                else {
-                    hfc.common.successToast("Center saved successfully.");
-                }
-                $("#editCenterPanel").data("kendoWindow").close();
-            });
+            else if (e.id === "save") {
+                // Save the record
+                var clone = JSON.parse(JSON.stringify(this.get("item"))); // cheap way to get a deep clone
+                delete clone.favorite; // remove this property
+                delete clone.refkey; // remove this property
+                clone.lastModified = new Date().toISOString();
+                // common.log("saving center data " + JSON.stringify(clone));
+                new Firebase(hfc.common.FirebaseUrl)
+                    .child(this.get("item").refkey)
+                    .update(clone, function (error) {
+                    if (error) {
+                        hfc.common.errorToast("Data could not be saved." + error);
+                    }
+                    else {
+                        hfc.common.successToast("Center saved successfully.");
+                        _this.set("canEdit", false);
+                    }
+                });
+            }
         };
         centervm.prototype.setup = function (item) {
             this.set("item", item);

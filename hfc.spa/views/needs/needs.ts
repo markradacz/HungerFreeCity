@@ -8,9 +8,11 @@ module hfc {
         public need: any = null;
         public item: any;
 		public adding: boolean;
+		public centers: any[];
  
         public setup(item): void {
             needsvm.instance = this;
+	        if (!item.alignment) item.alignment = "";
 			this.set("item", item);
 			this.reorderItems();
         }

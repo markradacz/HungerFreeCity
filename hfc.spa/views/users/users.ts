@@ -6,15 +6,15 @@ module hfc {
     export class usersvm extends kendo.data.ObservableObject {
         public users = new kendo.data.ObservableArray([]);
         public user: any = { email: "", centers: [], roles: [] };
-		public canEdit: boolean = false;
-		public canView: boolean = false;
+		public canEdit = false;
+		public canView = false;
 		public allRoles: string[] = ["user", "admin", "manager"];
 		public centers: any[] = [];
 
         public showUser(e: any) {
-            var listView = $(e.sender.element).data("kendoListView");
-            var index = listView.select().index();
-            var user = this.users[index];
+	        const listView = $(e.sender.element).data("kendoListView");
+			const index = listView.select().index();
+            const user = this.users[index];
 			this.set("user", user);
 			this.set("canView", true);
 			this.set("canEdit", false);
@@ -25,7 +25,7 @@ module hfc {
 				this.set("canEdit", true);
 			} else if (e.id === "save") {
 				// Save the record
-				var clone = JSON.parse(JSON.stringify(this.get("user")));	// cheap way to get a deep clone
+				const clone = JSON.parse(JSON.stringify(this.get("user")));	// cheap way to get a deep clone
 				clone.lastModified = new Date().toISOString();
 
 				new Firebase(common.FirebaseUrl)

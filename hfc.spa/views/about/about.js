@@ -9,17 +9,15 @@ var hfc;
         __extends(aboutvm, _super);
         function aboutvm() {
             _super.apply(this, arguments);
-            this.title = "About";
         }
         aboutvm.prototype.init = function () {
-            //super.init();
         };
         return aboutvm;
     })(kendo.data.ObservableObject);
     hfc.aboutvm = aboutvm;
 })(hfc || (hfc = {}));
 define([
-    "text!../views/about/about.html"
+    "text!/views/about/about.html"
 ], function (template) {
     var vm = new hfc.aboutvm();
     var view = new kendo.View(template, {

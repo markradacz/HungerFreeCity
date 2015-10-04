@@ -30,7 +30,7 @@ module hfc {
 }
 
 define([
-    "text!../views/admin/admin.html",
+    "text!/views/admin/admin.html",
     "/views/users/users.js"
 ], (template, users) => {
     var vm = new hfc.adminvm();

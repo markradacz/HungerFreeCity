@@ -4,109 +4,44 @@
      data-items='[{
         type: "buttonGroup",
         buttons: [
-            { spriteCssClass: "fa fa-pencil", text: " EDIT", "id": "edit" }
+            { spriteCssClass: "fa fa-pencil", text: " EDIT", "id": "edit" },
+            { spriteCssClass: "fa fa-floppy-o", text: " SAVE", "id": "save" }
         ]
     }]'>
 </div>
 
-<h3>Address</h3>
-<div data-bind="text: item.address.address1"></div>
-<div data-bind="text: item.address.address2"></div>
-<div>
-    <span data-bind="text: item.address.city"></span>
-    <span data-bind="text: item.address.state"></span>
-    <span data-bind="text: item.address.zipcode"></span>
-</div>
+<h3>Name</h3>
+<input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.name, enabled: canEdit" placeholder="Name" style="width: 100%" />
 
 <h3>Phone</h3>
-<div data-bind="text: item.phone"></div>
+<input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.phone, enabled: canEdit" placeholder="Phone" style="width: 100%" />
 
 <h3>Type</h3>
-<div data-bind="text: item.centertype.name"></div>
-<div data-bind="text: item.centertype.description"></div>
+<input class="k-combobox"data-min-width="300" data-role="combobox" style="width: 100%"
+        data-value-primitive="false"
+        data-placeholder="Choose Type"
+        data-text-field="name"
+        data-value-field="id"
+        data-bind="value: item.centertype, source: CenterTypes, enabled: canEdit" />
 
 <h3>Hours</h3>
-<div data-bind="text: item.hours"></div>
+<input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.hours, enabled: canEdit" placeholder="Hours" style="width: 100%" />
 
-<h3>Site</h3>
-<div data-bind="text: item.site"></div>
+<h3>Site URL</h3>
+<input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.site, enabled: canEdit" placeholder="Site URL" style="width: 100%" />
+
+<h3>Address</h3>
+<div>
+    <input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.address.address1, enabled: canEdit" placeholder="Address" style="width: 100%" />
+</div>
+<div>
+    <input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.address.address2, enabled: canEdit" placeholder="Address 2" style="width: 100%" />
+</div>
+<div>
+    <input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.address.city, enabled: canEdit" placeholder="City" />
+    <input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.address.state, enabled: canEdit" placeholder="State" />
+    <input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.address.zipcode, enabled: canEdit" placeholder="Zip" />
+</div>
 
 <h3>Notes</h3>
-<div data-role="listview"
-     data-selectable="false"
-     data-template="centerItemTemplate"
-     data-bind="source: item.centerinfo">
-</div>
-<script type="text/x-kendo-tmpl" id="centerItemTemplate">
-    <div data-bind="text: name" />
-</script>
-
-<div id="editCenterPanel" style="display: none"
-     data-role="window"
-     data-title="EDIT CENTER"
-     data-draggable="true"
-     data-modal="true"
-     data-scrollable="false"
-     data-pinned="false"
-     data-resizable="false"
-     data-position='{ top: "50%", left: "50%" }'
-     data-visible="false"
-     class="editPanel">
-    <div>
-        <div>
-            <label class="k-edit-label">Name</label>
-            <input type="text" class="k-textbox" data-min-width="300" data-bind="value: editItem.name" placeholder="Name" />
-        </div>
-        <div>
-            <label class="k-edit-label">Phone</label>
-            <input type="text" class="k-textbox" data-min-width="300" data-bind="value: editItem.phone" placeholder="Phone"/>
-        </div>
-
-        <div>
-            <label class="k-edit-label">Type</label>
-            <input class="k-combobox"data-min-width="300" data-role="combobox"
-                   data-value-primitive="false"
-                   data-placeholder="Choose Type"
-                   data-text-field="name"
-                   data-value-field="id"
-                   data-bind="value: editItem.centertype, source: CenterTypes" />
-        </div>
-
-        <div>
-            <label class="k-edit-label">Hours</label>
-            <input type="text" class="k-textbox" data-min-width="300" data-bind="value: editItem.hours" placeholder="Hours" />
-        </div>
-        <div>
-            <label class="k-edit-label">Site URL</label>
-            <input type="text" class="k-textbox" data-min-width="300" data-bind="value: editItem.site" placeholder="Site URL" />
-        </div>
-        <div>
-            <label class="k-edit-label">Address</label>
-            <input type="text" class="k-textbox" data-min-width="300" data-bind="value: editItem.address.address1" placeholder="Address" />
-        </div>
-        <div>
-            <label class="k-edit-label">Address 2</label>
-            <input type="text" class="k-textbox" data-min-width="300" data-bind="value: editItem.address.address2" placeholder="Address 2" />
-        </div>
-        <div>
-            <label class="k-edit-label">City</label>
-            <input type="text" class="k-textbox" data-min-width="300" data-bind="value: editItem.address.city" placeholder="City" />
-        </div>
-        <div>
-            <label class="k-edit-label">State</label>
-            <input type="text" class="k-textbox" data-min-width="300" data-bind="value: editItem.address.state" placeholder="State" />
-        </div>
-        <div>
-            <label class="k-edit-label">Zip</label>
-            <input type="text" class="k-textbox" data-min-width="300" data-bind="value: editItem.address.zipcode" placeholder="Zip" />
-        </div>
-        <div>
-            <label class="k-edit-label">Notes</label>
-            <textarea class="k-textbox" rows="6" data-min-width="300" data-bind="combine: editItem.centerinfo" placeholder="Notes" style="width: 248px;"></textarea>
-        </div>
-
-        <button id="button" data-role="button" class="k-primary" data-bind="click: saveButtonClick" style="width: 100%;">
-            <span class="fa fa-floppy-o"></span><span> Save</span>
-        </button>
-    </div>
-</div>
+<textarea class="k-textbox" rows="6" data-min-width="300" data-bind="combine: item.centerinfo, enabled: canEdit" placeholder="Notes" style="width: 100%;"></textarea>

@@ -6,6 +6,8 @@
 			"scripts/common.js",
 			"Views/home/home.html",
 			"Views/home/home.js",
+			"Views/about/about.html",
+			"Views/about/about.js",
 			"Views/favorites/favorites.html",
 			"Views/favorites/favorites.js",
 			"Views/map/map.html",
