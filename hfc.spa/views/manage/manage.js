@@ -113,7 +113,7 @@ var hfc;
                     $(this).animate({ width: 0, height: "100%", opacity: 0 }, 200);
                 }
             });
-            this.needsView.model.setup(item);
+            this.needsView.model.setup(item, this.centers);
             this.centerView.model.setup(item);
             this.locationView.model.setup(item);
             // select the Needs button in the toolbar if there isn't anything selected

@@ -13,14 +13,15 @@ module hfc {
 				this.set("canEdit", true);
 			} else if (e.id === "save") {
 				// Save the record
-				const clone = JSON.parse(JSON.stringify(this.get("item")));	// cheap way to get a deep clone
+				const item = this.get("item");
+				const clone = JSON.parse(JSON.stringify(item));	// cheap way to get a deep clone
 				delete clone.favorite;	// remove this property
 				delete clone.refkey;	// remove this property
 				clone.lastModified = new Date().toISOString();
 
 				// common.log("saving center data " + JSON.stringify(clone));
 				new Firebase(common.FirebaseUrl)
-					.child(this.get("item").refkey)
+					.child(item.refkey)
 					.update(clone, error => {
 						if (error) {
 							common.errorToast("Data could not be saved." + error);

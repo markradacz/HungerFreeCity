@@ -5,16 +5,34 @@
 module hfc {
     export class needsvm extends kendo.data.ObservableObject {
         public static instance: needsvm = null; // set in the setup() method below
+        public initialized = false; // set in the databound() method below
         public need: any = null;
         public item: any;
+		public isLinked: boolean = false;
 		public adding: boolean;
-		public centers: any[];
+		public centers = new kendo.data.ObservableArray([]);
  
-        public setup(item): void {
+        public setup(item, centers): void {
             needsvm.instance = this;
-	        if (!item.alignment) item.alignment = "";
+			if (!item.linked) item.linked = "";
 			this.set("item", item);
+			this.set("centers", centers);
 			this.reorderItems();
+        }
+
+        public doLinkAction(e: any): void {
+			const toolbar = $("#centerLinkToolbar").data("kendoToolBar");
+			if (e.id === "yes") {
+				this.set("isLinked", true);
+				toolbar.show($("#dropDownSegment"));
+			}
+			if (e.id === "no") {
+				this.set("isLinked", false);
+				// TODO: get the List from the last linked center into this center
+				this.item.linked = "";
+				toolbar.hide($("#dropDownSegment"));
+				this.updateCenter();
+			}
         }
 
         public doAction(e: any): void {
@@ -27,14 +45,27 @@ module hfc {
 				});
 	            this.set("adding", true);
                 $("#editNeedPanel").data("kendoWindow").open().center();
-			}
+	        }
         }
 
 		private saveNeeds(): void {
 			// common.log("saving center data " + JSON.stringify(clone));
 			const item = this.get("item");
-			const clone = JSON.parse(JSON.stringify(item.needs));	// cheap way to get a deep clone
-			var ref = new Firebase(common.FirebaseUrl).child(item.refkey);
+			this.saveCenterNeeds(item);
+
+			// find linked centers and update their needs too
+			this.centers.forEach((c: any) => {
+				if (c.linked === item.centerid) {
+					c.needs = item.needs;
+					// save the center's needs
+					this.saveCenterNeeds(c);
+				}
+			});
+		}
+
+		private saveCenterNeeds(centerItem): void {
+			const clone = JSON.parse(JSON.stringify(centerItem.needs));	// cheap way to get a deep clone
+			var ref = new Firebase(common.FirebaseUrl).child(centerItem.refkey);
 			ref.child("needs")
 				.set(clone, error => {
 					if (error) {
@@ -43,7 +74,7 @@ module hfc {
 						common.successToast("Needs data saved successfully.");
 						ref.update({ lastModified: new Date().toISOString() });
 					}
-				});
+				});			
 		}
 
         public onEdit(e: any): void {
@@ -118,7 +149,66 @@ module hfc {
 					window.setTimeout(() => { needsvm.instance.saveNeeds() }, 1);	// background save
                 }
             });
+
+			// TODO: prevent linking for centers that are themselves referenced as links
+
+			const toolbar = $("#centerLinkToolbar").data("kendoToolBar");
+			const init = this.get("initialized");
+			if (!init) {
+				// only do this once
+				toolbar.add({ template: "<input id='centerDropdown'/>", id: "dropDownSegment" });
+				this.set("initialized", true);
+			}
+
+			const item = this.get("item");
+	        $("#centerDropdown").kendoDropDownList({
+		        optionLabel: "Linked Center",
+		        dataTextField: "name",
+				dataValueField: "centerid",
+				valuePrimitive: false,
+				dataSource: this.centers.filter((c: any) => {
+					return c.centerid !== item.centerid && !c.linked;
+				}),
+				value: item.linked,
+				select: e => {
+					// Use the selected item or its text
+					var chosenlink: any = e.sender.dataItem(e.item);
+					var item = this.get("item");
+					if (item.linked !== chosenlink.centerid) {
+						item.linked = chosenlink.centerid;
+						// TODO: get the List from the linked center into this center
+						// update the item
+						this.updateCenter();
+					}
+				}
+			});
+
+			if (item.linked !== "") {
+				this.set("isLinked", true);
+				toolbar.toggle("#yes", true);
+				toolbar.show($("#dropDownSegment"));	
+			} else {
+				this.set("isLinked", false);
+				toolbar.toggle("#no", true);			
+				toolbar.hide($("#dropDownSegment"));
+			}
         }
+
+		private updateCenter(): void {
+			const item = this.get("item");
+			const clone = JSON.parse(JSON.stringify(item));	// cheap way to get a deep clone
+			delete clone.favorite;	// remove this property
+			delete clone.refkey;	// remove this property
+			clone.lastModified = new Date().toISOString();
+			const ref = new Firebase(common.FirebaseUrl).child(item.refkey);
+			ref.update(clone, error => {
+				if (error) {
+					common.errorToast("Center data could not be updated." + error);
+				} else {
+					common.successToast("Center data updated successfully.");
+				}
+			});
+		}
 
         private saveButtonClick(e: any): void {
 	        if (this.get("adding")) {

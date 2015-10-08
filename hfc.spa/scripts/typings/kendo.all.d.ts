@@ -1725,7 +1725,7 @@ declare module kendo.ui {
         options: DropDownListOptions;
         dataSource: kendo.data.DataSource;
         close(): void;
-        dataItem(index?: number): any;
+        dataItem(index?: number | JQuery): any;
         destroy(): void;
         focus(): void;
         open(): void;

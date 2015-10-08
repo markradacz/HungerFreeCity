@@ -23,13 +23,14 @@ var hfc;
             }
             else if (e.id === "save") {
                 // Save the record
-                var clone = JSON.parse(JSON.stringify(this.get("item"))); // cheap way to get a deep clone
+                var item = this.get("item");
+                var clone = JSON.parse(JSON.stringify(item)); // cheap way to get a deep clone
                 delete clone.favorite; // remove this property
                 delete clone.refkey; // remove this property
                 clone.lastModified = new Date().toISOString();
                 // common.log("saving center data " + JSON.stringify(clone));
                 new Firebase(hfc.common.FirebaseUrl)
-                    .child(this.get("item").refkey)
+                    .child(item.refkey)
                     .update(clone, function (error) {
                     if (error) {
                         hfc.common.errorToast("Data could not be saved." + error);

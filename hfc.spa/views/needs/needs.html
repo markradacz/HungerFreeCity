@@ -1,21 +1,25 @@
-﻿<h3>Align Needs to another Center?</h3>
-
-<input class="k-combobox" data-min-width="300" data-role="combobox"
-       data-value-primitive="false"
-       data-placeholder="Choose Center"
-       data-text-field="name"
-       data-value-field="id"
-       data-bind="value: item.alignment, source: centers" />
-
-<div class="tabtoolbar"
+﻿<h3>Link needs to a different Center?</h3>
+<div id="centerLinkToolbar" class="tabtoolbar"
     data-role="toolbar"
-    data-bind="events: { click: doAction }"
+    data-bind="events: { toggle: doLinkAction }"
     data-items='[{
         type: "buttonGroup",
         buttons: [
-            { spriteCssClass: "fa fa-plus", text: " ADD NEED", "id": "add" }
+            { spriteCssClass: "fa fa-list-ol", text: " No, maintain our own needs list", togglable: true, group: "alignment", "id": "no" },
+            { spriteCssClass: "fa fa-link", text: " Yes, link our needs from:", togglable: true, group: "alignment", "id": "yes" }
         ]
     }]'>
+</div>            
+
+<div class="tabtoolbar"
+    data-role="toolbar"
+    data-bind="invisible: isLinked, events: { click: doAction }"
+    data-items='[{
+            type: "buttonGroup",
+            buttons: [
+                { spriteCssClass: "fa fa-plus", text: " ADD NEED", "id": "add" }
+            ]
+        }]'>
 </div>
 
 <div id="needsList"
@@ -23,7 +27,7 @@
      data-role="listview"
      data-selectable="true"
      data-template="needItemTemplate"
-     data-bind="source: item.needs, events: { dataBound: onDataBound, change: onItemSelected }">
+     data-bind="invisible: isLinked, source: item.needs, events: { dataBound: onDataBound, change: onItemSelected }">
 </div>
 <script type="text/x-kendo-tmpl" id="needItemTemplate">
     <div class="needItem">

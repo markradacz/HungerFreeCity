@@ -78,7 +78,7 @@ module hfc {
                 }
             });
 
-            (<needsvm>this.needsView.model).setup(item);
+            (<needsvm>this.needsView.model).setup(item, this.centers);
             (<centervm>this.centerView.model).setup(item);
             (<locationvm>this.locationView.model).setup(item);
 
