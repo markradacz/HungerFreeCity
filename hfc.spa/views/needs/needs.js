@@ -149,6 +149,8 @@ var hfc;
             });
             // TODO: prevent linking for centers that are themselves referenced as links
             var toolbar = $("#centerLinkToolbar").data("kendoToolBar");
+            if (!toolbar)
+                return;
             var init = this.get("initialized");
             if (!init) {
                 // only do this once

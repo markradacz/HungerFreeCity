@@ -16,6 +16,11 @@ var hfc;
         common.hasRole = function (role) {
             return common.User && common.User.roles && common.User.roles.indexOf(role) >= 0;
         };
+        common.CenterTypeOf = function (ctid) {
+            return common.CenterTypes.filter(function (c) {
+                return c.id === ctid;
+            })[0];
+        };
         common.animate = function (jelement, type) {
             var wrapper = kendo.fx(jelement);
             var effect = wrapper.fade("in");
@@ -90,11 +95,11 @@ var hfc;
         -----------------------------------------------------*/
         common.User = null;
         common.FirebaseUrl = 'https://hungerfreecity.firebaseio.com/';
-        common.CenterTypes = [
+        common.CenterTypes = new kendo.data.ObservableArray([
             { id: "DONATE", name: "Donation Center", description: "Collects donations and delivers to a local Food Bank" },
             { id: "PANTRY", name: "Food Pantry", description: "Food Pantry collects donations for their own distribution, and delivers to a local Food Bank" },
             { id: "BANK", name: "Food Bank", description: "Collects donations and distributes to folks in need through multiple outlets" }
-        ];
+        ]);
         return common;
     })(kendo.data.ObservableObject);
     hfc.common = common;
@@ -308,20 +313,22 @@ var kendo;
     (function (data_1) {
         var binders;
         (function (binders) {
-            var selected = (function (_super) {
-                __extends(selected, _super);
-                function selected() {
+            var centerType = (function (_super) {
+                __extends(centerType, _super);
+                function centerType() {
                     _super.apply(this, arguments);
                 }
-                selected.prototype.refresh = function () {
+                centerType.prototype.refresh = function () {
                     var that = this;
-                    var value = that.bindings["isChecked"].get();
-                    var isChecked = /^true$|^1$/i.test(value);
-                    $(that.element).prop("checked", isChecked ? "checked" : "");
+                    var ctid = that.bindings["centerType"].get() || "DONATE";
+                    var ctrtype = hfc.common.CenterTypes.filter(function (c) {
+                        return c.id === ctid;
+                    })[0];
+                    $(that.element).text(ctrtype.name);
                 };
-                return selected;
+                return centerType;
             })(data_1.Binder);
-            binders.selected = selected;
+            binders.centerType = centerType;
             var isChecked = (function (_super) {
                 __extends(isChecked, _super);
                 function isChecked() {

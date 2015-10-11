@@ -28,10 +28,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="animated_favicon1.gif" />
+    <Content Include="images\bank.png" />
+    <Content Include="images\donate.png" />
     <Content Include="images\hfc-bg.png" />
     <Content Include="images\hfc-logo-sq.png" />
     <Content Include="images\hfc-logo.png" />
     <Content Include="images\page-loader.gif" />
+    <Content Include="images\pantry.png" />
     <Content Include="images\spacer.gif" />
     <Content Include="Scripts\app.js" />
     <Content Include="Scripts\app.js.map" />

@@ -8,7 +8,7 @@ module hfc {
         public initialized = false; // set in the databound() method below
         public need: any = null;
         public item: any;
-		public isLinked: boolean = false;
+		public isLinked = false;
 		public adding: boolean;
 		public centers = new kendo.data.ObservableArray([]);
  
@@ -153,6 +153,8 @@ module hfc {
 			// TODO: prevent linking for centers that are themselves referenced as links
 
 			const toolbar = $("#centerLinkToolbar").data("kendoToolBar");
+			if (!toolbar) return;
+
 			const init = this.get("initialized");
 			if (!init) {
 				// only do this once

@@ -12,13 +12,19 @@ module hfc {
 			return common.User && common.User.roles && common.User.roles.indexOf(role) >= 0;
 		}
 
-        public static FirebaseUrl: string = 'https://hungerfreecity.firebaseio.com/';
+        public static FirebaseUrl = 'https://hungerfreecity.firebaseio.com/';
 
-		public static CenterTypes = [
+		public static CenterTypes = new kendo.data.ObservableArray([
 			{ id: "DONATE", name: "Donation Center", description: "Collects donations and delivers to a local Food Bank" },
 			{ id: "PANTRY", name: "Food Pantry", description: "Food Pantry collects donations for their own distribution, and delivers to a local Food Bank" },
 			{ id: "BANK", name: "Food Bank", description: "Collects donations and distributes to folks in need through multiple outlets" }
-		];
+		]);
+
+		public static CenterTypeOf(ctid: string): any {
+			return common.CenterTypes.filter((c: any) => {
+				return c.id === ctid;
+			})[0];
+		}
 
 		public static animate(jelement: JQuery, type?: string) {
             var wrapper = kendo.fx(jelement);
@@ -295,14 +301,17 @@ module kendo.data.binders.widget {
 //});
 
 module kendo.data.binders {
-    export class selected extends Binder {
+    export class centerType extends Binder {
         refresh() {
             const that = this;
-            const value = that.bindings["isChecked"].get();
-            const isChecked = /^true$|^1$/i.test(value);
-            $(that.element).prop("checked", isChecked ? "checked" : "");
-       }
+            const ctid = that.bindings["centerType"].get() || "DONATE";
+			const ctrtype = hfc.common.CenterTypes.filter((c: any) => {
+				return c.id === ctid;
+			})[0];
+            $(that.element).text(ctrtype.name);
+		}
     }
+
     export class isChecked extends Binder {
         refresh() {
             const that = this;
@@ -344,6 +353,7 @@ module kendo.data.binders {
             }
         }
     }
+
     // get the count of a collection named in the binding
     export class subcount extends Binder {
         refresh() {
@@ -354,6 +364,7 @@ module kendo.data.binders {
             $(that.element).text(len);
         }
     }
+
     // join the properties of a collection
     export class combine extends Binder {
 		refresh() {
@@ -380,6 +391,7 @@ module kendo.data.binders {
 			}
 		}
     }
+
 	// join the properties of a collection
     export class top10 extends Binder {
         refresh() {
@@ -472,6 +484,7 @@ module kendo.data.binders {
             effect.duration(1000).play();
         }
     }
+
     // Example: <span data-bind="formattedText: selectedBlock.LastUpdated" data-format="dddd MMM dd, yyyy hh:mmtt"></span>
     export class formattedText extends Binder {
         format: string;
@@ -486,6 +499,7 @@ module kendo.data.binders {
             }
         }
     }
+
 	// Example: <span data-bind="date: selectedBlock.LastUpdated" data-dateformat="dddd MMM dd, yyyy hh:mmtt"></span>
     export class date extends Binder {
         private dateformat: string;
@@ -501,6 +515,7 @@ module kendo.data.binders {
             }
         }
     }
+
 	// format text from binding
     //export class textFormat extends Binder {
     //    f: string;
@@ -554,7 +569,8 @@ module kendo.data.binders {
 	//		}
 	//	}
 	//});
-    // toggle a CSS class
+    
+	// toggle a CSS class
     // <div class="tile" data-bind="cssToggle: canRemove" data-class-true="already" data-class-false="new">
     export class cssToggle extends Binder {
         c: string;

@@ -92,6 +92,7 @@ var hfc;
                     var marker = new google.maps.Marker({
                         position: { lat: lat, lng: lng },
                         draggable: false,
+                        icon: "images/" + (ctr.centertype || "donate") + ".png",
                         //label: ctr.name,
                         title: ctr.name,
                         map: _this.map,
@@ -105,7 +106,7 @@ var hfc;
             });
         };
         mapvm.prototype.showInfo = function (center, marker) {
-            this.infowindow.setContent("<table style='width: 300px'><tr>\n\t\t\t\t<td style='vertical-align:top;padding-right:5px;'>\n\t\t\t\t<b>" + center.name + "</b><br/>\n\t\t\t\t<div>" + center.address.address1 + "</div>\n\t\t\t\t<div>" + center.address.address2 + "</div>\n\t\t\t\t<div>" + center.address.city + " " + center.address.state + " " + center.address.zipcode + "</div>\n\t\t\t\t<b>Phone</b><br/>\n\t\t\t\t<div>" + center.phone + "</div>\n\t\t\t\t<b>Hours</b><br/>\n\t\t\t\t<div>" + center.hours + "</div>\n\t\t\t\t<b>Notes</b><br/>\n\t\t\t\t<div>" + center.centerinfo.join("\n") + "</div>\n\t\t\t\t<b>Site</b><br/>\n\t\t\t\t<a href=\"" + center.site + "\" target=\"blank\" style=\"white-space:nowrap;\">" + center.site + " <span class=\"fa fa-external-link\" /></a>\n\t\t\t\t</td><td style='vertical-align:top;'>\n\t\t\t\t<b>Top Needs</b><br/>\n\t\t\t\t<ol style='padding:0;margin-left:15px;'>" + center.needs.slice(0, 10).map(function (v) { return ("<li>" + v.name + "</li>"); }).join("") + "</ol>\n\t\t\t\t</td>\n\t\t\t\t</tr></table>");
+            this.infowindow.setContent("<table style='width: 300px'><tr>\n\t\t\t\t<td style='vertical-align:top;padding-right:5px;'>\n\t\t\t\t<b>" + center.name + "</b><br/>\n\t\t\t\t<div>" + center.address.address1 + "</div>\n\t\t\t\t<div>" + center.address.address2 + "</div>\n\t\t\t\t<div>" + center.address.city + " " + center.address.state + " " + center.address.zipcode + "</div>\n\t\t\t\t<b>Type</b><br/>\n\t\t\t\t<div>" + hfc.common.CenterTypeOf(center.centertype || hfc.common.CenterTypes[0].id).name + "</div>\n\t\t\t\t<b>Phone</b><br/>\n\t\t\t\t<div>" + center.phone + "</div>\n\t\t\t\t<b>Hours</b><br/>\n\t\t\t\t<div>" + center.hours + "</div>\n\t\t\t\t<b>Notes</b><br/>\n\t\t\t\t<div>" + center.centerinfo.join("\n") + "</div>\n\t\t\t\t<b>Site</b><br/>\n\t\t\t\t<a href=\"" + center.site + "\" target=\"blank\" style=\"white-space:nowrap;\">" + center.site + " <span class=\"fa fa-external-link\" /></a>\n\t\t\t\t</td><td style='vertical-align:top;'>\n\t\t\t\t<b>Top Needs</b><br/>\n\t\t\t\t<ol style='padding:0;margin-left:15px;'>" + center.needs.slice(0, 10).map(function (v) { return ("<li>" + v.name + "</li>"); }).join("") + "</ol>\n\t\t\t\t</td>\n\t\t\t\t</tr></table>");
             this.infowindow.open(this.map, marker);
         };
         mapvm.prototype.init = function () {

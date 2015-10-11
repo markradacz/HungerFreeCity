@@ -75,6 +75,7 @@ module hfc {
 					var marker = new google.maps.Marker({
 						position: { lat: lat, lng: lng },
 						draggable: false,
+						icon: `images/${ctr.centertype || "donate"}.png`,
 						//label: ctr.name,
 						title: ctr.name, // + " " + lat + " " + lng,
 						map: this.map,
@@ -96,6 +97,8 @@ module hfc {
 				<div>${center.address.address1}</div>
 				<div>${center.address.address2}</div>
 				<div>${center.address.city} ${center.address.state} ${center.address.zipcode}</div>
+				<b>Type</b><br/>
+				<div>${hfc.common.CenterTypeOf(center.centertype || hfc.common.CenterTypes[0].id).name}</div>
 				<b>Phone</b><br/>
 				<div>${center.phone}</div>
 				<b>Hours</b><br/>
