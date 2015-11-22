@@ -4,8 +4,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /// <reference path="../../scripts/typings/require.d.ts" />
-/// <reference path="../../scripts/typings/jquery.d.ts" />
-/// <reference path="../../scripts/typings/kendo.all.d.ts" />
+/// <reference path="../../scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../../scripts/typings/kendo-ui/kendo-ui.d.ts" />
 /// <reference path="../../scripts/common.ts" />
 var hfc;
 (function (hfc) {

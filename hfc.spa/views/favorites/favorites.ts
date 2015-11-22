@@ -1,5 +1,5 @@
-﻿/// <reference path='../../scripts/typings/jquery.d.ts' />
-/// <reference path='../../scripts/typings/kendo.all.d.ts' />
+﻿/// <reference path="../../scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../../scripts/typings/kendo-ui/kendo-ui.d.ts" />
 /// <reference path='../../scripts/common.ts' />
 module hfc {
     export class favoritesvm extends kendo.data.ObservableObject {
@@ -8,8 +8,8 @@ module hfc {
         public init(): void {
         }
 
-		private load(ref: Firebase): void {
-			ref.child("centers").on("value", data => {
+		private load(): void {
+			common.firebase.child("centers").on("value", data => {
 				this.centers.length = 0;	// clear the current array
 				// join in the user's favorited centers, and add each to the collection
 				if (common.User) {
@@ -50,20 +50,15 @@ module hfc {
             super();
 			var that = this;
 
-			$.subscribe("loggedIn", (ref: Firebase) => {
-				that.load(ref);
-			});
+			$.subscribe("loggedIn", that.load);
 
-			$.subscribe("saveFavorites", () => {
 				// re-load the centers when the favorites change
-				const ref = new Firebase(hfc.common.FirebaseUrl);
-				that.load(ref);
-			});
+			$.subscribe("saveFavorites", that.load);
 
 			that.centers.bind("change", e => {
 				if (e.action === "itemchange" && e.field === "favorite") {
 					// so change the user's favorites and persist
-					hfc.common.User.favorites = that.centers
+					common.User.favorites = that.centers
 						.filter((v: any) => v.favorite)
 						.map((v: any) => v.centerid);
 					//hfc.common.log("favorites are " + JSON.stringify(common.User.favorites));
@@ -77,11 +72,10 @@ module hfc {
 define([
     "text!/views/favorites/favorites.html"
 ], (template) => {
-    var vm: hfc.favoritesvm = new hfc.favoritesvm();
-    var view: kendo.View = new kendo.View(template, {
+    var vm = new hfc.favoritesvm();
+    return new kendo.View(template, {
         model: vm,
         show() { hfc.common.animate(this.element); },
         init() { vm.init(); }
     });
-    return view;
 });

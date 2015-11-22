@@ -1,5 +1,5 @@
-﻿/// <reference path='../../scripts/typings/jquery.d.ts' />
-/// <reference path='../../scripts/typings/kendo.all.d.ts' />
+﻿/// <reference path="../../scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../../scripts/typings/kendo-ui/kendo-ui.d.ts" />
 /// <reference path='../../scripts/common.ts' />
 module hfc {
     export class homevm extends kendo.data.ObservableObject {
@@ -59,10 +59,9 @@ define([
     vm.mapView = map;
     vm.allView = all;
 
-    var view: kendo.View = new kendo.View(template, {
+    return new kendo.View(template, {
         model: vm,
         show() { hfc.common.animate(this.element); },
         init() { vm.init(); }
     });
-    return view;
 });

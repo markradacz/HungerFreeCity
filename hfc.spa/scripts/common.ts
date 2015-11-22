@@ -1,5 +1,6 @@
-﻿/// <reference path="typings/jquery.d.ts" />
-/// <reference path="typings/kendo.all.d.ts" />
+﻿/// <reference path="typings/jquery/jquery.d.ts" />
+/// <reference path="typings/kendo-ui/kendo-ui.d.ts" />
+/// <reference path="typings/firebase/firebase.d.ts" />
 /*global alert,$,self,models,data,document,window,kendo,jQuery*/
 
 module hfc {
@@ -12,7 +13,11 @@ module hfc {
 			return common.User && common.User.roles && common.User.roles.indexOf(role) >= 0;
 		}
 
-        public static FirebaseUrl = 'https://hungerfreecity.firebaseio.com/';
+        /*-----------------------------------------------------
+		Firebase
+	    -----------------------------------------------------*/
+        private static FirebaseUrl = 'https://hungerfreecity.firebaseio.com/';
+		public static firebase = new Firebase(common.FirebaseUrl);
 
 		public static CenterTypes = new kendo.data.ObservableArray([
 			{ id: "DONATE", name: "Donation Center", description: "Collects donations and delivers to a local Food Bank" },
@@ -27,8 +32,8 @@ module hfc {
 		}
 
 		public static animate(jelement: JQuery, type?: string) {
-            var wrapper = kendo.fx(jelement);
-            var effect = wrapper.fade("in");
+            const wrapper = kendo.fx(jelement);
+            let effect = wrapper.fade("in");
 			switch (type) {
                 //case "fadeIn":
                 //effect = wrapper.fade( "in" );
@@ -68,22 +73,22 @@ module hfc {
 		Toast Notifications
 	    -----------------------------------------------------*/
         public static successToast(message: string): void {
-            var w : kendo.ui.Notification = $("#notification").data("kendoNotification");
+            const w = $("#notification").data("kendoNotification") as kendo.ui.Notification;
             if(w) w.show({ message: message }, "success");
         }
 
         public static infoToast(message: string): void {
-            var w: kendo.ui.Notification = $("#notification").data("kendoNotification");
+            const w = $("#notification").data("kendoNotification") as kendo.ui.Notification;
             if (w) w.show({ message: message }, "info");
         }
 
         public static warningToast(message: string): void {
-            var w: kendo.ui.Notification = $("#notification").data("kendoNotification");
+            const w = $("#notification").data("kendoNotification") as kendo.ui.Notification;
             if (w) w.show({ message: message }, "warning");
         }
 
         public static errorToast(message: string): void {
-            var w: kendo.ui.Notification = $("#notification").data("kendoNotification");
+            const w = $("#notification").data("kendoNotification") as kendo.ui.Notification;
             if (w) w.show({ message: message }, "error");
         }
 
@@ -104,7 +109,7 @@ module hfc {
 // extend jQuery with a new indexByPropertyValue() function that looks for an array item with a matching property value
 jQuery.extend({
     indexByPropertyValue: (array: any[], propertyName: string, value: any): any => {
-		for (var i = 0; i < array.length; i++) {
+		for (let i = 0; i < array.length; i++) {
 			if (array[i][propertyName] === value)
 				return i;
 		}
@@ -114,8 +119,8 @@ jQuery.extend({
 // extend jQuery with a new findByPropertyValue() function that looks for an array item with a matching property value
 jQuery.extend({
     findByPropertyValue: (array: any[], propertyName: string, value: any) : any => {
-		for (var i = 0; i < array.length; i++) {
-			var v = array[i];
+		for (let i = 0; i < array.length; i++) {
+			const v = array[i];
 			if (v[propertyName] === value) return v;
 		}
 	    return null;
@@ -128,7 +133,7 @@ jQuery.extend({
 	    $.each(obj, (i, v) => {
 	        if (v === undefined || v === null) return;	// may encounter missing items if they were sliced away below
 	        var prop = v[propertyName];
-	        for (var ii = i + 1; ii < obj.length; ii++) {
+			for (let ii = i + 1; ii < obj.length; ii++) {
 	            if (obj[ii][propertyName] === prop) {
 	                // remove the array element at ii; as it is a duplicate
 	                obj.splice(ii, 1);
@@ -157,7 +162,6 @@ jQuery.extend({
 // extend jQuery with a new sortItems() function
 jQuery.extend({
     sortItems: (array: Array<any>, keyPropertyName: string) => {
-	    // common.log("replaceOrAddItem: " + array.length + " of " + keyPropertyName + " = " + keyValue + " with " + JSON.stringify(replacementItem));
 	    // slice(0) used here to copy the array
 	    var copy = array.slice(0);
 	    copy.sort((a, b) => {
@@ -203,6 +207,30 @@ jQuery(() => {
 module kendo.data.binders.widget {
 	import Binder = kendo.data.Binder;
 	import Binding = kendo.data.Binding;
+
+	export class xdatabound extends Binder {
+        constructor(element: Element, bindings: { [key: string]: Binding; }, options?: any) {
+            super(element, bindings, options);
+        }
+        init(element: any, bindings: { [key: string]: Binding; }, options?: any) {
+            super.init(element, bindings, options);
+            //const binding = this.bindings["xdatabound"];
+        }
+        refresh() {
+            const binding = this.bindings["xdatabound"];
+            try {
+                // common.log("xdatabound: on " + this.element.tagName + " with " + binding.path);
+                // var fn = that.bindings["xdatabound"].get();	// calls the function! don't want that
+                let fn = binding.source.get(binding.path);
+                if (!fn) fn = eval(binding.path);	// see if we can get a function reference by an eval
+                if (!fn) fn = window[binding.path];	// see if we can get a function reference within the global window object
+                if (fn) fn(this.element, binding.source);
+                else hfc.common.log("xdatabound error: function doesn't exist: on " + this.element.tagName + " with " + binding.path + " on source " + JSON.stringify(binding.source));
+            } catch (e) {
+                hfc.common.log("xdatabound error with " + binding.path + " on " + this.element.tagName + " error: " + JSON.stringify(e));
+            }
+        }
+    }
 
 	export class onEnter extends Binder {
         constructor(element: Element, bindings: { [key: string]: Binding; }, options?: any) {
@@ -490,7 +518,7 @@ module kendo.data.binders {
         format: string;
         constructor(element: Element, bindings: { [key: string]: Binding; }, options?: any) {
             super(element, bindings, options);
-            this.format = $(element).data("format");
+            this.format = String($(element).data("format"));
         }
         refresh() {
             const data = this.bindings["formattedText"].get();
@@ -505,7 +533,7 @@ module kendo.data.binders {
         private dateformat: string;
         constructor(element: Element, bindings: { [key: string]: Binding; }, options?: any) {
             super(element, bindings, options);
-            this.dateformat = $(element).data("dateformat");
+            this.dateformat = String($(element).data("dateformat"));
         }
         public refresh() {
             const data = this.bindings["date"].get();
@@ -578,8 +606,8 @@ module kendo.data.binders {
         constructor(element: Element, bindings: { [key: string]: Binding; }, options?: any) {
             super(element, bindings, options);
             const t = $(element);
-            this.c = t.data("class") || t.data("classTrue") || "enabled";
-            this.nc = t.data("class") || t.data("classFalse") || "disabled";
+            this.c = String(t.data("class") || t.data("classTrue") || "enabled");
+            this.nc = String(t.data("class") || t.data("classFalse") || "disabled");
         }
         refresh() {
             const e = $(this.element);

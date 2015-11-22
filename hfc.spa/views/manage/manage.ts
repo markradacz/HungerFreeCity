@@ -1,6 +1,6 @@
 ﻿/// <reference path="../../scripts/typings/require.d.ts" />
-/// <reference path="../../scripts/typings/jquery.d.ts" />
-/// <reference path="../../scripts/typings/kendo.all.d.ts" />
+/// <reference path="../../scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../../scripts/typings/kendo-ui/kendo-ui.d.ts" />
 /// <reference path="../../scripts/common.ts" />
 module hfc {
     export class managevm extends kendo.data.ObservableObject {
@@ -42,7 +42,7 @@ module hfc {
 				const user = common.User;
 				const centers = user.centers;
 				centers.push(center.centerid);
-				new Firebase(common.FirebaseUrl)
+				common.firebase
 					.child("users")
 					.child(user.userId)
 					.child("centers")
@@ -54,7 +54,7 @@ module hfc {
 
 				// save the new center to Firebase
 				this.set("item", center);
-				new Firebase(common.FirebaseUrl)
+				common.firebase
 					.child("centers")
 					.push(center, error => {
 					if (error) {
@@ -66,7 +66,7 @@ module hfc {
 
         public showCenter(e: any) {
             // get the row of the collection to bind to the subviews
-            const listView = $(e.sender.element).data("kendoListView");
+            const listView = $(e.sender.element).data("kendoListView") as kendo.ui.ListView;
             const index = listView.select().index();
             const item = this.centers[index];
 			this.set("item", item);
@@ -83,7 +83,7 @@ module hfc {
             (<locationvm>this.locationView.model).setup(item);
 
             // select the Needs button in the toolbar if there isn't anything selected
-            const tabtoolbar = $("#tabtoolbar").data("kendoToolBar");
+            const tabtoolbar = $("#tabtoolbar").data("kendoToolBar") as kendo.ui.ToolBar;
 			const selected = tabtoolbar.getSelectedFromGroup("tab");
 			if (selected.length === 0) {
 				tabtoolbar.toggle("#needs", true);
@@ -104,7 +104,7 @@ module hfc {
 
 		public onRemove(e: any): void {
             // find which item is selected
-            const listView = $("#centerlist").data("kendoListView");
+            const listView = $("#centerlist").data("kendoListView") as kendo.ui.ListView;
             const index = listView.select().index();
             const item = this.centers[index];
 
@@ -112,7 +112,7 @@ module hfc {
 			this.set("toolbarVisible", false);
 
 			// remove on Firebase (and it will remove from centers list by callback)
-			new Firebase(common.FirebaseUrl)
+			common.firebase
 				.child(item.refkey)
 				.set(null); // remove the item
 		}
@@ -134,9 +134,9 @@ module hfc {
 			// if we have an item selected, then re-select it after a data refresh
 			const curr = this.get("item");
 			if (!curr) return;
-			const listView = $("#centerlist").data("kendoListView");
+			const listView = $("#centerlist").data("kendoListView") as kendo.ui.ListView;
 			if (!listView) return;
-			const all = listView.dataItems();
+			const all = listView.dataItems() as any;
 			const idx = $.indexByPropertyValue(all, "centerid", curr.centerid);
 			if (idx >= 0) {
 				const sel = listView.element.children()[idx];
@@ -152,11 +152,11 @@ module hfc {
         public constructor() {
             super();
 			var that = this;
-            $.subscribe("loggedIn", (ref: Firebase) => {
-				const isadmin = hfc.common.hasRole("admin");
+            $.subscribe("loggedIn", () => {
+				const isadmin = common.hasRole("admin");
 				this.set("isAdmin", isadmin);
 
-                ref.child("centers").on("value", data => {
+                common.firebase.child("centers").on("value", data => {
 					that.centers.length = 0;	// clear the current array
                     // join in the user's centers, and add each to the collection
                     if (common.User) {

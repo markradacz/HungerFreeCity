@@ -1,6 +1,6 @@
 ﻿/// <reference path="../../scripts/typings/require.d.ts" />
-/// <reference path="../../scripts/typings/jquery.d.ts" />
-/// <reference path="../../scripts/typings/kendo.all.d.ts" />
+/// <reference path="../../scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../../scripts/typings/kendo-ui/kendo-ui.d.ts" />
 /// <reference path="../../scripts/common.ts" />
 module hfc {
     export class usersvm extends kendo.data.ObservableObject {
@@ -28,7 +28,7 @@ module hfc {
 				const clone = JSON.parse(JSON.stringify(this.get("user")));	// cheap way to get a deep clone
 				clone.lastModified = new Date().toISOString();
 
-				new Firebase(common.FirebaseUrl)
+				common.firebase
 					.child("users")
 					.child(clone.userId)
 					.set(clone, error => {
@@ -48,8 +48,8 @@ module hfc {
         public constructor() {
             super();
 			var that = this;
-            $.subscribe("loggedIn", (ref: Firebase) => {
-                ref.child("users").on("value", data => {
+            $.subscribe("loggedIn", () => {
+                common.firebase.child("users").on("value", data => {
 					// convert object to an array
 	                var all = [];
 					data.forEach(v => {
@@ -64,7 +64,7 @@ module hfc {
 					that.users.length = 0;	// clear the current array
                     all.forEach( v => { that.users.push(v); });
                 });
-                ref.child("centers").on("value", data => {
+                common.firebase.child("centers").on("value", data => {
 					// convert object to an array
 					var all = [];
 					data.forEach(v => {

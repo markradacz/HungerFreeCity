@@ -1,5 +1,5 @@
-﻿/// <reference path='../../scripts/typings/jquery.d.ts' />
-/// <reference path='../../scripts/typings/kendo.all.d.ts' />
+﻿/// <reference path="../../scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../../scripts/typings/kendo-ui/kendo-ui.d.ts" />
 /// <reference path='../../scripts/common.ts' />
 module hfc {
     export class allvm extends kendo.data.ObservableObject {
@@ -12,8 +12,8 @@ module hfc {
             super();
 			var that = this;
 
-			$.subscribe("loggedIn", (ref: Firebase) => {
-                ref.child("centers").on("value", data => {
+			$.subscribe("loggedIn", () => {
+                common.firebase.child("centers").on("value", data => {
 					that.centers.length = 0;	// clear the current array
                     // join in the user's favorited centers, and add each to the collection
                     if (common.User) {
@@ -53,11 +53,10 @@ module hfc {
 define([
     "text!/views/all/all.html"
 ], (template) => {
-    var vm: hfc.allvm = new hfc.allvm();
-    var view: kendo.View = new kendo.View(template, {
+    var vm = new hfc.allvm();
+    return new kendo.View(template, {
         model: vm,
         show() { hfc.common.animate(this.element); },
         init() { vm.init(); }
     });
-    return view;
 });

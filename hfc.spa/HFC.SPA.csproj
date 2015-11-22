@@ -33,12 +33,15 @@
     <Content Include="images\hfc-bg.png" />
     <Content Include="images\hfc-logo-sq.png" />
     <Content Include="images\hfc-logo.png" />
+    <Content Include="images\Logo3sm.png" />
     <Content Include="images\page-loader.gif" />
     <Content Include="images\pantry.png" />
     <Content Include="images\spacer.gif" />
     <Content Include="Scripts\app.js" />
     <Content Include="Scripts\app.js.map" />
     <Content Include="Scripts\async.js" />
+    <Content Include="Scripts\r.js" />
+    <Content Include="Scripts\require.js" />
     <Content Include="Views\admin\admin.js.map" />
     <Content Include="Views\all\all.html" />
     <Content Include="Views\all\all.js" />
@@ -51,7 +54,11 @@
     <Content Include="Views\all\all.js.map" />
     <Content Include="Views\favorites\favorites.js.map" />
     <Content Include="Views\map\map.js.map" />
+    <TypeScriptCompile Include="Scripts\typings\firebase\firebase-simplelogin.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\firebase\firebase.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\google.maps.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\kendo-ui\kendo-ui.d.ts" />
     <TypeScriptCompile Include="Views\about\about.ts" />
     <Content Include="Views\admin\admin.html" />
     <Content Include="Views\admin\admin.js" />
@@ -75,13 +82,11 @@
     <Content Include="Scripts\live.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\pubsub.js" />
-    <Content Include="Scripts\require.js" />
     <Content Include="Scripts\text.js" />
     <Content Include="Views\home\home.js.map" />
     <Content Include="Views\center\center.js" />
     <Content Include="Views\manage\manage.js.map" />
     <TypeScriptCompile Include="Scripts\common.ts" />
-    <TypeScriptCompile Include="Scripts\typings\firebase.d.ts" />
     <Content Include="Views\about\about.html" />
     <Content Include="Views\about\about.js" />
     <TypeScriptCompile Include="Views\admin\admin.ts" />
@@ -107,10 +112,6 @@
     <TypeScriptCompile Include="Scripts\typings\require.d.ts" />
     <TypeScriptCompile Include="Views\users\users.ts" />
   </ItemGroup>
-  <ItemGroup>
-    <TypeScriptCompile Include="Scripts\typings\jquery.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\kendo.all.d.ts" />
-  </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
@@ -128,7 +129,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>25708</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:25708/</IISUrl>
+          <IISUrl>http://localhost:25700/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -4,9 +4,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var _this = this;
-/// <reference path="typings/jquery.d.ts" />
-/// <reference path="typings/kendo.all.d.ts" />
-/// <reference path="typings/firebase.d.ts" />
+/// <reference path="typings/jquery/jquery.d.ts" />
+/// <reference path="typings/kendo-ui/kendo-ui.d.ts" />
+/// <reference path="typings/firebase/firebase.d.ts" />
 /// <reference path="typings/require.d.ts" />
 /// <reference path="common.ts" />
 var hfc;
@@ -23,24 +23,23 @@ var hfc;
             this.isRegistering = false;
             this.isResetting = false;
             this.isPanelShowing = false;
-            this.ref = new Firebase(hfc.common.FirebaseUrl);
             this.showRegister = function (e) {
                 _this.set("isLoggingIn", false);
                 _this.set("isRegistering", true);
                 _this.set("isResetting", false);
-                _this.showPanel("#loginPanel", "Sign Up");
+                _this.showPanel("#loginPanel", "Sign up");
                 _this.appear("#registerView");
             };
             this.showLogin = function (e) {
                 _this.set("isLoggingIn", true);
                 _this.set("isRegistering", false);
                 _this.set("isResetting", false);
-                _this.showPanel("#loginPanel", "Log In");
+                _this.showPanel("#loginPanel", "Sign in");
                 _this.appear("#loginView");
             };
             this.saveFavorites = function () {
                 var userId = _this.get("userId");
-                _this.ref
+                hfc.common.firebase
                     .child("users")
                     .child(userId)
                     .child("favorites")
@@ -105,7 +104,7 @@ var hfc;
             }
             if (mod) {
                 // save the user's profile
-                this.ref.child("users").child(hfc.common.User.userId).set(hfc.common.User);
+                hfc.common.firebase.child("users").child(hfc.common.User.userId).set(hfc.common.User);
                 hfc.common.successToast("User information updated");
             }
             this.closePanel("#userPanel");
@@ -120,7 +119,7 @@ var hfc;
         };
         appvm.prototype.logoff = function () {
             // Unauthenticate the client
-            this.ref.unauth();
+            hfc.common.firebase.unauth();
             hfc.common.User = null;
             this.setlogin();
         };
@@ -152,7 +151,7 @@ var hfc;
                 hfc.common.errorToast("Please provide a password");
                 return;
             }
-            this.ref.createUser({
+            hfc.common.firebase.createUser({
                 email: email,
                 password: password
             }, function (error, userData) {
@@ -161,7 +160,7 @@ var hfc;
                 }
                 else {
                     // login
-                    _this.ref.authWithPassword({
+                    hfc.common.firebase.authWithPassword({
                         email: email,
                         password: password
                     }, function (error, authData) {
@@ -180,7 +179,7 @@ var hfc;
                                 centers: [],
                                 roles: ["user"]
                             };
-                            _this.ref.child("users").child(userData.uid).set(hfc.common.User);
+                            hfc.common.firebase.child("users").child(userData.uid).set(hfc.common.User);
                             hfc.common.successToast("Successfully registered");
                             _this.closePanel("#loginPanel");
                             _this.setlogin();
@@ -192,7 +191,7 @@ var hfc;
         appvm.prototype.loginButtonClick = function (e) {
             var _this = this;
             // validate credentials
-            this.ref.authWithPassword({
+            hfc.common.firebase.authWithPassword({
                 email: this.get("email"),
                 password: this.get("password")
             }, function (error, authData) {
@@ -207,7 +206,7 @@ var hfc;
         };
         appvm.prototype.resetPasswordButtonClick = function (e) {
             var _this = this;
-            this.ref.resetPassword({
+            hfc.common.firebase.resetPassword({
                 email: this.get("email")
             }, function (error) {
                 if (error) {
@@ -231,7 +230,7 @@ var hfc;
                     hfc.common.errorToast("The specified user account does not exist.");
                     break;
                 default:
-                    hfc.common.errorToast("Error logging user in: " + error);
+                    hfc.common.errorToast("Error signing user in: " + error);
             }
         };
         appvm.prototype.routeChange = function (e) {
@@ -249,7 +248,7 @@ var hfc;
             if (authData) {
                 // get the user's profile data
                 this.set("userId", authData.uid);
-                var uref = this.ref.child("users").child(authData.uid).ref();
+                var uref = hfc.common.firebase.child("users").child(authData.uid).ref();
                 uref.once("value", function (userData) {
                     var data = userData.val();
                     var mod = false;
@@ -306,7 +305,7 @@ var hfc;
                 this.set("phone", hfc.common.User.phone);
                 this.set("firstName", hfc.common.User.firstName);
                 this.set("lastName", hfc.common.User.lastName);
-                $.publish("loggedIn", [this.ref]);
+                $.publish("loggedIn");
             }
             else {
                 this.set("loggedIn", false);
@@ -339,7 +338,7 @@ var hfc;
             //    }
             //});
             // get the user's profile data
-            this.getUserProfile(this.ref.getAuth());
+            this.getUserProfile(hfc.common.firebase.getAuth());
             $.subscribe("saveFavorites", this.saveFavorites);
             $.subscribe("showLogin", this.showLogin);
             $.subscribe("showRegister", this.showRegister);

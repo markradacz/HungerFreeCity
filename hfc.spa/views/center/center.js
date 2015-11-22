@@ -4,8 +4,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /// <reference path="../../scripts/typings/require.d.ts" />
-/// <reference path="../../scripts/typings/jquery.d.ts" />
-/// <reference path="../../scripts/typings/kendo.all.d.ts" />
+/// <reference path="../../scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../../scripts/typings/kendo-ui/kendo-ui.d.ts" />
 /// <reference path="../../scripts/common.ts" />
 var hfc;
 (function (hfc) {
@@ -29,7 +29,7 @@ var hfc;
                 delete clone.refkey; // remove this property
                 clone.lastModified = new Date().toISOString();
                 // common.log("saving center data " + JSON.stringify(clone));
-                new Firebase(hfc.common.FirebaseUrl)
+                hfc.common.firebase
                     .child(item.refkey)
                     .update(clone, function (error) {
                     if (error) {
@@ -56,11 +56,10 @@ define([
     'text!/views/center/center.html'
 ], function (template) {
     var vm = new hfc.centervm();
-    var view = new kendo.View(template, {
+    return new kendo.View(template, {
         model: vm,
         show: function () { hfc.common.animate(this.element); },
         init: function () { vm.init(); }
     });
-    return view;
 });
 //# sourceMappingURL=center.js.map

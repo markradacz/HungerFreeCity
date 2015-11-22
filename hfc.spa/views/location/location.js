@@ -4,8 +4,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /// <reference path="../../scripts/typings/require.d.ts" />
-/// <reference path="../../scripts/typings/jquery.d.ts" />
-/// <reference path="../../scripts/typings/kendo.all.d.ts" />
+/// <reference path="../../scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../../scripts/typings/kendo-ui/kendo-ui.d.ts" />
 /// <reference path="../../scripts/common.ts" />
 /// <reference path="../../scripts/typings/google.maps.d.ts" />
 var hfc;
@@ -90,7 +90,7 @@ var hfc;
                 item.geometry.coordinates[0] = this.get("lat");
                 item.geometry.coordinates[1] = this.get("lng");
                 var clone = JSON.parse(JSON.stringify(item.geometry)); // cheap way to get a deep clone
-                new Firebase(hfc.common.FirebaseUrl)
+                hfc.common.firebase
                     .child(item.refkey)
                     .child("geometry")
                     .update(clone, function (error) {
@@ -113,11 +113,10 @@ define([
     'text!/views/location/location.html'
 ], function (template) {
     var vm = new hfc.locationvm();
-    var view = new kendo.View(template, {
+    return new kendo.View(template, {
         model: vm,
         show: function () { hfc.common.animate(this.element, "fadeIn"); vm.initMap(); },
         init: function () { vm.init(); }
     });
-    return view;
 });
 //# sourceMappingURL=location.js.map

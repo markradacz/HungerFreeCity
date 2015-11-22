@@ -1,6 +1,6 @@
 ﻿/// <reference path="../../scripts/typings/require.d.ts" />
-/// <reference path="../../scripts/typings/jquery.d.ts" />
-/// <reference path="../../scripts/typings/kendo.all.d.ts" />
+/// <reference path="../../scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../../scripts/typings/kendo-ui/kendo-ui.d.ts" />
 /// <reference path="../../scripts/common.ts" />
 module hfc {
     export class needsvm extends kendo.data.ObservableObject {
@@ -44,7 +44,7 @@ module hfc {
 					onRemove: e => { this.onRemove(e); }
 				});
 	            this.set("adding", true);
-                $("#editNeedPanel").data("kendoWindow").open().center();
+                ($("#editNeedPanel").data("kendoWindow") as kendo.ui.Window).open().center();
 	        }
         }
 
@@ -65,7 +65,7 @@ module hfc {
 
 		private saveCenterNeeds(centerItem): void {
 			const clone = JSON.parse(JSON.stringify(centerItem.needs));	// cheap way to get a deep clone
-			var ref = new Firebase(common.FirebaseUrl).child(centerItem.refkey);
+			var ref = common.firebase.child(centerItem.refkey);
 			ref.child("needs")
 				.set(clone, error => {
 					if (error) {
@@ -83,7 +83,7 @@ module hfc {
             const index = listView.select().index();
             this.set("need", this.item.needs[index]);
 			this.set("adding", false);
-            $("#editNeedPanel").data("kendoWindow").open().center();
+            ($("#editNeedPanel").data("kendoWindow") as kendo.ui.Window).open().center();
         }
 
         public onShowRemove(e: any): void {
@@ -152,7 +152,7 @@ module hfc {
 
 			// TODO: prevent linking for centers that are themselves referenced as links
 
-			const toolbar = $("#centerLinkToolbar").data("kendoToolBar");
+			const toolbar = $("#centerLinkToolbar").data("kendoToolBar") as kendo.ui.ToolBar;
 			if (!toolbar) return;
 
 			const init = this.get("initialized");
@@ -172,7 +172,7 @@ module hfc {
 					return c.centerid !== item.centerid && !c.linked;
 				}),
 				value: item.linked,
-				select: e => {
+				select: (e: any) => {
 					// Use the selected item or its text
 					var chosenlink: any = e.sender.dataItem(e.item);
 					var item = this.get("item");
@@ -202,7 +202,7 @@ module hfc {
 			delete clone.favorite;	// remove this property
 			delete clone.refkey;	// remove this property
 			clone.lastModified = new Date().toISOString();
-			const ref = new Firebase(common.FirebaseUrl).child(item.refkey);
+			const ref = common.firebase.child(item.refkey);
 			ref.update(clone, error => {
 				if (error) {
 					common.errorToast("Center data could not be updated." + error);
@@ -219,7 +219,7 @@ module hfc {
 		        this.reorderItems();
 				this.set("adding", false);
 	        }
-	        $("#editNeedPanel").data("kendoWindow").close();
+	        ($("#editNeedPanel").data("kendoWindow") as kendo.ui.Window).close();
 			this.saveNeeds();
         }
 

@@ -1,12 +1,13 @@
-/// <reference path="typings/jquery.d.ts" />
-/// <reference path="typings/kendo.all.d.ts" />
+/// <reference path="typings/jquery/jquery.d.ts" />
+/// <reference path="typings/kendo-ui/kendo-ui.d.ts" />
+/// <reference path="typings/firebase/firebase.d.ts" />
 /// <reference path="typings/require.d.ts" />
 /// <reference path="common.ts" />
 require.config({
     paths: {
         'jQuery': "https://code.jquery.com/jquery-2.1.4.min",
         'bootstrap': "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min",
-        'kendo': "https://kendo.cdn.telerik.com/2015.2.805/js/kendo.all.min",
+        'kendo': "https://kendo.cdn.telerik.com/2015.3.930/js/kendo.all.min",
         'firebase': "https://cdn.firebase.com/js/client/2.3.0/firebase",
         'pubsub': "pubsub",
         'async': "async",

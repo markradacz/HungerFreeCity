@@ -9,10 +9,9 @@ define([
     "text!/views/about/about.html"
 ], template => {
     var vm = new hfc.aboutvm();
-    var view = new kendo.View(template, {
+    return new kendo.View(template, {
         model: vm,
         show() { hfc.common.animate(this.element); },
         init() { vm.init(); }
     });
-    return view;
 });

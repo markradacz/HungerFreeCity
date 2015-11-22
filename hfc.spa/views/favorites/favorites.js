@@ -3,8 +3,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/// <reference path='../../scripts/typings/jquery.d.ts' />
-/// <reference path='../../scripts/typings/kendo.all.d.ts' />
+/// <reference path="../../scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../../scripts/typings/kendo-ui/kendo-ui.d.ts" />
 /// <reference path='../../scripts/common.ts' />
 var hfc;
 (function (hfc) {
@@ -14,14 +14,9 @@ var hfc;
             _super.call(this);
             this.centers = new kendo.data.ObservableArray([]);
             var that = this;
-            $.subscribe("loggedIn", function (ref) {
-                that.load(ref);
-            });
-            $.subscribe("saveFavorites", function () {
-                // re-load the centers when the favorites change
-                var ref = new Firebase(hfc.common.FirebaseUrl);
-                that.load(ref);
-            });
+            $.subscribe("loggedIn", that.load);
+            // re-load the centers when the favorites change
+            $.subscribe("saveFavorites", that.load);
             that.centers.bind("change", function (e) {
                 if (e.action === "itemchange" && e.field === "favorite") {
                     // so change the user's favorites and persist
@@ -35,9 +30,9 @@ var hfc;
         }
         favoritesvm.prototype.init = function () {
         };
-        favoritesvm.prototype.load = function (ref) {
+        favoritesvm.prototype.load = function () {
             var _this = this;
-            ref.child("centers").on("value", function (data) {
+            hfc.common.firebase.child("centers").on("value", function (data) {
                 _this.centers.length = 0; // clear the current array
                 // join in the user's favorited centers, and add each to the collection
                 if (hfc.common.User) {
@@ -85,11 +80,10 @@ define([
     "text!/views/favorites/favorites.html"
 ], function (template) {
     var vm = new hfc.favoritesvm();
-    var view = new kendo.View(template, {
+    return new kendo.View(template, {
         model: vm,
         show: function () { hfc.common.animate(this.element); },
         init: function () { vm.init(); }
     });
-    return view;
 });
 //# sourceMappingURL=favorites.js.map

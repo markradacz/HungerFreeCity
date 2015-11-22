@@ -9,9 +9,11 @@
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="icon" type="image/gif" href="animated_favicon1.gif">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
-    <link href="https://kendo.cdn.telerik.com/2015.2.805/styles/kendo.common.core.min.css" rel="stylesheet" />
-    <link href="https://kendo.cdn.telerik.com/2015.2.805/styles/kendo.bootstrap.min.css" rel="stylesheet" />
-    <link href="https://kendo.cdn.telerik.com/2015.2.805/styles/kendo.silver.min.css" rel="stylesheet" />
+    <link href="https://kendo.cdn.telerik.com/2015.3.930/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="https://kendo.cdn.telerik.com/2015.3.930/styles/kendo.material.min.css" rel="stylesheet" />
+    <link href="https://kendo.cdn.telerik.com/2015.3.930/styles/kendo.common.min.css" rel="stylesheet">
+    <link href="https://kendo.cdn.telerik.com/2015.3.930/styles/kendo.rtl.min.css" rel="stylesheet">
+    <link href="https://kendo.cdn.telerik.com/2015.3.930/styles/kendo.default.min.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" />
     <link href="hfc.css" rel="stylesheet" />
     <style type="text/css">
@@ -44,17 +46,17 @@
                 </div>
                 <div class="collapse navbar-collapse" id="navbar-collapse">
                     <ul id="nav-links" class="nav navbar-nav">
-                        <li><a href="#/"><span class="fa fa-lg fa-home"></span> Home</a></li>
-                        <li data-bind="visible: isManager, enabled: loggedIn"><a href="#/manage"><span class="fa fa-lg fa-heart"></span> Centers</a></li>
-                        <li data-bind="visible: isAdmin, enabled: loggedIn"><a href="#/admin"><span class="fa fa-lg fa-cube"></span> Admin</a></li>
-                        <li><a href="#/about"><span class="fa fa-lg fa-info"></span> About</a></li>
+                        <li><a href="#/"><span class="fa fa-lg fa-home fa-fw"></span> Home</a></li>
+                        <li data-bind="visible: isManager, enabled: loggedIn"><a href="#/manage"><span class="fa fa-lg fa-heart fa-fw"></span> Centers</a></li>
+                        <li data-bind="visible: isAdmin, enabled: loggedIn"><a href="#/admin"><span class="fa fa-lg fa-cube fa-fw"></span> Admin</a></li>
+                        <li><a href="#/about"><span class="fa fa-lg fa-info fa-fw"></span> About</a></li>
                     </ul>
 
                     <ul class="nav navbar-nav navbar-right">
-                        <li data-bind="visible: loggedIn"><a class="k-link" data-bind="click: showUser"><span class="fa fa-lg fa-user"></span> <span data-bind="text: firstName"></span></a></li>
-                        <li data-bind="visible: loggedIn"><a class="k-link" data-bind="click: logoff"><span class="fa fa-lg fa-sign-out"></span> Log Off</a></li>
-                        <li data-bind="invisible: loggedIn"><a class="k-link" data-bind="click: showRegister"><span class="fa fa-lg fa-user"></span> Sign up</a></li>
-                        <li data-bind="invisible: loggedIn"><a class="k-link" data-bind="click: showLogin"><span class="fa fa-lg fa-sign-in"></span> Log in</a></li>
+                        <li data-bind="visible: loggedIn"><a class="k-link" data-bind="click: showUser"><span class="fa fa-lg fa-user fa-fw"></span> <span data-bind="text: firstName"></span></a></li>
+                        <li data-bind="visible: loggedIn"><a class="k-link" data-bind="click: logoff"><span class="fa fa-lg fa-sign-out fa-fw"></span> Sign out</a></li>
+                        <li data-bind="invisible: loggedIn"><a class="k-link" data-bind="click: showRegister"><span class="fa fa-lg fa-user fa-fw"></span> Sign up</a></li>
+                        <li data-bind="invisible: loggedIn"><a class="k-link" data-bind="click: showLogin"><span class="fa fa-lg fa-sign-in fa-fw"></span> Sign in</a></li>
                     </ul>
                 </div>
             </div>
@@ -65,7 +67,7 @@
 
         <div id="loginPanel" style="display: none"
              data-role="window"
-             data-title="Log in"
+             data-title="Sign in"
              data-draggable="true"
              data-modal="true"
              data-scrollable="false"
@@ -89,7 +91,7 @@
                 </div>
                 <div>
                     <button data-role="button" class="k-primary" data-bind="click: loginButtonClick" style="width: 100%;">
-                        <span class="fa fa-lg fa-sign-in"></span> Log in
+                        <span class="fa fa-lg fa-sign-in"></span> Sign in
                     </button>
                 </div>
                 <div>
@@ -99,7 +101,7 @@
 
             <div id="registerView" data-bind="visible: isRegistering">
                 <div>
-                    Already have an account? <a data-bind="click: showLogin">Log in.</a>
+                    Already have an account? <a data-bind="click: showLogin">Sign in.</a>
                 </div>
                 <div>
                     <input type="text" class="k-textbox" data-min-width="300" data-bind="value: firstName" placeholder="First Name" style="width: 100%;" />
@@ -139,7 +141,7 @@
                     </button>
                 </div>
                 <div>
-                    <a data-bind="click: showLogin">Return to Log in</a>
+                    <a data-bind="click: showLogin">Return to Sign in</a>
                 </div>
             </div>
         </div>

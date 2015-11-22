@@ -20,11 +20,10 @@ define([
     "text!/views/about/about.html"
 ], function (template) {
     var vm = new hfc.aboutvm();
-    var view = new kendo.View(template, {
+    return new kendo.View(template, {
         model: vm,
         show: function () { hfc.common.animate(this.element); },
         init: function () { vm.init(); }
     });
-    return view;
 });
 //# sourceMappingURL=about.js.map

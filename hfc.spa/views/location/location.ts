@@ -1,6 +1,6 @@
 ﻿/// <reference path="../../scripts/typings/require.d.ts" />
-/// <reference path="../../scripts/typings/jquery.d.ts" />
-/// <reference path="../../scripts/typings/kendo.all.d.ts" />
+/// <reference path="../../scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../../scripts/typings/kendo-ui/kendo-ui.d.ts" />
 /// <reference path="../../scripts/common.ts" />
 /// <reference path="../../scripts/typings/google.maps.d.ts" />
 module hfc {
@@ -89,7 +89,7 @@ module hfc {
 
 				const clone = JSON.parse(JSON.stringify(item.geometry));	// cheap way to get a deep clone
 
-				new Firebase(common.FirebaseUrl)
+				common.firebase
 					.child(item.refkey)
 					.child("geometry")
 					.update(clone, error => {
@@ -111,10 +111,9 @@ define([
     'text!/views/location/location.html'
 ], template => {
     var vm = new hfc.locationvm();
-    var view = new kendo.View(template, {
+    return new kendo.View(template, {
         model: vm,
         show() { hfc.common.animate(this.element, "fadeIn"); vm.initMap(); },
         init() { vm.init(); }
     });
-    return view;
 });

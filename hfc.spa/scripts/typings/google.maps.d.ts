@@ -1820,7 +1820,7 @@ declare module google.maps {
             matched_substrings: PredictionSubstring[];
             place_id: string;
             terms: PredictionTerm[];
-            types: string[]
+            types: string[];
         }
 
         export interface PredictionTerm {

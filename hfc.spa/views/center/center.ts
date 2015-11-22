@@ -1,6 +1,6 @@
 ﻿/// <reference path="../../scripts/typings/require.d.ts" />
-/// <reference path="../../scripts/typings/jquery.d.ts" />
-/// <reference path="../../scripts/typings/kendo.all.d.ts" />
+/// <reference path="../../scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../../scripts/typings/kendo-ui/kendo-ui.d.ts" />
 /// <reference path="../../scripts/common.ts" />
 module hfc {
     export class centervm extends kendo.data.ObservableObject {
@@ -20,7 +20,7 @@ module hfc {
 				clone.lastModified = new Date().toISOString();
 
 				// common.log("saving center data " + JSON.stringify(clone));
-				new Firebase(common.FirebaseUrl)
+				common.firebase
 					.child(item.refkey)
 					.update(clone, error => {
 						if (error) {
@@ -47,10 +47,9 @@ define([
     'text!/views/center/center.html'
 ], template => {
     var vm = new hfc.centervm();
-    var view = new kendo.View(template, {
+    return new kendo.View(template, {
         model: vm,
         show() { hfc.common.animate(this.element); },
         init() { vm.init(); }
     });
-    return view;
 });

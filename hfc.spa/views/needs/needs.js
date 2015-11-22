@@ -4,8 +4,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /// <reference path="../../scripts/typings/require.d.ts" />
-/// <reference path="../../scripts/typings/jquery.d.ts" />
-/// <reference path="../../scripts/typings/kendo.all.d.ts" />
+/// <reference path="../../scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../../scripts/typings/kendo-ui/kendo-ui.d.ts" />
 /// <reference path="../../scripts/common.ts" />
 var hfc;
 (function (hfc) {
@@ -69,7 +69,7 @@ var hfc;
         };
         needsvm.prototype.saveCenterNeeds = function (centerItem) {
             var clone = JSON.parse(JSON.stringify(centerItem.needs)); // cheap way to get a deep clone
-            var ref = new Firebase(hfc.common.FirebaseUrl).child(centerItem.refkey);
+            var ref = hfc.common.firebase.child(centerItem.refkey);
             ref.child("needs")
                 .set(clone, function (error) {
                 if (error) {
@@ -196,7 +196,7 @@ var hfc;
             delete clone.favorite; // remove this property
             delete clone.refkey; // remove this property
             clone.lastModified = new Date().toISOString();
-            var ref = new Firebase(hfc.common.FirebaseUrl).child(item.refkey);
+            var ref = hfc.common.firebase.child(item.refkey);
             ref.update(clone, function (error) {
                 if (error) {
                     hfc.common.errorToast("Center data could not be updated." + error);

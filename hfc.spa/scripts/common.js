@@ -1,5 +1,6 @@
-/// <reference path="typings/jquery.d.ts" />
-/// <reference path="typings/kendo.all.d.ts" />
+/// <reference path="typings/jquery/jquery.d.ts" />
+/// <reference path="typings/kendo-ui/kendo-ui.d.ts" />
+/// <reference path="typings/firebase/firebase.d.ts" />
 /*global alert,$,self,models,data,document,window,kendo,jQuery*/
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -94,7 +95,11 @@ var hfc;
         User
         -----------------------------------------------------*/
         common.User = null;
+        /*-----------------------------------------------------
+        Firebase
+        -----------------------------------------------------*/
         common.FirebaseUrl = 'https://hungerfreecity.firebaseio.com/';
+        common.firebase = new Firebase(common.FirebaseUrl);
         common.CenterTypes = new kendo.data.ObservableArray([
             { id: "DONATE", name: "Donation Center", description: "Collects donations and delivers to a local Food Bank" },
             { id: "PANTRY", name: "Food Pantry", description: "Food Pantry collects donations for their own distribution, and delivers to a local Food Bank" },
@@ -159,7 +164,6 @@ jQuery.extend({
 // extend jQuery with a new sortItems() function
 jQuery.extend({
     sortItems: function (array, keyPropertyName) {
-        // common.log("replaceOrAddItem: " + array.length + " of " + keyPropertyName + " = " + keyValue + " with " + JSON.stringify(replacementItem));
         // slice(0) used here to copy the array
         var copy = array.slice(0);
         copy.sort(function (a, b) {
@@ -208,6 +212,37 @@ var kendo;
             var widget;
             (function (widget) {
                 var Binder = kendo.data.Binder;
+                var xdatabound = (function (_super) {
+                    __extends(xdatabound, _super);
+                    function xdatabound(element, bindings, options) {
+                        _super.call(this, element, bindings, options);
+                    }
+                    xdatabound.prototype.init = function (element, bindings, options) {
+                        _super.prototype.init.call(this, element, bindings, options);
+                        //const binding = this.bindings["xdatabound"];
+                    };
+                    xdatabound.prototype.refresh = function () {
+                        var binding = this.bindings["xdatabound"];
+                        try {
+                            // common.log("xdatabound: on " + this.element.tagName + " with " + binding.path);
+                            // var fn = that.bindings["xdatabound"].get();	// calls the function! don't want that
+                            var fn = binding.source.get(binding.path);
+                            if (!fn)
+                                fn = eval(binding.path); // see if we can get a function reference by an eval
+                            if (!fn)
+                                fn = window[binding.path]; // see if we can get a function reference within the global window object
+                            if (fn)
+                                fn(this.element, binding.source);
+                            else
+                                hfc.common.log("xdatabound error: function doesn't exist: on " + this.element.tagName + " with " + binding.path + " on source " + JSON.stringify(binding.source));
+                        }
+                        catch (e) {
+                            hfc.common.log("xdatabound error with " + binding.path + " on " + this.element.tagName + " error: " + JSON.stringify(e));
+                        }
+                    };
+                    return xdatabound;
+                })(Binder);
+                widget.xdatabound = xdatabound;
                 var onEnter = (function (_super) {
                     __extends(onEnter, _super);
                     function onEnter(element, bindings, options) {
@@ -551,7 +586,7 @@ var kendo;
                 __extends(formattedText, _super);
                 function formattedText(element, bindings, options) {
                     _super.call(this, element, bindings, options);
-                    this.format = $(element).data("format");
+                    this.format = String($(element).data("format"));
                 }
                 formattedText.prototype.refresh = function () {
                     var data = this.bindings["formattedText"].get();
@@ -567,7 +602,7 @@ var kendo;
                 __extends(date, _super);
                 function date(element, bindings, options) {
                     _super.call(this, element, bindings, options);
-                    this.dateformat = $(element).data("dateformat");
+                    this.dateformat = String($(element).data("dateformat"));
                 }
                 date.prototype.refresh = function () {
                     var data = this.bindings["date"].get();
@@ -636,8 +671,8 @@ var kendo;
                 function cssToggle(element, bindings, options) {
                     _super.call(this, element, bindings, options);
                     var t = $(element);
-                    this.c = t.data("class") || t.data("classTrue") || "enabled";
-                    this.nc = t.data("class") || t.data("classFalse") || "disabled";
+                    this.c = String(t.data("class") || t.data("classTrue") || "enabled");
+                    this.nc = String(t.data("class") || t.data("classFalse") || "disabled");
                 }
                 cssToggle.prototype.refresh = function () {
                     var e = $(this.element);

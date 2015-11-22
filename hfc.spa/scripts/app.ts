@@ -1,6 +1,6 @@
-﻿/// <reference path="typings/jquery.d.ts" />
-/// <reference path="typings/kendo.all.d.ts" />
-/// <reference path="typings/firebase.d.ts" />
+﻿/// <reference path="typings/jquery/jquery.d.ts" />
+/// <reference path="typings/kendo-ui/kendo-ui.d.ts" />
+/// <reference path="typings/firebase/firebase.d.ts" />
 /// <reference path="typings/require.d.ts" />
 /// <reference path="common.ts" />
 module hfc {
@@ -19,11 +19,10 @@ module hfc {
 
 		private isPanelShowing = false;
         private nav: any;
-        private ref = new Firebase(common.FirebaseUrl);
         private userId: string;
 
         private showPanel(id: string, title: string): void {
-            const p = $(id).data("kendoWindow");
+            const p = $(id).data("kendoWindow") as kendo.ui.Window;
 			p.title(title);
 
 			if (this.get("isPanelShowing"))
@@ -36,7 +35,7 @@ module hfc {
 
         private closePanel(id: string): void {
 			this.set("isPanelShowing", false);
-            $(id).data("kendoWindow").close();
+            ($(id).data("kendoWindow") as kendo.ui.Window).close();
         }
 
 		public panelClosed(e: any): void {
@@ -50,7 +49,7 @@ module hfc {
             this.set("isLoggingIn", false);
             this.set("isRegistering", true);
 			this.set("isResetting", false);
-			this.showPanel("#loginPanel", "Sign Up");
+			this.showPanel("#loginPanel", "Sign up");
 			this.appear("#registerView");
 		}
 
@@ -58,7 +57,7 @@ module hfc {
             this.set("isLoggingIn", true);
             this.set("isRegistering", false);
 			this.set("isResetting", false);
-			this.showPanel("#loginPanel", "Log In");
+			this.showPanel("#loginPanel", "Sign in");
 			this.appear("#loginView");
 		}
 
@@ -80,11 +79,11 @@ module hfc {
             const phone = this.get("phone");
 
 			if (firstName == null || firstName === "") {
-                hfc.common.errorToast("Please provide a First Name");
+                common.errorToast("Please provide a First Name");
                 return;
             }
             if (lastName == null || lastName === "") {
-                hfc.common.errorToast("Please provide a Last Name");
+                common.errorToast("Please provide a Last Name");
                 return;
             }
 
@@ -105,8 +104,8 @@ module hfc {
 
 			if (mod) {
 				// save the user's profile
-				this.ref.child("users").child(hfc.common.User.userId).set(hfc.common.User);	
-				hfc.common.successToast("User information updated");
+				common.firebase.child("users").child(common.User.userId).set(common.User);	
+				common.successToast("User information updated");
 			}
 			this.closePanel("#userPanel");
 		}
@@ -122,8 +121,8 @@ module hfc {
 
         public logoff(): void {
             // Unauthenticate the client
-            this.ref.unauth();
-            hfc.common.User = null;
+            common.firebase.unauth();
+            common.User = null;
             this.setlogin();
         }
 
@@ -141,23 +140,23 @@ module hfc {
 
             // validate registration
 			if (firstName == null || firstName === "") {
-                hfc.common.errorToast("Please provide a First Name");
+                common.errorToast("Please provide a First Name");
                 return;
             }
             if (lastName == null || lastName === "") {
-                hfc.common.errorToast("Please provide a Last Name");
+                common.errorToast("Please provide a Last Name");
                 return;
             }
             if (email == null || !this.validateEmail(email)) {
-                hfc.common.errorToast("Invalid email address: " + email);
+                common.errorToast("Invalid email address: " + email);
                 return;
             }
             if (password == null || password === "") {
-                hfc.common.errorToast("Please provide a password");
+                common.errorToast("Please provide a password");
                 return;
             }
 
-            this.ref.createUser({
+            common.firebase.createUser({
                 email: email,
                 password: password
             }, (error, userData) => {
@@ -165,7 +164,7 @@ module hfc {
                     this.showError(error);
                 } else {
 					// login
-					this.ref.authWithPassword({
+					common.firebase.authWithPassword({
 						email: email,
 						password: password
 					}, (error, authData) => {
@@ -173,7 +172,7 @@ module hfc {
 							this.showError(error);
 						} else {
 							// save the user's profile
-							hfc.common.User = {
+							common.User = {
 								userId: userData.uid,
 								firstName: firstName,
 								lastName: lastName,
@@ -183,9 +182,9 @@ module hfc {
 								centers: [],
 								roles: ["user"]
 							};
-							this.ref.child("users").child(userData.uid).set(hfc.common.User);
+							common.firebase.child("users").child(userData.uid).set(common.User);
 
-							hfc.common.successToast("Successfully registered");
+							common.successToast("Successfully registered");
 							this.closePanel("#loginPanel");
 							this.setlogin();
 						}
@@ -196,7 +195,7 @@ module hfc {
 
         public loginButtonClick(e: any): void {
             // validate credentials
-            this.ref.authWithPassword({
+            common.firebase.authWithPassword({
                 email: this.get("email"),
                 password: this.get("password")
             }, (error, authData) => {
@@ -210,13 +209,13 @@ module hfc {
         }
 
         public resetPasswordButtonClick(e: any): void {
-            this.ref.resetPassword({
+            common.firebase.resetPassword({
                 email: this.get("email")
             }, error => {
                 if (error) {
                     this.showError(error);
                 } else {
-                    hfc.common.successToast("Password reset email sent");
+                    common.successToast("Password reset email sent");
                     this.closePanel("#loginPanel");
                 }
             });
@@ -225,16 +224,16 @@ module hfc {
         private showError(error: any): void {
             switch (error.code) {
                 case "INVALID_EMAIL":
-                    hfc.common.errorToast("The specified user account email is invalid.");
+                    common.errorToast("The specified user account email is invalid.");
                     break;
                 case "INVALID_PASSWORD":
-                    hfc.common.errorToast("The specified user account password is incorrect.");
+                    common.errorToast("The specified user account password is incorrect.");
                     break;
                 case "INVALID_USER":
-                    hfc.common.errorToast("The specified user account does not exist.");
+                    common.errorToast("The specified user account does not exist.");
                     break;
                 default:
-                    hfc.common.errorToast("Error logging user in: " + error);
+                    common.errorToast("Error signing user in: " + error);
             }
         }
 
@@ -253,7 +252,7 @@ module hfc {
             if (authData) {
                 // get the user's profile data
                 this.set("userId", authData.uid);
-	            const uref = this.ref.child("users").child(authData.uid).ref();
+				const uref = common.firebase.child("users").child(authData.uid).ref();
 	            uref.once("value", userData => {
 					var data = userData.val();
                     var mod = false;
@@ -291,7 +290,7 @@ module hfc {
                     }
 
                     if (mod) uref.set(data);
-                    hfc.common.User = data;
+                    common.User = data;
                     this.setlogin();
                 });
             }
@@ -302,33 +301,33 @@ module hfc {
         }
 
         private setlogin(): void {
-            if (hfc.common.User) {
-                hfc.common.successToast("Welcome " + common.User.email);
+            if (common.User) {
+                common.successToast("Welcome " + common.User.email);
                 this.set("loggedIn", true);
-				this.set("isManager", hfc.common.hasRole("manager") || hfc.common.hasRole("admin"));
-				this.set("isAdmin", hfc.common.hasRole("admin"));
-                this.set("email", hfc.common.User.email);
-                this.set("phone", hfc.common.User.phone);
-                this.set("firstName", hfc.common.User.firstName);
-                this.set("lastName", hfc.common.User.lastName);
-                $.publish("loggedIn", [this.ref]);
+				this.set("isManager", common.hasRole("manager") || common.hasRole("admin"));
+				this.set("isAdmin", common.hasRole("admin"));
+                this.set("email", common.User.email);
+                this.set("phone", common.User.phone);
+                this.set("firstName", common.User.firstName);
+                this.set("lastName", common.User.lastName);
+                $.publish("loggedIn");
             } else {
                 this.set("loggedIn", false);
 				this.set("isManager", false);
 				this.set("isAdmin", false);
-                hfc.common.successToast("Logged off");
+                common.successToast("Logged off");
                 $.publish("loggedOff");
             }
         }
 
         private saveFavorites = () => {
 	        const userId = this.get("userId");
-	        this.ref
+			common.firebase
 				.child("users")
 				.child(userId)
 				.child("favorites")
-				.set(hfc.common.User.favorites);
-			hfc.common.successToast("Saved favorites");
+				.set(common.User.favorites);
+			common.successToast("Saved favorites");
         }
 
         public init(): void {
@@ -356,7 +355,7 @@ module hfc {
             //});
 
             // get the user's profile data
-            this.getUserProfile(this.ref.getAuth());
+            this.getUserProfile(common.firebase.getAuth());
 
             $.subscribe("saveFavorites", this.saveFavorites);
             $.subscribe("showLogin", this.showLogin);

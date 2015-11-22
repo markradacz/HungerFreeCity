@@ -1,9 +1,9 @@
-﻿/// <reference path='../../scripts/typings/jquery.d.ts' />
-/// <reference path='../../scripts/typings/kendo.all.d.ts' />
+﻿/// <reference path="../../scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../../scripts/typings/kendo-ui/kendo-ui.d.ts" />
 /// <reference path='../../scripts/common.ts' />
 module hfc {
     export class mapvm extends kendo.data.ObservableObject {
-		private centers: any[] = [];
+        public centers = new kendo.data.ObservableArray([]);
 		private map: google.maps.Map;
 		private markers: google.maps.Marker[] = [];
 		private infowindow: google.maps.InfoWindow;
@@ -38,7 +38,7 @@ module hfc {
 			var totLng = 0;
 			var totCnt = 0;
 
-			this.centers.forEach(c => {
+			this.centers.forEach( (c: any) => {
 				var lat = c.geometry.coordinates[0];
 				var lng = c.geometry.coordinates[1];
 				if (lat !== 0 && lng !== 0) {
@@ -122,8 +122,8 @@ module hfc {
 	    public constructor() {
             super();
 			var that = this;
-			$.subscribe("loggedIn", (ref: Firebase) => {
-                ref.child("centers").on("value", data => {
+			$.subscribe("loggedIn", () => {
+                common.firebase.child("centers").on("value", data => {
 					// convert object to an array
 	                that.centers.length = 0; // empty our current array first
 					data.forEach(v => {
@@ -139,11 +139,10 @@ module hfc {
 define([
     "text!/views/map/map.html"
 ], template => {
-    var vm: hfc.mapvm = new hfc.mapvm();
-    var view: kendo.View = new kendo.View(template, {
+    var vm = new hfc.mapvm();
+    return new kendo.View(template, {
         model: vm,
         show() { hfc.common.animate(this.element); vm.initMap(); },
         init() { vm.init(); }
     });
-    return view;
 });

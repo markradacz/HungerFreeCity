@@ -3,8 +3,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/// <reference path='../../scripts/typings/jquery.d.ts' />
-/// <reference path='../../scripts/typings/kendo.all.d.ts' />
+/// <reference path="../../scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../../scripts/typings/kendo-ui/kendo-ui.d.ts" />
 /// <reference path='../../scripts/common.ts' />
 var hfc;
 (function (hfc) {
@@ -66,11 +66,10 @@ define([
     vm.favoritesView = favorites;
     vm.mapView = map;
     vm.allView = all;
-    var view = new kendo.View(template, {
+    return new kendo.View(template, {
         model: vm,
         show: function () { hfc.common.animate(this.element); },
         init: function () { vm.init(); }
     });
-    return view;
 });
 //# sourceMappingURL=home.js.map

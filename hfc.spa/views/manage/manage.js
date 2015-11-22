@@ -4,8 +4,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /// <reference path="../../scripts/typings/require.d.ts" />
-/// <reference path="../../scripts/typings/jquery.d.ts" />
-/// <reference path="../../scripts/typings/kendo.all.d.ts" />
+/// <reference path="../../scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../../scripts/typings/kendo-ui/kendo-ui.d.ts" />
 /// <reference path="../../scripts/common.ts" />
 var hfc;
 (function (hfc) {
@@ -21,10 +21,10 @@ var hfc;
             this.item = { name: "" };
             this.layout = new kendo.Layout("<div id='viewContent'/>");
             var that = this;
-            $.subscribe("loggedIn", function (ref) {
+            $.subscribe("loggedIn", function () {
                 var isadmin = hfc.common.hasRole("admin");
                 _this.set("isAdmin", isadmin);
-                ref.child("centers").on("value", function (data) {
+                hfc.common.firebase.child("centers").on("value", function (data) {
                     that.centers.length = 0; // clear the current array
                     // join in the user's centers, and add each to the collection
                     if (hfc.common.User) {
@@ -81,7 +81,7 @@ var hfc;
                 var user = hfc.common.User;
                 var centers = user.centers;
                 centers.push(center.centerid);
-                new Firebase(hfc.common.FirebaseUrl)
+                hfc.common.firebase
                     .child("users")
                     .child(user.userId)
                     .child("centers")
@@ -92,7 +92,7 @@ var hfc;
                 });
                 // save the new center to Firebase
                 this.set("item", center);
-                new Firebase(hfc.common.FirebaseUrl)
+                hfc.common.firebase
                     .child("centers")
                     .push(center, function (error) {
                     if (error) {
@@ -143,7 +143,7 @@ var hfc;
             this.layout.showIn("#viewContent", this.blankView, "swap");
             this.set("toolbarVisible", false);
             // remove on Firebase (and it will remove from centers list by callback)
-            new Firebase(hfc.common.FirebaseUrl)
+            hfc.common.firebase
                 .child(item.refkey)
                 .set(null); // remove the item
         };

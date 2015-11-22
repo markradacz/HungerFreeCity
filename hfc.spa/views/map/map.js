@@ -3,8 +3,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/// <reference path='../../scripts/typings/jquery.d.ts' />
-/// <reference path='../../scripts/typings/kendo.all.d.ts' />
+/// <reference path="../../scripts/typings/jquery/jquery.d.ts" />
+/// <reference path="../../scripts/typings/kendo-ui/kendo-ui.d.ts" />
 /// <reference path='../../scripts/common.ts' />
 var hfc;
 (function (hfc) {
@@ -12,11 +12,11 @@ var hfc;
         __extends(mapvm, _super);
         function mapvm() {
             _super.call(this);
-            this.centers = [];
+            this.centers = new kendo.data.ObservableArray([]);
             this.markers = [];
             var that = this;
-            $.subscribe("loggedIn", function (ref) {
-                ref.child("centers").on("value", function (data) {
+            $.subscribe("loggedIn", function () {
+                hfc.common.firebase.child("centers").on("value", function (data) {
                     // convert object to an array
                     that.centers.length = 0; // empty our current array first
                     data.forEach(function (v) {
@@ -119,11 +119,10 @@ define([
     "text!/views/map/map.html"
 ], function (template) {
     var vm = new hfc.mapvm();
-    var view = new kendo.View(template, {
+    return new kendo.View(template, {
         model: vm,
         show: function () { hfc.common.animate(this.element); vm.initMap(); },
         init: function () { vm.init(); }
     });
-    return view;
 });
 //# sourceMappingURL=map.js.map
