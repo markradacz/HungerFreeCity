@@ -1,0 +1,16 @@
+﻿<h1 data-bind="appearAnimation: slideDown">Admin</h1>
+<div id="tabtoolbar"
+     class="tabtoolbar"
+     data-role="toolbar"
+     data-bind="events: { toggle: tabToggle }"
+     data-items='[{
+        type: "buttonGroup",
+        buttons: [
+            { spriteCssClass: "fa fa-user", text: " USERS", togglable: true, group: "tab", "id": "users" },
+            { spriteCssClass: "fa fa-tags", text: " NEEDS", togglable: true, group: "tab", "id": "needs" },
+            { spriteCssClass: "fa fa-list", text: " CONTENT", togglable: true, group: "tab", "id": "pages" }
+        ]
+	}]'>
+</div>
+<div id="adminTabs">
+</div>

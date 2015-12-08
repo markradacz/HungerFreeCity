@@ -1,0 +1,61 @@
+﻿<h3>Link needs to a different Center?</h3>
+<div id="centerLinkToolbar" class="tabtoolbar"
+    data-role="toolbar"
+    data-bind="events: { toggle: doLinkAction }"
+    data-items='[{
+        type: "buttonGroup",
+        buttons: [
+            { spriteCssClass: "fa fa-list-ol", text: " No, maintain our own needs list", togglable: true, group: "alignment", "id": "no" },
+            { spriteCssClass: "fa fa-link", text: " Yes, link our needs from:", togglable: true, group: "alignment", "id": "yes" }
+        ]
+    }]'>
+</div>            
+
+<div class="tabtoolbar"
+    data-role="toolbar"
+    data-bind="invisible: isLinked, events: { click: doAction }"
+    data-items='[{
+            type: "buttonGroup",
+            buttons: [
+                { spriteCssClass: "fa fa-plus", text: " ADD NEED", "id": "add" }
+            ]
+        }]'>
+</div>
+
+<div id="needsList"
+     class="needslist"
+     data-role="listview"
+     data-selectable="true"
+     data-template="needItemTemplate"
+     data-bind="invisible: isLinked, source: item.needs, events: { dataBound: onDataBound, change: onItemSelected }">
+</div>
+<script type="text/x-kendo-tmpl" id="needItemTemplate">
+    <div class="needItem">
+        <button class="confirmRemoveNeed" data-bind="click: onRemove">REMOVE</button>
+        <span class="needIndex" data-bind="text: index" />
+        <span data-bind="text: name" />
+        <span class="fa fa-lg fa-bars" />
+        <a class="removeIcon" data-bind="click: onShowRemove"><span class="fa fa-lg fa-trash" /></a>
+        <a data-bind="click: onEdit"><span class="fa fa-lg fa-pencil" /></a>
+    </div>
+</script>
+
+<div id="editNeedPanel" style="display: none"
+     data-role="window"
+     data-title="EDIT ITEM"
+     data-draggable="true"
+     data-modal="true"
+     data-scrollable="false"
+     data-pinned="false"
+     data-resizable="false"
+     data-position='{ top: "50%", left: "50%" }'
+     data-visible="false"
+     class="editPanel">
+    <div>
+        <label class="k-edit-label">Name</label>
+        <input type="text" class="k-textbox" data-min-width="300" data-bind="value: need.name" placeholder="Name of need" />
+    </div>
+    <button id="button" data-role="button" class="k-primary" data-bind="click: saveButtonClick" style="width: 100%;">
+        <span class="fa fa-floppy-o"></span> <span> Save</span>
+    </button>
+</div>

@@ -5,6 +5,7 @@ namespace HFCWebAdmin.Migrations
 	using System.Data.Entity.Migrations;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     internal sealed class Configuration : DbMigrationsConfiguration<HFCWebAdmin.Models.ApplicationDbContext>
     {
         public Configuration()
@@ -12,12 +13,17 @@ namespace HFCWebAdmin.Migrations
             AutomaticMigrationsEnabled = true;
         }
 =======
+=======
+>>>>>>> origin/master
 	internal sealed class Configuration : DbMigrationsConfiguration<ApplicationDbContext>
 	{
 		public Configuration()
 		{
 			AutomaticMigrationsEnabled = false;
 		}
+<<<<<<< HEAD
+>>>>>>> origin/master
+=======
 >>>>>>> origin/master
 
 		protected override void Seed( ApplicationDbContext context )

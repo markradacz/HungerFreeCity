@@ -1,0 +1,47 @@
+﻿<div class="tabtoolbar"
+     data-role="toolbar"
+     data-bind="events: { click: doAction }"
+     data-items='[{
+        type: "buttonGroup",
+        buttons: [
+            { spriteCssClass: "fa fa-pencil", text: " EDIT", "id": "edit" },
+            { spriteCssClass: "fa fa-floppy-o", text: " SAVE", "id": "save" }
+        ]
+    }]'>
+</div>
+
+<h3>Name</h3>
+<input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.name, enabled: canEdit" placeholder="Name" style="width: 100%" />
+
+<h3>Phone</h3>
+<input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.phone, enabled: canEdit" placeholder="Phone" style="width: 100%" />
+
+<h3>Type</h3>
+<input class="k-combobox"data-min-width="300" data-role="combobox" style="width: 100%"
+    data-value-primitive="false"
+    data-placeholder="Choose Type"
+    data-text-field="name"
+    data-value-field="id"
+    data-bind="value: item.centertype, source: CenterTypes, enabled: canEdit" />
+
+<h3>Hours</h3>
+<input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.hours, enabled: canEdit" placeholder="Hours" style="width: 100%" />
+
+<h3>Site URL</h3>
+<input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.site, enabled: canEdit" placeholder="Site URL" style="width: 100%" />
+
+<h3>Address</h3>
+<div>
+    <input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.address.address1, enabled: canEdit" placeholder="Address" style="width: 100%" />
+</div>
+<div>
+    <input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.address.address2, enabled: canEdit" placeholder="Address 2" style="width: 100%" />
+</div>
+<div>
+    <input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.address.city, enabled: canEdit" placeholder="City" />
+    <input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.address.state, enabled: canEdit" placeholder="State" />
+    <input type="text" class="k-textbox" data-min-width="300" data-bind="value: item.address.zipcode, enabled: canEdit" placeholder="Zip" />
+</div>
+
+<h3>Notes</h3>
+<textarea class="k-textbox" rows="6" data-min-width="300" data-bind="combine: item.centerinfo, enabled: canEdit" placeholder="Notes" style="width: 100%;"></textarea>

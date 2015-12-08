@@ -1,17 +1,10 @@
 ﻿@model IEnumerable<HFCWebAdmin.Models.PantryItem>
 
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Pantry Items";
 }
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
+<h2>Pantry Items</h2>
     <p>
         @Html.ActionLink("Create New", "Create")
     </p>
@@ -91,5 +84,3 @@
     }
     
     </table>
-</body>
-</html>

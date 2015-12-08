@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <ProjectGuid>{2F92563E-4C0B-4967-90AB-31EB6EC59BB1}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <OutputPath>bin</OutputPath>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <TypeScriptToolsVersion>1.6</TypeScriptToolsVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="animated_favicon1.gif" />
+    <Content Include="images\bank.png" />
+    <Content Include="images\donate.png" />
+    <Content Include="images\hfc-bg.png" />
+    <Content Include="images\hfc-logo-sq.png" />
+    <Content Include="images\hfc-logo.png" />
+    <Content Include="images\Logo3sm.png" />
+    <Content Include="images\page-loader.gif" />
+    <Content Include="images\pantry.png" />
+    <Content Include="images\spacer.gif" />
+    <Content Include="Scripts\app.js" />
+    <Content Include="Scripts\app.js.map" />
+    <Content Include="Scripts\async.js" />
+    <Content Include="Scripts\r.js" />
+    <Content Include="Scripts\require.js" />
+    <Content Include="Views\admin\admin.js.map" />
+    <Content Include="Views\all\all.html" />
+    <Content Include="Views\all\all.js" />
+    <Content Include="Views\favorites\favorites.html" />
+    <Content Include="Views\favorites\favorites.js" />
+    <Content Include="Views\map\map.html" />
+    <Content Include="Views\map\map.js" />
+    <Content Include="Views\users\users.js.map" />
+    <Content Include="Views\about\about.js.map" />
+    <Content Include="Views\all\all.js.map" />
+    <Content Include="Views\favorites\favorites.js.map" />
+    <Content Include="Views\map\map.js.map" />
+    <TypeScriptCompile Include="Scripts\typings\firebase\firebase-simplelogin.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\firebase\firebase.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\google.maps.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\kendo-ui\kendo-ui.d.ts" />
+    <TypeScriptCompile Include="Views\about\about.ts" />
+    <Content Include="Views\admin\admin.html" />
+    <Content Include="Views\admin\admin.js" />
+    <Content Include="Views\center\center.js.map" />
+    <Content Include="Views\location\location.js" />
+    <Content Include="Views\needs\needs.js.map" />
+    <Content Include="Views\location\location.js.map" />
+    <Content Include="hfc.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="index.html" />
+    <Content Include="Scripts\liveSetup.js" />
+    <TypeScriptCompile Include="Scripts\app.ts" />
+    <TypeScriptCompile Include="Scripts\main.ts" />
+    <Content Include="Scripts\main.js" />
+    <Content Include="packages.config" />
+    <Content Include="Scripts\common.js.map" />
+    <Content Include="Scripts\main.js.map" />
+    <Content Include="firebase.json" />
+    <Content Include="Scripts\common.js" />
+    <Content Include="Scripts\debug.js" />
+    <Content Include="Scripts\live.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\pubsub.js" />
+    <Content Include="Scripts\text.js" />
+    <Content Include="Views\home\home.js.map" />
+    <Content Include="Views\center\center.js" />
+    <Content Include="Views\manage\manage.js.map" />
+    <TypeScriptCompile Include="Scripts\common.ts" />
+    <Content Include="Views\about\about.html" />
+    <Content Include="Views\about\about.js" />
+    <TypeScriptCompile Include="Views\admin\admin.ts" />
+    <TypeScriptCompile Include="Views\all\all.ts" />
+    <TypeScriptCompile Include="Views\favorites\favorites.ts" />
+    <TypeScriptCompile Include="Views\location\location.ts" />
+    <TypeScriptCompile Include="Views\center\center.ts" />
+    <TypeScriptCompile Include="Views\map\map.ts" />
+    <TypeScriptCompile Include="Views\needs\needs.ts" />
+    <TypeScriptCompile Include="Views\manage\manage.ts" />
+    <Content Include="Views\center\center.html" />
+    <Content Include="Views\location\location.html" />
+    <Content Include="Views\manage\manage.html" />
+    <Content Include="Views\manage\manage.js" />
+    <TypeScriptCompile Include="Views\home\home.ts" />
+    <Content Include="Views\home\home.html" />
+    <Content Include="Views\home\home.js" />
+    <Content Include="Views\needs\needs.html" />
+    <Content Include="Views\needs\needs.js" />
+    <Content Include="Views\users\users.html" />
+    <Content Include="Views\users\users.js" />
+    <Content Include="web.config" />
+    <TypeScriptCompile Include="Scripts\typings\require.d.ts" />
+    <TypeScriptCompile Include="Views\users\users.ts" />
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">12.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>Textr</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\WebApplications\Microsoft.WebApplication.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\WebApplications\Microsoft.WebApplication.targets')" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>25708</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:25700/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
+    <TypeScriptSourceMap>true</TypeScriptSourceMap>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TypeScriptRemoveComments>true</TypeScriptRemoveComments>
+    <TypeScriptSourceMap>false</TypeScriptSourceMap>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+</Project>

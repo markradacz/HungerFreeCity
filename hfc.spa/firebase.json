@@ -1,0 +1,16 @@
+{
+  "firebase": "hungerfreecity",
+  "public": ".",
+  "ignore": [
+    "firebase.json",
+    "**/packages",
+    "**/bin",
+    "**/obj",
+    "**/.*",
+    "**/.vs*",
+    "**/web.config",
+    "**/*.json",
+    "**/*.map",
+    "**/node_modules/**"
+  ]
+}

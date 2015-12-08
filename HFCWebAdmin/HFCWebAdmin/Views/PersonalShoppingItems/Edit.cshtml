@@ -1,17 +1,10 @@
 ﻿@model HFCWebAdmin.Models.PersonalShoppingItem
 
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Edit";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Edit</title>
-</head>
-<body>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
     
@@ -21,7 +14,8 @@
         @Html.AntiForgeryToken()
         
         <div class="form-horizontal">
-            <h4>PersonalShoppingItem</h4>
+            <h2>Edit</h2>
+            <h4>Personal Shopping Item</h4>
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @Html.HiddenFor(model => model.ID)
@@ -135,5 +129,3 @@
     <div>
         @Html.ActionLink("Back to List", "Index")
     </div>
-</body>
-</html>

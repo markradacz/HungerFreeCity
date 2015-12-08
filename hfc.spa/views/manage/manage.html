@@ -1,0 +1,70 @@
+﻿<table style="width: 100%; height: 100%">
+    <tr>
+        <td style="width: 300px; vertical-align: top;">
+            <h1 data-bind="appearAnimation: slideDown">Centers</h1>
+            <div class="tabtoolbar"
+                 data-role="toolbar"
+                 data-bind="visible: isAdmin, events: { click: doAction }"
+                 data-items='[{
+                    type: "buttonGroup",
+                    buttons: [
+                        { spriteCssClass: "fa fa-plus", text: " ADD CENTER", "id": "addcenter" }
+                    ]
+                }]'>
+            </div>
+            <div id="centerlist"
+                 class="centerlist"
+                 data-role="listview"
+                 data-selectable="true"
+                 data-template="template"
+                 data-bind="source: centers, events: { change: showCenter, dataBound: listBound }"
+                 style="height: 500px; overflow: auto">
+            </div>
+            <script type="text/x-kendo-tmpl" id="template">
+				<div class="center-tile">
+					<table style="width: 100%">
+						<tr>
+                            <td>
+                                <button class="confirmRemove" data-bind="click: onRemove">REMOVE</button>
+                            </td>
+                            <td>
+                                <dl>
+                                    <dt data-bind="text: name" />
+                                    <dd data-bind="text: address.address1" />
+                                    <dd data-bind="text: address.address2" />
+                                    <dd>
+                                        <span data-bind="text: address.city" />
+                                        <span data-bind="text: address.state" />
+                                        <span data-bind="text: address.zipcode" />
+                                    </dd>
+                                    <dd data-bind="text: phone" />
+                                </dl>
+                            </td>
+							<td style="vertical-align: top; text-align: center; width: 20px;">
+                                <a class="removeIcon" data-bind="visible: isAdmin, click: onShowRemove"><span class="fa fa-2x fa-trash" /></a>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</script>
+        </td>
+        <td style="padding-left: 20px; vertical-align: top;">
+            <h1 data-bind="visible: toolbarVisible, appearAnimation: slideDown, html: item.name"></h1>
+            <div id="tabtoolbar"
+                 class="tabtoolbar"
+                 data-role="toolbar"
+                 data-bind="visible: toolbarVisible, events: { toggle: tabToggle }"
+                 data-items='[{
+                    type: "buttonGroup",
+                    buttons: [
+                        { spriteCssClass: "fa fa-tags", text: " NEEDS", togglable: true, group: "tab", "id": "needs" },
+                        { spriteCssClass: "fa fa-bank", text: " CENTER", togglable: true, group: "tab", "id": "center" },
+                        { spriteCssClass: "fa fa-map-o", text: " LOCATION", togglable: true, group: "tab", "id": "location" }
+                    ]
+				}]'>
+            </div>
+            <div id="tabContent">
+            </div>
+        </td>
+    </tr>
+</table>

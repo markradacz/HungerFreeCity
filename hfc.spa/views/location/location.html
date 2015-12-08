@@ -1,0 +1,17 @@
+﻿<div class="tabtoolbar"
+     data-role="toolbar"
+     data-bind="events: { click: doAction }"
+     data-items='[{
+        type: "buttonGroup",
+        buttons: [
+            { spriteCssClass: "fa fa-pencil", text: " EDIT", "id": "edit" },
+            { spriteCssClass: "fa fa-floppy-o", text: " SAVE", "id": "save" }
+        ]
+    }]'>
+</div>
+<div>
+    <span data-bind="text: lat"></span>
+    <span data-bind="text: lng"></span>
+</div>
+
+<div id="locationMap"></div>
