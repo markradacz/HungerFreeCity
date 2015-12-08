@@ -1,9 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using System
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Hunger Free City App</title>
+    <title>@ViewBag.Title - Hunger Free City</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
@@ -43,7 +44,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Hunger Free City App</p>
+            <p>&copy; @DateTime.Now.Year - Hunger Free City</p>
         </footer>
     </div>
 

@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
 
 namespace HFCWebAdmin.Models
 {
     public class ShoppingItem
     {
         public string ID { get; set; }
+        public int FoodDistributorID { get; set; }
         public string ShoppingListID { get; set; }
         public string PantryItemID { get; set; }
         public string Notes { get; set; }

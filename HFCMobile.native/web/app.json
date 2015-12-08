@@ -1,0 +1,14 @@
+{
+  "name": "Hunger Free City",
+  "description": "Connecting people to the needs of Community.",
+  "repository": "https://github.com/mirchow/HungerFreeCity",
+  "logo": "http://node-js-sample.herokuapp.com/node.svg",
+  "keywords": [
+    "Food",
+    "Bank",
+    "Hunger",
+    "Community",
+    "Donation",
+    "Charity"
+  ]
+}

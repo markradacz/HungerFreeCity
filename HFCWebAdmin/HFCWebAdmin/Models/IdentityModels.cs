@@ -30,14 +30,14 @@ namespace HFCWebAdmin.Models
             return new ApplicationDbContext();
         }
 
-        public System.Data.Entity.DbSet<HFCWebAdmin.Models.PantryItem> PantryItems { get; set; }
+        public DbSet<PantryItem> PantryItems { get; set; }
 
-        public System.Data.Entity.DbSet<HFCWebAdmin.Models.ShoppingItem> ShoppingItems { get; set; }
+        public DbSet<ShoppingItem> ShoppingItems { get; set; }
 
-        public System.Data.Entity.DbSet<HFCWebAdmin.Models.ShoppingList> ShoppingLists { get; set; }
+        public DbSet<ShoppingList> ShoppingLists { get; set; }
 
-        public System.Data.Entity.DbSet<HFCWebAdmin.Models.PersonalShoppingItem> PersonalShoppingItems { get; set; }
+        public DbSet<PersonalShoppingItem> PersonalShoppingItems { get; set; }
 
-        public System.Data.Entity.DbSet<HFCWebAdmin.Models.PersonalShoppingList> PersonalShoppingLists { get; set; }
+        public DbSet<PersonalShoppingList> PersonalShoppingLists { get; set; }
     }
 }

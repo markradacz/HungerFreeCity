@@ -1,0 +1,29 @@
+# Uncomment this line to define a global platform for your project
+platform :ios, '8.4'
+use_frameworks!
+
+def all_pods
+    pod 'GoogleMaps'
+    pod 'Google/Analytics'
+    pod 'GoogleSignIn'
+    
+    pod 'FBSDKCoreKit'
+    pod 'FBSDKLoginKit'
+    
+    pod 'Firebase'
+    pod 'GeoFire'
+    
+    pod 'DZNEmptyDataSet'
+    
+    # pod 'Alamofire'
+    # pod 'SwiftyJSON'
+    
+end
+
+target 'Hunger Free City' do
+    all_pods
+end
+
+target 'Hunger Free CityTests' do
+    all_pods
+end
