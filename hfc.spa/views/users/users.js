@@ -73,13 +73,14 @@ var hfc;
                 hfc.common.firebase
                     .child("users")
                     .child(clone.userId)
-                    .set(clone, function (error) {
-                    if (error) {
-                        hfc.common.errorToast("Data could not be saved." + error);
-                    }
-                    else {
-                        hfc.common.successToast("User saved successfully.");
-                    }
+                    .set(clone)
+                    .then(function () {
+                    hfc.common.successToast("User saved successfully.");
+                })
+                    .catch(function (error) {
+                    hfc.common.errorToast("Data could not be saved." + error);
+                })
+                    .then(function () {
                     _this.set("canEdit", false);
                 });
             }

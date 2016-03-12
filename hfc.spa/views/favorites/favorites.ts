@@ -8,7 +8,7 @@ module hfc {
         public init(): void {
         }
 
-		private load(): void {
+		private load = () => {
 			common.firebase.child("centers").on("value", data => {
 				this.centers.length = 0;	// clear the current array
 				// join in the user's favorited centers, and add each to the collection
@@ -40,7 +40,7 @@ module hfc {
 					});
 					top.sort((a, b) => (b.count - a.count)); // descending
 					var topmost = top[0];
-					var allSameTopCount = jQuery.grep(top, t => t.count === topmost.count).map(t => t.name).join(", ");
+					const allSameTopCount = jQuery.grep(top, t => t.count === topmost.count).map(t => t.name).join(", ");
 					$.publish("topNeeds", [allSameTopCount]);
 				}
 			});

@@ -65,15 +65,15 @@ module hfc {
 
 		private saveCenterNeeds(centerItem): void {
 			const clone = JSON.parse(JSON.stringify(centerItem.needs));	// cheap way to get a deep clone
-			var ref = common.firebase.child(centerItem.refkey);
+			clone.lastModified = new Date().toISOString();
+			const ref = common.firebase.child(centerItem.refkey);
 			ref.child("needs")
-				.set(clone, error => {
-					if (error) {
-						common.errorToast("Needs data could not be saved." + error);
-					} else {
-						common.successToast("Needs data saved successfully.");
-						ref.update({ lastModified: new Date().toISOString() });
-					}
+				.set(clone)
+				.then( () => {
+					common.successToast("Needs data saved successfully.");
+				})
+				.catch( error => {
+					common.errorToast("Needs data could not be saved." + error);					
 				});			
 		}
 

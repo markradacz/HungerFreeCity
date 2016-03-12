@@ -31,14 +31,13 @@ var hfc;
                 // common.log("saving center data " + JSON.stringify(clone));
                 hfc.common.firebase
                     .child(item.refkey)
-                    .update(clone, function (error) {
-                    if (error) {
-                        hfc.common.errorToast("Data could not be saved." + error);
-                    }
-                    else {
-                        hfc.common.successToast("Center saved successfully.");
-                        _this.set("canEdit", false);
-                    }
+                    .update(clone)
+                    .then(function () {
+                    hfc.common.successToast("Center saved successfully.");
+                    _this.set("canEdit", false);
+                })
+                    .catch(function (error) {
+                    hfc.common.errorToast("Data could not be saved." + error);
                 });
             }
         };

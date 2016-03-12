@@ -69,16 +69,15 @@ var hfc;
         };
         needsvm.prototype.saveCenterNeeds = function (centerItem) {
             var clone = JSON.parse(JSON.stringify(centerItem.needs)); // cheap way to get a deep clone
+            clone.lastModified = new Date().toISOString();
             var ref = hfc.common.firebase.child(centerItem.refkey);
             ref.child("needs")
-                .set(clone, function (error) {
-                if (error) {
-                    hfc.common.errorToast("Needs data could not be saved." + error);
-                }
-                else {
-                    hfc.common.successToast("Needs data saved successfully.");
-                    ref.update({ lastModified: new Date().toISOString() });
-                }
+                .set(clone)
+                .then(function () {
+                hfc.common.successToast("Needs data saved successfully.");
+            })
+                .catch(function (error) {
+                hfc.common.errorToast("Needs data could not be saved." + error);
             });
         };
         needsvm.prototype.onEdit = function (e) {

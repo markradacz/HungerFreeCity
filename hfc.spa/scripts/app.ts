@@ -104,8 +104,13 @@ module hfc {
 
 			if (mod) {
 				// save the user's profile
-				common.firebase.child("users").child(common.User.userId).set(common.User);	
-				common.successToast("User information updated");
+				common.firebase
+					.child("users")
+					.child(common.User.userId)
+					.set(common.User)
+					.then(() => {
+						common.successToast("User information updated");
+					});
 			}
 			this.closePanel("#userPanel");
 		}
@@ -127,7 +132,7 @@ module hfc {
         }
 
         private validateEmail(email: string): boolean {
-            let re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+            const re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
             return re.test(email);
         }
 
@@ -159,37 +164,36 @@ module hfc {
             common.firebase.createUser({
                 email: email,
                 password: password
-            }, (error, userData) => {
-                if (error) {
-                    this.showError(error);
-                } else {
-					// login
-					common.firebase.authWithPassword({
+            })
+			.then(userData => {
+				// login
+				common.firebase.authWithPassword({
+					email: email,
+					password: password
+				})
+				.then(authData => {
+					// save the user's profile
+					common.User = {
+						userId: userData.uid,
+						firstName: firstName,
+						lastName: lastName,
+						phone: phone,
 						email: email,
-						password: password
-					}, (error, authData) => {
-						if (error) {
-							this.showError(error);
-						} else {
-							// save the user's profile
-							common.User = {
-								userId: userData.uid,
-								firstName: firstName,
-								lastName: lastName,
-								phone: phone,
-								email: email,
-								favorites: [],
-								centers: [],
-								roles: ["user"]
-							};
-							common.firebase.child("users").child(userData.uid).set(common.User);
-
-							common.successToast("Successfully registered");
-							this.closePanel("#loginPanel");
-							this.setlogin();
-						}
-					});
-                }
+						favorites: [],
+						centers: [],
+						roles: ["user"]
+					};
+					common.firebase.child("users").child(userData.uid).set(common.User);
+					common.successToast("Successfully registered");
+					this.closePanel("#loginPanel");
+					this.setlogin();
+				})
+				.catch( error => {
+					this.showError(error);						
+				});				
+			})
+			.catch( error => {
+				this.showError(error);
             });
         }
 
@@ -198,26 +202,26 @@ module hfc {
             common.firebase.authWithPassword({
                 email: this.get("email"),
                 password: this.get("password")
-            }, (error, authData) => {
-                if (error) {
-                    this.showError(error);
-                } else {
-                    this.getUserProfile(authData);
-                    this.closePanel("#loginPanel");
-                }
-            });
+            })
+			.then(authData => {
+                this.getUserProfile(authData);
+                this.closePanel("#loginPanel");
+            })
+			.catch( error => {
+				this.showError(error);		            
+	        });        
         }
 
         public resetPasswordButtonClick(e: any): void {
             common.firebase.resetPassword({
                 email: this.get("email")
-            }, error => {
-                if (error) {
-                    this.showError(error);
-                } else {
-                    common.successToast("Password reset email sent");
-                    this.closePanel("#loginPanel");
-                }
+            })
+			.then( () => {
+				common.successToast("Password reset email sent");
+				this.closePanel("#loginPanel");
+	        })
+			.catch(error => {
+                this.showError(error);
             });
         }
 
@@ -253,7 +257,7 @@ module hfc {
                 // get the user's profile data
                 this.set("userId", authData.uid);
 				const uref = common.firebase.child("users").child(authData.uid).ref();
-	            uref.once("value", userData => {
+				uref.once("value").then( userData => {
 					var data = userData.val();
                     var mod = false;
                     if (data.userId === null) {

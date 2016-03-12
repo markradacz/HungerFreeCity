@@ -10,7 +10,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <TypeScriptToolsVersion>1.6</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>1.7</TypeScriptToolsVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
@@ -54,6 +54,7 @@
     <Content Include="Views\all\all.js.map" />
     <Content Include="Views\favorites\favorites.js.map" />
     <Content Include="Views\map\map.js.map" />
+    <TypeScriptCompile Include="Scripts\typings\es6-promise\es6-promise.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\firebase\firebase-simplelogin.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\firebase\firebase.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\google.maps.d.ts" />

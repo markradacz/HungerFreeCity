@@ -22,13 +22,13 @@ module hfc {
 				// common.log("saving center data " + JSON.stringify(clone));
 				common.firebase
 					.child(item.refkey)
-					.update(clone, error => {
-						if (error) {
-							common.errorToast("Data could not be saved." + error);
-						} else {
-							common.successToast("Center saved successfully.");
-							this.set("canEdit", false);
-						}
+					.update(clone)
+					.then(() => {
+						common.successToast("Center saved successfully.");
+						this.set("canEdit", false);
+					})
+					.catch(error => {
+						common.errorToast("Data could not be saved." + error);
 					});
 			}
 		}

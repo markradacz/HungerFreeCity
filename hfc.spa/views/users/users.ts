@@ -31,12 +31,14 @@ module hfc {
 				common.firebase
 					.child("users")
 					.child(clone.userId)
-					.set(clone, error => {
-						if (error) {
-							common.errorToast("Data could not be saved." + error);
-						} else {
-							common.successToast("User saved successfully.");
-						}
+					.set(clone)
+					.then( () => {
+						common.successToast("User saved successfully.");		            
+					})
+					.catch( error => {
+						common.errorToast("Data could not be saved." + error);
+					})
+					.then( () => {
 						this.set("canEdit", false);
 					});
 			}
@@ -64,6 +66,7 @@ module hfc {
 					that.users.length = 0;	// clear the current array
                     all.forEach( v => { that.users.push(v); });
                 });
+
                 common.firebase.child("centers").on("value", data => {
 					// convert object to an array
 					var all = [];
@@ -86,7 +89,6 @@ define([
     "text!/views/users/users.html"
 ], template => {
     var vm = new hfc.usersvm();
-
     return new kendo.View(template, {
         model: vm,
         show() { hfc.common.animate(this.element); },

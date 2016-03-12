@@ -104,8 +104,13 @@ var hfc;
             }
             if (mod) {
                 // save the user's profile
-                hfc.common.firebase.child("users").child(hfc.common.User.userId).set(hfc.common.User);
-                hfc.common.successToast("User information updated");
+                hfc.common.firebase
+                    .child("users")
+                    .child(hfc.common.User.userId)
+                    .set(hfc.common.User)
+                    .then(function () {
+                    hfc.common.successToast("User information updated");
+                });
             }
             this.closePanel("#userPanel");
         };
@@ -154,38 +159,36 @@ var hfc;
             hfc.common.firebase.createUser({
                 email: email,
                 password: password
-            }, function (error, userData) {
-                if (error) {
-                    _this.showError(error);
-                }
-                else {
-                    // login
-                    hfc.common.firebase.authWithPassword({
+            })
+                .then(function (userData) {
+                // login
+                hfc.common.firebase.authWithPassword({
+                    email: email,
+                    password: password
+                })
+                    .then(function (authData) {
+                    // save the user's profile
+                    hfc.common.User = {
+                        userId: userData.uid,
+                        firstName: firstName,
+                        lastName: lastName,
+                        phone: phone,
                         email: email,
-                        password: password
-                    }, function (error, authData) {
-                        if (error) {
-                            _this.showError(error);
-                        }
-                        else {
-                            // save the user's profile
-                            hfc.common.User = {
-                                userId: userData.uid,
-                                firstName: firstName,
-                                lastName: lastName,
-                                phone: phone,
-                                email: email,
-                                favorites: [],
-                                centers: [],
-                                roles: ["user"]
-                            };
-                            hfc.common.firebase.child("users").child(userData.uid).set(hfc.common.User);
-                            hfc.common.successToast("Successfully registered");
-                            _this.closePanel("#loginPanel");
-                            _this.setlogin();
-                        }
-                    });
-                }
+                        favorites: [],
+                        centers: [],
+                        roles: ["user"]
+                    };
+                    hfc.common.firebase.child("users").child(userData.uid).set(hfc.common.User);
+                    hfc.common.successToast("Successfully registered");
+                    _this.closePanel("#loginPanel");
+                    _this.setlogin();
+                })
+                    .catch(function (error) {
+                    _this.showError(error);
+                });
+            })
+                .catch(function (error) {
+                _this.showError(error);
             });
         };
         appvm.prototype.loginButtonClick = function (e) {
@@ -194,28 +197,26 @@ var hfc;
             hfc.common.firebase.authWithPassword({
                 email: this.get("email"),
                 password: this.get("password")
-            }, function (error, authData) {
-                if (error) {
-                    _this.showError(error);
-                }
-                else {
-                    _this.getUserProfile(authData);
-                    _this.closePanel("#loginPanel");
-                }
+            })
+                .then(function (authData) {
+                _this.getUserProfile(authData);
+                _this.closePanel("#loginPanel");
+            })
+                .catch(function (error) {
+                _this.showError(error);
             });
         };
         appvm.prototype.resetPasswordButtonClick = function (e) {
             var _this = this;
             hfc.common.firebase.resetPassword({
                 email: this.get("email")
-            }, function (error) {
-                if (error) {
-                    _this.showError(error);
-                }
-                else {
-                    hfc.common.successToast("Password reset email sent");
-                    _this.closePanel("#loginPanel");
-                }
+            })
+                .then(function () {
+                hfc.common.successToast("Password reset email sent");
+                _this.closePanel("#loginPanel");
+            })
+                .catch(function (error) {
+                _this.showError(error);
             });
         };
         appvm.prototype.showError = function (error) {
@@ -249,7 +250,7 @@ var hfc;
                 // get the user's profile data
                 this.set("userId", authData.uid);
                 var uref = hfc.common.firebase.child("users").child(authData.uid).ref();
-                uref.once("value", function (userData) {
+                uref.once("value").then(function (userData) {
                     var data = userData.val();
                     var mod = false;
                     if (data.userId === null) {
