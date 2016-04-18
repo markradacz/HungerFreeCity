@@ -184,7 +184,7 @@ var hfc;
             this.layout.render("#tabContent");
         };
         return managevm;
-    })(kendo.data.ObservableObject);
+    }(kendo.data.ObservableObject));
     hfc.managevm = managevm;
 })(hfc || (hfc = {}));
 define([

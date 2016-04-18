@@ -221,7 +221,7 @@ var hfc;
         };
         needsvm.instance = null; // set in the setup() method below
         return needsvm;
-    })(kendo.data.ObservableObject);
+    }(kendo.data.ObservableObject));
     hfc.needsvm = needsvm;
 })(hfc || (hfc = {}));
 define([

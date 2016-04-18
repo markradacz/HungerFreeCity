@@ -112,7 +112,7 @@ var hfc;
         mapvm.prototype.init = function () {
         };
         return mapvm;
-    })(kendo.data.ObservableObject);
+    }(kendo.data.ObservableObject));
     hfc.mapvm = mapvm;
 })(hfc || (hfc = {}));
 define([

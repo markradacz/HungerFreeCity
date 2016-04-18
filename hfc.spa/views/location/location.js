@@ -106,7 +106,7 @@ var hfc;
         locationvm.prototype.init = function () {
         };
         return locationvm;
-    })(kendo.data.ObservableObject);
+    }(kendo.data.ObservableObject));
     hfc.locationvm = locationvm;
 })(hfc || (hfc = {}));
 define([

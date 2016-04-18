@@ -53,7 +53,7 @@ var hfc;
         allvm.prototype.init = function () {
         };
         return allvm;
-    })(kendo.data.ObservableObject);
+    }(kendo.data.ObservableObject));
     hfc.allvm = allvm;
 })(hfc || (hfc = {}));
 define([

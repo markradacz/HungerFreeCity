@@ -49,7 +49,7 @@ var hfc;
             //super.init();
         };
         return centervm;
-    })(kendo.data.ObservableObject);
+    }(kendo.data.ObservableObject));
     hfc.centervm = centervm;
 })(hfc || (hfc = {}));
 define([
