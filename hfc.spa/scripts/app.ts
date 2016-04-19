@@ -142,7 +142,7 @@ namespace hfc {
             const lastName = this.get("lastName");
             const email = this.get("email");
             const password = this.get("password");
-            const phone = this.get("phone");
+            //const phone = this.get("phone");
 
             // validate registration
 			if (firstName == null || firstName === "") {
@@ -167,36 +167,50 @@ namespace hfc {
                 password: password
             })
 			.then(userData => {
-				// login
-				common.firebase.authWithPassword({
-					email: email,
-					password: password
-				})
-				.then(authData => {
-					// save the user's profile
-					common.User = {
-						userId: userData.uid,
-						firstName: firstName,
-						lastName: lastName,
-						phone: phone,
-						email: email,
-						favorites: [],
-						centers: [],
-						roles: ["user"]
-					};
-					common.firebase.child("users").child(userData.uid).set(common.User);
-					common.successToast("Successfully registered");
-					this.closePanel("#loginPanel");
-					this.setlogin();
-				})
-				.catch( error => {
-					this.showError(error);						
-				});				
+				this.tryToLogin();
 			})
-			.catch( error => {
-				this.showError(error);
-            });
+			.catch(error => {
+				if (error.code === "EMAIL_TAKEN") {
+					this.tryToLogin();
+				} else {
+					this.showError(error);					
+				}
+            });		
         }
+
+		private tryToLogin() {
+            const firstName = this.get("firstName");
+            const lastName = this.get("lastName");
+            const email = this.get("email");
+            const password = this.get("password");
+            const phone = this.get("phone");
+
+			// login
+			common.firebase.authWithPassword({
+				email: email,
+				password: password
+			})
+			.then(authData => {
+				// save the user's profile
+				common.User = {
+					userId: authData.uid,
+					firstName: firstName,
+					lastName: lastName,
+					phone: phone,
+					email: email,
+					favorites: [],
+					centers: [],
+					roles: ["user"]
+				};
+				common.firebase.child("users").child(authData.uid).set(common.User);
+				common.successToast("Successfully registered");
+				this.closePanel("#loginPanel");
+				this.setlogin();
+			})
+			.catch(error => {
+				this.showError(error);
+			});
+		}
 
         public loginButtonClick(e: any): void {
             // validate credentials

@@ -138,7 +138,7 @@ var hfc;
             var lastName = this.get("lastName");
             var email = this.get("email");
             var password = this.get("password");
-            var phone = this.get("phone");
+            //const phone = this.get("phone");
             // validate registration
             if (firstName == null || firstName === "") {
                 hfc.common.errorToast("Please provide a First Name");
@@ -161,31 +161,45 @@ var hfc;
                 password: password
             })
                 .then(function (userData) {
-                // login
-                hfc.common.firebase.authWithPassword({
-                    email: email,
-                    password: password
-                })
-                    .then(function (authData) {
-                    // save the user's profile
-                    hfc.common.User = {
-                        userId: userData.uid,
-                        firstName: firstName,
-                        lastName: lastName,
-                        phone: phone,
-                        email: email,
-                        favorites: [],
-                        centers: [],
-                        roles: ["user"]
-                    };
-                    hfc.common.firebase.child("users").child(userData.uid).set(hfc.common.User);
-                    hfc.common.successToast("Successfully registered");
-                    _this.closePanel("#loginPanel");
-                    _this.setlogin();
-                })
-                    .catch(function (error) {
+                _this.tryToLogin();
+            })
+                .catch(function (error) {
+                if (error.code === "EMAIL_TAKEN") {
+                    _this.tryToLogin();
+                }
+                else {
                     _this.showError(error);
-                });
+                }
+            });
+        };
+        appvm.prototype.tryToLogin = function () {
+            var _this = this;
+            var firstName = this.get("firstName");
+            var lastName = this.get("lastName");
+            var email = this.get("email");
+            var password = this.get("password");
+            var phone = this.get("phone");
+            // login
+            hfc.common.firebase.authWithPassword({
+                email: email,
+                password: password
+            })
+                .then(function (authData) {
+                // save the user's profile
+                hfc.common.User = {
+                    userId: authData.uid,
+                    firstName: firstName,
+                    lastName: lastName,
+                    phone: phone,
+                    email: email,
+                    favorites: [],
+                    centers: [],
+                    roles: ["user"]
+                };
+                hfc.common.firebase.child("users").child(authData.uid).set(hfc.common.User);
+                hfc.common.successToast("Successfully registered");
+                _this.closePanel("#loginPanel");
+                _this.setlogin();
             })
                 .catch(function (error) {
                 _this.showError(error);

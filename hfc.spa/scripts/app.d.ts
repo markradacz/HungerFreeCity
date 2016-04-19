@@ -31,6 +31,7 @@ declare namespace hfc {
         logoff(): void;
         private validateEmail(email);
         registerButtonClick(e: any): void;
+        private tryToLogin();
         loginButtonClick(e: any): void;
         resetPasswordButtonClick(e: any): void;
         private showError(error);
