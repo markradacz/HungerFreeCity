@@ -13,7 +13,7 @@ var hfc;
         aboutvm.prototype.init = function () {
         };
         return aboutvm;
-    })(kendo.data.ObservableObject);
+    }(kendo.data.ObservableObject));
     hfc.aboutvm = aboutvm;
 })(hfc || (hfc = {}));
 define([

@@ -88,7 +88,7 @@ var hfc;
         usersvm.prototype.init = function () {
         };
         return usersvm;
-    })(kendo.data.ObservableObject);
+    }(kendo.data.ObservableObject));
     hfc.usersvm = usersvm;
 })(hfc || (hfc = {}));
 define([

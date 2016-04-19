@@ -53,7 +53,7 @@ var hfc;
             this.layout.render("#homeTabContent");
         };
         return homevm;
-    })(kendo.data.ObservableObject);
+    }(kendo.data.ObservableObject));
     hfc.homevm = homevm;
 })(hfc || (hfc = {}));
 define([

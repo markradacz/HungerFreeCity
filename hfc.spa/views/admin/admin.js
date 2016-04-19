@@ -30,7 +30,7 @@ var hfc;
             this.layout.render("#adminTabs");
         };
         return adminvm;
-    })(kendo.data.ObservableObject);
+    }(kendo.data.ObservableObject));
     hfc.adminvm = adminvm;
 })(hfc || (hfc = {}));
 define([

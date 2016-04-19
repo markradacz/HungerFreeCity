@@ -73,7 +73,7 @@ var hfc;
         favoritesvm.prototype.init = function () {
         };
         return favoritesvm;
-    })(kendo.data.ObservableObject);
+    }(kendo.data.ObservableObject));
     hfc.favoritesvm = favoritesvm;
 })(hfc || (hfc = {}));
 define([

@@ -1,0 +1,37 @@
+{
+  "name": "center",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "hours": {
+      "type": "string",
+      "required": true
+    },
+    "address": {
+      "type": "object",
+      "required": true
+    },
+    "geometry": {
+      "type": "object",
+      "required": true
+    },
+    "phone": {
+      "type": "string"
+    },
+    "lastModified": {
+      "type": "date",
+      "required": false
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

@@ -1,7 +1,7 @@
 // Type definitions for Firebase API 2.4.1
 // Project: https://www.firebase.com/docs/javascript/firebase
 // Definitions by: Vincent Botone <https://github.com/vbortone/>, Shin1 Kashimura <https://github.com/in-async/>, Sebastien Dubois <https://github.com/dsebastien/>, Szymon Stasik <https://github.com/ciekawy/>
-// Definitions: https://github.com/borisyankov/DefinitelyTyped
+// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
 /// <reference path="../es6-promise/es6-promise.d.ts" />
 
@@ -279,7 +279,6 @@ interface Firebase extends FirebaseQuery {
 	 * Creates a new user account using an email / password combination.
 	 */
 	createUser(credentials: FirebaseCredentials, onComplete: (error: any, userData: any) => void): void;
-	createUser(credentials: FirebaseCredentials): Promise<FirebaseAuthData>;
 	/**
 	 * Updates the email associated with an email / password user account.
 	 */
@@ -296,7 +295,6 @@ interface Firebase extends FirebaseQuery {
 	 * Sends a password-reset email to the owner of the account, containing a token that may be used to authenticate and change the user password.
 	 */
 	resetPassword(credentials: FirebaseResetPasswordCredentials, onComplete: (error: any) => void): void;
-	resetPassword(credentials: FirebaseResetPasswordCredentials): Promise<any>;
 	onDisconnect(): FirebaseOnDisconnect;
 }
 
@@ -338,6 +336,46 @@ interface FirebaseAuthData {
 	expires: number;
 	auth: Object;
 	google?: FirebaseAuthDataGoogle;
+	twitter?: FirebaseAuthDataTwitter;
+	github?: FirebaseAuthDataGithub;
+	facebook?: FirebaseAuthDataFacebook;
+	password?: FirebaseAuthDataPassword;
+	anonymous?: any;
+}
+
+interface FirebaseAuthDataPassword{
+	email: string;
+	isTemporaryPassword: boolean;
+	profileImageURL: string;
+}
+
+interface FirebaseAuthDataTwitter{
+	id: string;
+	accessToken: string;
+	accessTokenSecret: string;
+	displayName: string;
+	username: string;
+	profileImageURL: string;
+	cachedUserProfile: any;
+}
+
+interface FirebaseAuthDataGithub{
+	id: string;
+	accessToken: string;
+	displayName: string;
+	email?: string;
+	username: string;
+	profileImageURL: string;
+	cachedUserProfile: any;
+}
+
+interface FirebaseAuthDataFacebook{
+	id: string;
+	accessToken: string;
+	displayName: string;
+	email?: string;
+	profileImageURL: string;
+	cachedUserProfile: any;
 }
 
 interface FirebaseAuthDataGoogle {

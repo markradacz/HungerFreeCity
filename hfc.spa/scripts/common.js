@@ -106,7 +106,7 @@ var hfc;
             { id: "BANK", name: "Food Bank", description: "Collects donations and distributes to folks in need through multiple outlets" }
         ]);
         return common;
-    })(kendo.data.ObservableObject);
+    }(kendo.data.ObservableObject));
     hfc.common = common;
 })(hfc || (hfc = {}));
 // extend jQuery with a new indexByPropertyValue() function that looks for an array item with a matching property value
@@ -241,7 +241,7 @@ var kendo;
                         }
                     };
                     return xdatabound;
-                })(Binder);
+                }(Binder));
                 widget.xdatabound = xdatabound;
                 var onEnter = (function (_super) {
                     __extends(onEnter, _super);
@@ -262,7 +262,7 @@ var kendo;
                     onEnter.prototype.refresh = function () {
                     };
                     return onEnter;
-                })(Binder);
+                }(Binder));
                 widget.onEnter = onEnter;
                 var onKeyUp = (function (_super) {
                     __extends(onKeyUp, _super);
@@ -281,7 +281,7 @@ var kendo;
                     onKeyUp.prototype.refresh = function () {
                     };
                     return onKeyUp;
-                })(Binder);
+                }(Binder));
                 widget.onKeyUp = onKeyUp;
                 var onComboKeyUp = (function (_super) {
                     __extends(onComboKeyUp, _super);
@@ -300,7 +300,7 @@ var kendo;
                     onComboKeyUp.prototype.refresh = function () {
                     };
                     return onComboKeyUp;
-                })(Binder);
+                }(Binder));
                 widget.onComboKeyUp = onComboKeyUp;
             })(widget = binders.widget || (binders.widget = {}));
         })(binders = data.binders || (data.binders = {}));
@@ -362,7 +362,7 @@ var kendo;
                     $(that.element).text(ctrtype.name);
                 };
                 return centerType;
-            })(data_1.Binder);
+            }(data_1.Binder));
             binders.centerType = centerType;
             var isChecked = (function (_super) {
                 __extends(isChecked, _super);
@@ -376,7 +376,7 @@ var kendo;
                     $(that.element).prop("checked", isChecked ? "checked" : "");
                 };
                 return isChecked;
-            })(data_1.Binder);
+            }(data_1.Binder));
             binders.isChecked = isChecked;
             var tileColor = (function (_super) {
                 __extends(tileColor, _super);
@@ -391,7 +391,7 @@ var kendo;
                     $(that.element).toggleClass(action, true);
                 };
                 return tileColor;
-            })(data_1.Binder);
+            }(data_1.Binder));
             binders.tileColor = tileColor;
             var title = (function (_super) {
                 __extends(title, _super);
@@ -404,7 +404,7 @@ var kendo;
                     $(that.element).attr("title", value);
                 };
                 return title;
-            })(data_1.Binder);
+            }(data_1.Binder));
             binders.title = title;
             var databoundX = (function (_super) {
                 __extends(databoundX, _super);
@@ -432,7 +432,7 @@ var kendo;
                     }
                 };
                 return databoundX;
-            })(data_1.Binder);
+            }(data_1.Binder));
             binders.databoundX = databoundX;
             // get the count of a collection named in the binding
             var subcount = (function (_super) {
@@ -448,7 +448,7 @@ var kendo;
                     $(that.element).text(len);
                 };
                 return subcount;
-            })(data_1.Binder);
+            }(data_1.Binder));
             binders.subcount = subcount;
             // join the properties of a collection
             var combine = (function (_super) {
@@ -481,7 +481,7 @@ var kendo;
                     }
                 };
                 return combine;
-            })(data_1.Binder);
+            }(data_1.Binder));
             binders.combine = combine;
             // join the properties of a collection
             var top10 = (function (_super) {
@@ -501,16 +501,16 @@ var kendo;
                         $(this.element).text("");
                     }
                     else {
-                        var prop = binding.path["prop"].replace(/'/g, "");
+                        var prop_1 = binding.path["prop"].replace(/'/g, "");
                         var all = collection.slice(0, 10).map(function (v) {
-                            return "<li>" + v[prop] + "</li>";
+                            return "<li>" + v[prop_1] + "</li>";
                         });
                         //var sep = binding.path["sep"].replace(/'/g, "");
                         $(this.element).html("<ol>" + all.join("") + "</ol>");
                     }
                 };
                 return top10;
-            })(data_1.Binder);
+            }(data_1.Binder));
             binders.top10 = top10;
             // apply animation to the element on appearance
             var appearAnimation = (function (_super) {
@@ -579,7 +579,7 @@ var kendo;
                     effect.duration(1000).play();
                 };
                 return appearAnimation;
-            })(data_1.Binder);
+            }(data_1.Binder));
             binders.appearAnimation = appearAnimation;
             // Example: <span data-bind="formattedText: selectedBlock.LastUpdated" data-format="dddd MMM dd, yyyy hh:mmtt"></span>
             var formattedText = (function (_super) {
@@ -595,7 +595,7 @@ var kendo;
                     }
                 };
                 return formattedText;
-            })(data_1.Binder);
+            }(data_1.Binder));
             binders.formattedText = formattedText;
             // Example: <span data-bind="date: selectedBlock.LastUpdated" data-dateformat="dddd MMM dd, yyyy hh:mmtt"></span>
             var date = (function (_super) {
@@ -612,7 +612,7 @@ var kendo;
                     }
                 };
                 return date;
-            })(data_1.Binder);
+            }(data_1.Binder));
             binders.date = date;
             // format text from binding
             //export class textFormat extends Binder {
@@ -690,7 +690,7 @@ var kendo;
                     }
                 };
                 return cssToggle;
-            })(data_1.Binder);
+            }(data_1.Binder));
             binders.cssToggle = cssToggle;
         })(binders = data_1.binders || (data_1.binders = {}));
     })(data = kendo.data || (kendo.data = {}));
