@@ -279,6 +279,7 @@ interface Firebase extends FirebaseQuery {
 	 * Creates a new user account using an email / password combination.
 	 */
 	createUser(credentials: FirebaseCredentials, onComplete: (error: any, userData: any) => void): void;
+	createUser(credentials: FirebaseCredentials): Promise<FirebaseAuthData>;
 	/**
 	 * Updates the email associated with an email / password user account.
 	 */
@@ -295,6 +296,7 @@ interface Firebase extends FirebaseQuery {
 	 * Sends a password-reset email to the owner of the account, containing a token that may be used to authenticate and change the user password.
 	 */
 	resetPassword(credentials: FirebaseResetPasswordCredentials, onComplete: (error: any) => void): void;
+	resetPassword(credentials: FirebaseResetPasswordCredentials): Promise<void>;
 	onDisconnect(): FirebaseOnDisconnect;
 }
 

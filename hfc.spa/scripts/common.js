@@ -1,7 +1,7 @@
 /// <reference path="typings/jquery/jquery.d.ts" />
 /// <reference path="typings/kendo-ui/kendo-ui.d.ts" />
 /// <reference path="typings/firebase/firebase.d.ts" />
-/*global alert,$,self,models,data,document,window,kendo,jQuery*/
+/// <reference path="typings/require.d.ts" />
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -91,6 +91,10 @@ var hfc;
                 console.log(this._getTimeDiff() + "ms: " + message);
             }
         };
+        //constructor(objToObserve) {
+        //	super(objToObserve);
+        //	super.init(this);
+        //}
         /*-----------------------------------------------------
         User
         -----------------------------------------------------*/
@@ -249,13 +253,14 @@ var kendo;
                         _super.call(this, element, bindings, options);
                     }
                     onEnter.prototype.init = function (element, bindings, options) {
+                        var _this = this;
                         _super.prototype.init.call(this, element, bindings, options);
                         var binding = this.bindings["onEnter"];
                         $(element.input).bind("keydown", function (e) {
                             if (e.which === 13) {
                                 var fn = binding.source.get(binding.path);
                                 if (fn)
-                                    fn(e, this, binding.source);
+                                    fn(e, _this, binding.source);
                             }
                         });
                     };
@@ -270,12 +275,13 @@ var kendo;
                         _super.call(this, element, bindings, options);
                     }
                     onKeyUp.prototype.init = function (element, bindings, options) {
+                        var _this = this;
                         _super.prototype.init.call(this, element, bindings, options);
                         var binding = this.bindings["onKeyUp"];
                         $(element.element[0]).bind("keyup", function (e) {
                             var fn = binding.source.get(binding.path);
                             if (fn)
-                                fn(e, this, binding.source);
+                                fn(e, _this, binding.source);
                         });
                     };
                     onKeyUp.prototype.refresh = function () {
@@ -289,12 +295,13 @@ var kendo;
                         _super.call(this, element, bindings, options);
                     }
                     onComboKeyUp.prototype.init = function (element, bindings, options) {
+                        var _this = this;
                         _super.prototype.init.call(this, element, bindings, options);
                         var binding = this.bindings["onComboKeyUp"];
                         $(element.input[0]).bind("keyup", function (e) {
                             var fn = binding.source.get(binding.path);
                             if (fn)
-                                fn(e, this, binding.source);
+                                fn(e, _this, binding.source);
                         });
                     };
                     onComboKeyUp.prototype.refresh = function () {

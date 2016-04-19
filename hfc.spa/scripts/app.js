@@ -1,14 +1,14 @@
+/// <reference path="typings/jquery/jquery.d.ts" />
+/// <reference path="typings/kendo-ui/kendo-ui.d.ts" />
+/// <reference path="typings/firebase/firebase.d.ts" />
+/// <reference path="typings/require.d.ts" />
+/// <reference path="common.ts" />
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var _this = this;
-/// <reference path="typings/jquery/jquery.d.ts" />
-/// <reference path="typings/kendo-ui/kendo-ui.d.ts" />
-/// <reference path="typings/firebase/firebase.d.ts" />
-/// <reference path="typings/require.d.ts" />
-/// <reference path="common.ts" />
 var hfc;
 (function (hfc) {
     var appvm = (function (_super) {
@@ -249,8 +249,8 @@ var hfc;
             if (authData) {
                 // get the user's profile data
                 this.set("userId", authData.uid);
-                var uref = hfc.common.firebase.child("users").child(authData.uid).ref();
-                uref.once("value").then(function (userData) {
+                var uref_1 = hfc.common.firebase.child("users").child(authData.uid).ref();
+                uref_1.once("value").then(function (userData) {
                     var data = userData.val();
                     var mod = false;
                     if (data.userId === null) {
@@ -286,7 +286,7 @@ var hfc;
                         mod = true;
                     }
                     if (mod)
-                        uref.set(data);
+                        uref_1.set(data);
                     hfc.common.User = data;
                     _this.setlogin();
                 });
@@ -345,7 +345,7 @@ var hfc;
             $.subscribe("showRegister", this.showRegister);
         };
         return appvm;
-    })(kendo.data.ObservableObject);
+    }(kendo.data.ObservableObject));
     hfc.appvm = appvm;
 })(hfc || (hfc = {}));
 define([

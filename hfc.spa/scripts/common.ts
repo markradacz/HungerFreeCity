@@ -1,10 +1,15 @@
 /// <reference path="typings/jquery/jquery.d.ts" />
 /// <reference path="typings/kendo-ui/kendo-ui.d.ts" />
 /// <reference path="typings/firebase/firebase.d.ts" />
-/*global alert,$,self,models,data,document,window,kendo,jQuery*/
+/// <reference path="typings/require.d.ts" />
 
-module hfc {
-    export class common extends kendo.data.ObservableObject {
+namespace hfc {
+	export class common extends kendo.data.ObservableObject {
+		//constructor(objToObserve) {
+		//	super(objToObserve);
+		//	super.init(this);
+		//}
+
         /*-----------------------------------------------------
 		User
 	    -----------------------------------------------------*/
@@ -66,7 +71,7 @@ module hfc {
                     effect.add(wrapper.zoom("out"));
                     break;
             }
-            effect.duration(1000).play();			
+            effect.duration(1000).play();
 		}
 
         /*-----------------------------------------------------
@@ -74,7 +79,7 @@ module hfc {
 	    -----------------------------------------------------*/
         public static successToast(message: string): void {
             const w = $("#notification").data("kendoNotification") as kendo.ui.Notification;
-            if(w) w.show({ message: message }, "success");
+            if (w) w.show({ message: message }, "success");
         }
 
         public static infoToast(message: string): void {
@@ -95,9 +100,9 @@ module hfc {
         /*-----------------------------------------------------
 		Debug Logging
 	    -----------------------------------------------------*/
-        private static _getTimeDiff() : number { return new Date().getTime() - performance.timing.navigationStart; }
+        private static _getTimeDiff(): number { return new Date().getTime() - performance.timing.navigationStart; }
 
-        public static log(message: string): void  {
+        public static log(message: string): void {
             if (window.console) {
                 console.log(this._getTimeDiff() + "ms: " + message);
                 // if (console.timeStamp) console.timeStamp(message);
@@ -118,63 +123,63 @@ jQuery.extend({
 });
 // extend jQuery with a new findByPropertyValue() function that looks for an array item with a matching property value
 jQuery.extend({
-    findByPropertyValue: (array: any[], propertyName: string, value: any) : any => {
+    findByPropertyValue: (array: any[], propertyName: string, value: any): any => {
 		for (let i = 0; i < array.length; i++) {
 			const v = array[i];
 			if (v[propertyName] === value) return v;
 		}
-	    return null;
+		return null;
     }
 });
 
 // extend jQuery with a new distinctByProperty() function that does an in-place edit of the array removing duplicates; favoring early values rather than latter
 jQuery.extend({
     distinctByProperty: (obj: Array<any>, propertyName: string) => {
-	    $.each(obj, (i, v) => {
-	        if (v === undefined || v === null) return;	// may encounter missing items if they were sliced away below
-	        var prop = v[propertyName];
+		$.each(obj, (i, v) => {
+			if (v === undefined || v === null) return;	// may encounter missing items if they were sliced away below
+			var prop = v[propertyName];
 			for (let ii = i + 1; ii < obj.length; ii++) {
-	            if (obj[ii][propertyName] === prop) {
-	                // remove the array element at ii; as it is a duplicate
-	                obj.splice(ii, 1);
-	            }
-	        }
-	    });
+				if (obj[ii][propertyName] === prop) {
+					// remove the array element at ii; as it is a duplicate
+					obj.splice(ii, 1);
+				}
+			}
+		});
 	}
 });
 
 // extend jQuery with a new replaceOrAddItem() function
 jQuery.extend({
     replaceOrAddItem: (array: Array<any>, keyPropertyName: string, keyValue: any, replacementItem: any) => {
-	    // common.log("replaceOrAddItem: " + array.length + " of " + keyPropertyName + " = " + keyValue + " with " + JSON.stringify(replacementItem));
-	    // slice(0) used here to copy the array to avoid sequence bugs since we remove items in-place
-	    if (array.length > 0) {
-	        $.each(array.slice(0), (i, v) => {
-	            if (v[keyPropertyName] === keyValue) {
-	                array.splice(i, 1);
-	            }
-	        });
-	    }
-	    array.push(replacementItem);
+		// common.log("replaceOrAddItem: " + array.length + " of " + keyPropertyName + " = " + keyValue + " with " + JSON.stringify(replacementItem));
+		// slice(0) used here to copy the array to avoid sequence bugs since we remove items in-place
+		if (array.length > 0) {
+			$.each(array.slice(0), (i, v) => {
+				if (v[keyPropertyName] === keyValue) {
+					array.splice(i, 1);
+				}
+			});
+		}
+		array.push(replacementItem);
 	}
 });
 
 // extend jQuery with a new sortItems() function
 jQuery.extend({
     sortItems: (array: Array<any>, keyPropertyName: string) => {
-	    // slice(0) used here to copy the array
-	    var copy = array.slice(0);
-	    copy.sort((a, b) => {
-	        var a1 = a[keyPropertyName], b1= b[keyPropertyName];
-	        if(a1 === b1) return 0;
-	        return a1 > b1 ? 1 : -1;
-	    });
+		// slice(0) used here to copy the array
+		var copy = array.slice(0);
+		copy.sort((a, b) => {
+			var a1 = a[keyPropertyName], b1 = b[keyPropertyName];
+			if (a1 === b1) return 0;
+			return a1 > b1 ? 1 : -1;
+		});
 
-	    // empty the original array and set the new values
-	    array.splice(0, array.length);
+		// empty the original array and set the new values
+		array.splice(0, array.length);
 
-	    // add the items back in the sorted order
-	    $.each(copy, (i, v) => { array.push(v); });
+		// add the items back in the sorted order
+		$.each(copy, (i, v) => { array.push(v); });
 	}
 });
 
@@ -187,7 +192,7 @@ jQuery(() => {
 
 // This adds placeholder support to browsers that wouldn't otherwise support it
 jQuery(() => {
-    if (!$.support["placeholder"]) { 
+    if (!$.support["placeholder"]) {
         const active = document.activeElement;
         $(":text").focus(function () {
             if ($(this).attr("placeholder") !== "" && $(this).val() === $(this).attr("placeholder")) {
@@ -238,17 +243,17 @@ module kendo.data.binders.widget {
         }
 
         init(element: any, bindings: { [key: string]: Binding; }, options?: any) {
- 		    super.init(element, bindings, options);
-		    var binding = this.bindings["onEnter"];
-		    $(element.input).bind("keydown", function(e) {
-			    if (e.which === 13) {
-					const fn = binding.source.get(binding.path);
-				    if (fn) fn(e, this, binding.source);
-			    }
-		    });
-       }
+			super.init(element, bindings, options);
+			var binding = this.bindings["onEnter"];
+	        $(element.input).bind("keydown", e => {
+		        if (e.which === 13) {
+			        const fn = binding.source.get(binding.path);
+			        if (fn) fn(e, this, binding.source);
+		        }
+	        });
+		}
 
-        refresh() {          
+        refresh() {
         }
     }
 
@@ -260,10 +265,10 @@ module kendo.data.binders.widget {
         init(element: any, bindings: { [key: string]: Binding; }, options?: any) {
             super.init(element, bindings, options);
             var binding = this.bindings["onKeyUp"];
-            $(element.element[0]).bind("keyup", function (e) {
-                const fn = binding.source.get(binding.path);
-                if (fn) fn(e, this, binding.source);
-            });
+	        $(element.element[0]).bind("keyup", e => {
+		        const fn = binding.source.get(binding.path);
+		        if (fn) fn(e, this, binding.source);
+	        });
         }
 
         refresh() {
@@ -278,10 +283,10 @@ module kendo.data.binders.widget {
         init(element: any, bindings: { [key: string]: Binding; }, options?: any) {
             super.init(element, bindings, options);
             var binding = this.bindings["onComboKeyUp"];
-            $(element.input[0]).bind("keyup", function (e) {
-                const fn = binding.source.get(binding.path);
-                if (fn) fn(e, this, binding.source);
-            });
+	        $(element.input[0]).bind("keyup", e => {
+		        const fn = binding.source.get(binding.path);
+		        if (fn) fn(e, this, binding.source);
+	        });
         }
 
         refresh() {
@@ -348,7 +353,8 @@ module kendo.data.binders {
             $(that.element).prop("checked", isChecked ? "checked" : "");
         }
     }
-    export class tileColor extends Binder {
+
+	export class tileColor extends Binder {
         refresh() {
             const that = this;
             const action = that.bindings["tileColor"].get();
@@ -356,14 +362,16 @@ module kendo.data.binders {
             $(that.element).toggleClass(action, true);
         }
     }
-    export class title extends Binder {
+
+	export class title extends Binder {
         refresh() {
             const that = this;
             const value = that.bindings["title"].get();
             $(that.element).attr("title", value);
         }
     }
-    export class databoundX extends Binder {
+
+	export class databoundX extends Binder {
         refresh() {
             const binding = this.bindings["databound"];
             try {
@@ -405,8 +413,8 @@ module kendo.data.binders {
 				collection = binding.source[matches[1]][matches[2]];
 			}
 			if (collection === undefined || collection === null) {
-		        element.text("");
-	        } else {
+				element.text("");
+			} else {
 				element.text(collection.join("\n"));
 				element.one("change", { element: element, collection: collection }, e => {
 					const txt = e.data.element.val();
@@ -445,7 +453,7 @@ module kendo.data.binders {
 
     // apply animation to the element on appearance
     export class appearAnimation extends Binder {
-        public refresh() : void {
+        public refresh(): void {
             const that = this;
             const binding = this.bindings["appearAnimation"];
             let type = binding.path;
@@ -597,7 +605,7 @@ module kendo.data.binders {
 	//		}
 	//	}
 	//});
-    
+
 	// toggle a CSS class
     // <div class="tile" data-bind="cssToggle: canRemove" data-class-true="already" data-class-false="new">
     export class cssToggle extends Binder {

@@ -3,7 +3,8 @@
 /// <reference path="typings/firebase/firebase.d.ts" />
 /// <reference path="typings/require.d.ts" />
 /// <reference path="common.ts" />
-module hfc {
+
+namespace hfc {
     export class appvm extends kendo.data.ObservableObject {
         public firstName: string;
         public lastName: string;
