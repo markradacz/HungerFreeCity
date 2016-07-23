@@ -9,3 +9,7 @@ Hunger Free City - It’s an App that will connect people in the community, loca
 
 3. MVC Documentation 
   http://www.asp.net/mvc/overview/getting-started/introduction/getting-started
+
+4. Hackpad docs 
+	https://hackforjax.hackpad.com/Hunger-Free-City-Mobile-App-and-Admin-Site-TMqKyB9iewg
+	
